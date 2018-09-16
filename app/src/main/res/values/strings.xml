@@ -3,4 +3,27 @@
 
     <string name="login_erro_email">Login informado inválido</string>
     <string name="login_erro_password">Senha informada inválida</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="ws_host">http://192.168.0.101:9090/estrutura-art-web-maven-version/webservice</string>
+
+    <string name="orc_cpf_cnpj_erro">Cpf ou cnpj informado inválido!</string>
+    <string name="orc_rg_ins_est_erro">Rg ou inscrição estadual inválido!</string>
+    <string name="orc_nome_erro">Informe o nome completo!</string>
+    <string name="orc_celular_erro">Celular informado inválido!</string>
+    <string name="orc_email_erro">Email informado inválido!</string>
+    <string name="orc_cep_erro">Cep informado inválido!</string>
+    <string name="orc_logradouro_erro">Logradouro informado inválido!</string>
+    <string name="orc_estado_erro">Selecione um estado!</string>
+    <string name="orc_cidade_erro">Selecione uma cidade!</string>
+    <string name="orc_numero_erro">Informe o número da casa!</string>
+    <string name="orc_bairro_erro">Informe o bairro!</string>
+
+    <string name="spinner_title_cidade">Selecione!</string>
+    <string name="spinner_title_estado">Selecione!</string>
+
+
+
 </resources>

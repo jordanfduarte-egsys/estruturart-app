@@ -18,7 +18,7 @@
             android:layout_height="96dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp"
-            android:src="@mipmap/ic_logo" />
+            android:src="@drawable/logo_branco" />
 
         <!--  Email Label -->
         <android.support.design.widget.TextInputLayout

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_pedidos"
+            android:icon="@drawable/ic_pedidos_24dp"
+            android:title="Pedidos" />
+        <item
+            android:id="@+id/nav_orcamentos"
+            android:icon="@drawable/ic_orcamento_24dp"
+            android:title="Orçamento" />
+        <item
+            android:id="@+id/nav_sair"
+            android:icon="@drawable/ic_sair_24dp"
+            android:title="Sair" />
+    </group>
+</menu>
