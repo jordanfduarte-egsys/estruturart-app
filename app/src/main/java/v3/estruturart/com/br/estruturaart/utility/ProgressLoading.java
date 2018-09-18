@@ -10,28 +10,60 @@ import v3.estruturart.com.br.estruturaart.activity.OrcamentoEtapa1;
 import v3.estruturart.com.br.estruturaart.service.Client;
 
 public class ProgressLoading extends AsyncTask<Integer, Void, Void> {
-    private ProgressBar progressBar;
-    private OrcamentoEtapa1 activity;
+    private Context activity;
 
-    public ProgressLoading(ProgressBar progressBar, OrcamentoEtapa1 activity) {
-        this.progressBar = progressBar;
+    public ProgressLoading(Context activity) {
         this.activity = activity;
     }
 
     @Override
     protected Void doInBackground(Integer... integers) {
-        activity.test((AppCompatActivity)activity);
+        //((ProgressBar)((Activity activity)findViewById(R.id.progressBar1))).setVisibility(View.VISIBLE);
+        //activity.test((AppCompatActivity)activity);
+
+        Activity activity = (Activity)activity;
+        Client client = new Client(activity);
+        boolean enableElem = true;
+        if (
+            MaskEditUtil.unmask(getTextView(R.id.etCpfCnpj).getText().toString()).length() == 11
+            || MaskEditUtil.unmask(getTextView(R.id.etCpfCnpj).getText().toString()).length() == 14
+        ) {
+            TbUsuario usuario = new TbUsuario();
+            client.getParameter().put("cpf_cnpj", MaskEditUtil.unmask(getTextView(R.id.etCpfCnpj).getText().toString()));
+            usuario = (TbUsuario) client.fromPost("/find-cpf-cnpj", TbUsuario.class);
+            usuarioCompra = new TbUsuario();
+            if (usuario.getId() > 0) {
+                enableElem = false;
+                ((TextView)activity.findViewById(R.id.edRgInscricaoEstadual)).setText(usuario.getRgIncricaoEstadual());
+//                getEditText(R.id.edRgInscricaoEstadual).setText(usuario.getRgIncricaoEstadual());
+//                getEditText(R.id.edNomeCompleto).setText(usuario.getNome());
+//                getEditText(R.id.edCelular).setText(usuario.getTelefone());
+//                getEditText(R.id.edEmail).setText(usuario.getEmail());
+//                usuarioCompra = usuario;
+            }
+        } else {
+            enableElem = true;
+//            getEditText(R.id.edRgInscricaoEstadual).setText("");
+//            getEditText(R.id.edNomeCompleto).setText("");
+//            getEditText(R.id.edCelular).setText("");
+//            getEditText(R.id.edEmail).setText("");
+        }
+
+//        getEditText(R.id.edRgInscricaoEstadual).setEnabled(enableElem);
+//        getEditText(R.id.edNomeCompleto).setEnabled(enableElem);
+//        getEditText(R.id.edCelular).setEnabled(enableElem);
+//        getEditText(R.id.edEmail).setEnabled(enableElem);
         return null;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressBar.setVisibility(View.VISIBLE);
+        ((ProgressBar)((Activity activity)findViewById(R.id.progressBar1))).setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void onPostExecute(Void result) {
-        progressBar.setVisibility(View.GONE);
+        ((ProgressBar)((Activity activity)findViewById(R.id.progressBar1))).setVisibility(View.GONE);
     }
 }

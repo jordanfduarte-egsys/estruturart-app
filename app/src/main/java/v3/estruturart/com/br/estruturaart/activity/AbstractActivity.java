@@ -165,4 +165,17 @@ public class AbstractActivity extends AppCompatActivity {
             }
         }
     }
+
+    protected Orcamento getOrcamentoSession(String name) {
+        Gson gson = new Gson();
+        return (Orcamento) gson.fromJson(getSession("orcamentoSession").getString(name, ""), Orcamento.class);
+    }
+
+    protected void putOrcamentoSession(Orcamento orcamento, String name) {
+        Gson gson = new Gson();
+        SharedPreferences.Editor editor = getSession(Login.class.toString()).edit();
+        editor.putString(name, gson.toJson(orcamento));
+        editor.apply();
+        editor.commit();
+    }
 }

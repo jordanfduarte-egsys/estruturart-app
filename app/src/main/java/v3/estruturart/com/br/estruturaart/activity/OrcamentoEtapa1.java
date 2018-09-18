@@ -194,15 +194,12 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
     }
 
     public void bindCpfCnpj() {
-
-        final ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar1);
-        final OrcamentoEtapa1 orcamentoEtapa1 = (OrcamentoEtapa1)this;
+        final ProgressLoading progressCpfCnpj = new ProgressLoading(this);
 
         getTextView(R.id.etCpfCnpj).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                final CharSequence charSequence1 = charSequence;
-                (new ProgressLoading(progressBar, orcamentoEtapa1)).execute();
+                progressCpfCnpj.execute();
             }
 
             @Override
@@ -383,8 +380,42 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
 
     public void validarSubmitEtapa1() {
         if (getValidator(0).validate()) {
-            // OK AVANCAR ETAPA 2
-            // CHAMAR SERVICE
+            TbUsuario usuario = new TbUsuario();
+            TbEndereco endereco = new TbEndereco();
+            Orcamento orcamento = getOrcamentoSession(Orcamento.class);
+
+            String tipoPessoa = "2";
+            if (MaskEditUtil.unmask(getTexView(R.id.etCpfCnpj).getText().toString()).length() == 11)  {
+                tipoPessoa = "1";
+            }
+
+            if (usuarioCompra.getId() > 0) {
+                usuario = usuarioCompra;
+            } else {
+                usuario.setNome(getTexView(R.id.etNomeCompleto).getText().toString());
+                usuario.setCpfCnpj(getTexView(R.id.etCpfCnpj).getText().toString());
+                usuario.setEmail(getTexView(R.id.etEmail).getText().toString());
+                usuario.setRgIncricaoEstadual(getTexView(R.id.etRgInscricaoEstadual).getText().toString());
+                usuario.setTelefone(getTexView(R.id.etCelular).getText().toString());
+                usuario.setPerfilId(TbPerfil.CLIENTE);
+                usuario.setTipoPessoa(tipoPessoa);
+            }
+
+            endereco.setCep(MaskEditUtil.unmask(getTexView(R.id.etCep).getText().toString()));
+            endereco.setLogradouro(getTexView(R.id.etLogradouro).getText().toString());
+            endereco.setBairro(getTexView(R.id.etBairro).getText().toString());
+            endereco.setNumero(getTexView(R.id.etNumero).getText().toString());
+            endereco.setCidadeId(((TbCidade)getSpinner(R.id.etCidade).getSelectedItem()).getId());
+            endereco.setEstadoId(((TbEstado)getSpinner(R.id.etEstado).getSelectedItem()).getId());
+
+            orcamento.setUsuario(usuario);
+            orcamento.setEndereco(endereco);
+
+            // @TODO Validar todos esses campos com isValid()
+            if (orcamento.isValid(Orcamento.ETAPA1)) {
+                putOrcamentoSession(orcamento, Orcamento.class);
+                // Instancia a nova INTENT
+            }
         }
     }
 }
