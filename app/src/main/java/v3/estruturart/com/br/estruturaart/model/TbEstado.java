@@ -36,6 +36,10 @@ public class TbEstado extends AbstractModel
         this.nome = nome;
     }
 
+    public String toString() {
+        return this.nome;
+    }
+
     public boolean isValid() {
         return true;
     }

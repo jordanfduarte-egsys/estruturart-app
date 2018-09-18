@@ -1,9 +1,8 @@
 package v3.estruturart.com.br.estruturaart.model;
 
-import v3.estruturart.com.br.estruturaart.model.TbCidade;
-
 public class CepModel
 {
+    private Integer id;
     private String cep;
     private String logradouro;
     private String complemento;
@@ -113,5 +112,13 @@ public class CepModel
     public void setCidade(TbCidade cidade)
     {
         this.cidade = cidade;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

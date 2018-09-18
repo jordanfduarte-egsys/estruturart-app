@@ -24,6 +24,7 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class AbstractActivity extends AppCompatActivity {
         return ((BootstrapButton)findViewById(btnName));
     }
 
-    protected EditText getEditText(int editName) {
+    public EditText getEditText(int editName) {
         return (EditText)findViewById(editName);
     }
 
@@ -152,5 +153,16 @@ public class AbstractActivity extends AppCompatActivity {
             getSession(Login.class.toString()).getString("loginJson", ""),
             TbUsuario.class
         );
+    }
+
+    protected void getPositionSpinnerByListObject(Spinner sp, Object ob) {
+        for (int i = 0; i < sp.getCount(); i++) {
+            System.out.println("ESTADO SP: " + sp.getItemAtPosition(i).toString());
+            System.out.println("ESTADO CP: " + sp.getItemAtPosition(i).toString());
+            if (sp.getItemAtPosition(i).toString().equals(ob.toString())) {
+                sp.setSelection(i);
+                break;
+            }
+        }
     }
 }

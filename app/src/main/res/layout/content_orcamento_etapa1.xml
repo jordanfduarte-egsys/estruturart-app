@@ -12,6 +12,15 @@
     tools:context="v3.estruturart.com.br.estruturaart.activity.OrcamentoEtapa1"
     tools:showIn="@layout/app_bar_orcamento_etapa1">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/progressBar1"
+        />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -217,8 +226,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:ems="10"
-                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                    android:prompt="@string/spinner_title_estado" />
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
 
             </TableRow>
 
@@ -238,8 +246,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:ems="10"
-                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                    android:prompt="@string/spinner_title_cidade" />
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
             </TableRow>
 
             <TableRow

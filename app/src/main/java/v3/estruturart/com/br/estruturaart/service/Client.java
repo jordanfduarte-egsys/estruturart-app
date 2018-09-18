@@ -2,6 +2,8 @@ package v3.estruturart.com.br.estruturaart.service;
 
 import android.content.Context;
 import android.os.StrictMode;
+import android.widget.ProgressBar;
+
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -86,6 +88,7 @@ public class Client
 
         Gson gson = new Gson();
         try {
+            System.out.println("ESTADOS: " + this.json);
             if (!this.json.equals("")) {
                 return gson.fromJson(this.json, type);
             }
@@ -103,13 +106,14 @@ public class Client
 
     public Object fromPost(String action, Type type)
     {
+        Gson gson = new Gson();
         try {
             OkHttpClient client2 = new OkHttpClient();
             RequestBody body = RequestBody.create(FORMURLENCODED, getParametersToString());
             Request request = new Request.Builder()
-                .url(this.url + action)
-                .post(body)
-                .build();
+                    .url(this.url + action)
+                    .post(body)
+                    .build();
 
             Response responseO = client2.newCall(request).execute();
             this.json = responseO.body().string();
@@ -118,33 +122,31 @@ public class Client
 
             switch (responseO.code()) {
                 case 200:
-                break;
+                    break;
                 default:
                     throw new IOException(
-                        "Erro ao chamar o web service. Codigo: "
-                        + responseO.code()
-                        + responseO.message()
+                            "Erro ao chamar o web service. Codigo: "
+                                    + responseO.code()
+                                    + responseO.message()
                     );
             }
-        } catch (MalformedURLException ex) {
+        } catch(MalformedURLException ex){
             System.out.println("EXCEPTION1 => " + ex.getMessage());
             this.hasError = true;
             this.message = ex.getMessage();
-        } catch (ProtocolException ex) {
+        } catch(ProtocolException ex){
             System.out.println("EXCEPTION2 => " + ex.getMessage());
             this.hasError = true;
             this.message = ex.getMessage();
-        } catch (ConnectException ex) {
+        } catch(ConnectException ex){
             System.out.println("EXCEPTION3 => " + ex.getMessage());
             this.hasError = true;
             this.message = ex.getMessage();
-        } catch (Exception ex) {
+        } catch(Exception ex){
             System.out.println("EXCEPTION4 => " + ex.getMessage());
             this.hasError = true;
             this.message = ex.getMessage();
         }
-
-        Gson gson = new Gson();
         try {
             if (!this.json.equals("")) {
                 return gson.fromJson(this.json, type);
@@ -157,6 +159,7 @@ public class Client
             this.hasError = true;
             this.message = ex.getMessage();
         }
+
 
         return gson.fromJson("{}", type);
     }

@@ -1,7 +1,5 @@
 package v3.estruturart.com.br.estruturaart.model;
 
-import v3.estruturart.com.br.estruturaart.model.TbEstado;
-
 public class TbCidade extends AbstractModel
 {
     private Integer id = 0;
@@ -10,7 +8,7 @@ public class TbCidade extends AbstractModel
     private String nome;
     private TbEstado estado;
 
-    public Integer getId()
+    public int getId()
     {
         return this.id;
     }
@@ -58,6 +56,10 @@ public class TbCidade extends AbstractModel
     public void setEstado(TbEstado estado)
     {
         this.estado = estado;
+    }
+
+    public String toString() {
+        return this.nome;
     }
 
     public boolean isValid() {
