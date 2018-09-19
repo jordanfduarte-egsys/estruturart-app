@@ -6,7 +6,7 @@ public class TbCidade extends AbstractModel
     private int estadoId;
     private String uf;
     private String nome;
-    private TbEstado estado;
+    private TbEstado estado = new TbEstado();
 
     public int getId()
     {

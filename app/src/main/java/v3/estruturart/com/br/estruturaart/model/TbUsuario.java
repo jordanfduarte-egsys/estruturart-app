@@ -312,9 +312,50 @@ public class TbUsuario extends AbstractModel {
     }
 
     @Override
-    public boolean isValid() throws SQLException
+    public boolean isValid()
     {
         boolean isValid = true;
+
+        if (!Util.isNomeCompletoValid(this.getNome())) {
+            this.getValidation().add("Informe o nome completo!");
+            isValid = false;
+        }
+
+        if (this.getTipoPessoa().equals("1")) {
+            if (!Util.isCPFValid(this.getCpfCnpj())) {
+                this.getValidation().add( "Informe um CPF válido!");
+                isValid = false;
+            }
+        } else {
+            if (!Util.isCNPJValid(this.getCpfCnpj())) {
+                this.getValidation().add("Informe um CNPJ válido!");
+                isValid = false;
+            }
+        }
+
+        if (!Util.isEmailValid(this.getEmail())) {
+            this.getValidation().add("Informe um e-mail válido!");
+            isValid = false;
+        }
+
+        if (getRgIncricaoEstadual().equals("")) {
+            this.getValidation().add("Informe o RG ou inscriçao estadual válida!");
+            isValid = false;
+        }
+
+        if (this.getPerfilId() == TbPerfil.FUNCIONARIO) {
+            if (!Util.isPasswordValid(this.getSenha())) {
+                this.getValidation().add("Informe uma senha válida!");
+                isValid = false;
+            }
+        } else {
+            this.setSenha("");
+        }
+
+        if (this.getTelefone().length() <= 8) {
+            this.getValidation().add("Informe um telefone válida!");
+            isValid = false;
+        }
 
         return isValid;
     }

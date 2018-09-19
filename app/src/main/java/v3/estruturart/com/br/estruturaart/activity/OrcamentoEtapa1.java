@@ -31,17 +31,28 @@ import java.util.List;
 
 import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.model.CepModel;
+import v3.estruturart.com.br.estruturaart.model.Orcamento;
 import v3.estruturart.com.br.estruturaart.model.TbCidade;
+import v3.estruturart.com.br.estruturaart.model.TbEndereco;
 import v3.estruturart.com.br.estruturaart.model.TbEstado;
+import v3.estruturart.com.br.estruturaart.model.TbPerfil;
 import v3.estruturart.com.br.estruturaart.model.TbUsuario;
 import v3.estruturart.com.br.estruturaart.service.Client;
+import v3.estruturart.com.br.estruturaart.utility.AsyncResponse;
+import v3.estruturart.com.br.estruturaart.utility.AsyncTaskCustom;
 import v3.estruturart.com.br.estruturaart.utility.MaskEditUtil;
-import v3.estruturart.com.br.estruturaart.utility.ProgressLoading;
 
-public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,  AsyncResponse {
 
     private TbUsuario usuarioCompra = new TbUsuario();
+    private CepModel cepModelCompra = new CepModel();
     private TbCidade cidadeAutocomplete = new TbCidade();
+    private List<TbEstado> estados = new ArrayList<TbEstado>();
+    private List<TbCidade> cidades = new ArrayList<TbCidade>();
+    private static final int ASYNC_FIND_CPF_CNPJ = 1;
+    private static final int ASYNC_FIND_CEP = 2;
+    private static final int ASYNC_FIND_ESTADO = 3;
+    private static final int ASYNC_FIND_CIDADE = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +68,7 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
 
         loadMasks();
         loadEstados();
-        loadCidades(new TbEstado());
+        loadCidades();
         initValidationForm();
         bindCep();
         bindCpfCnpj();
@@ -86,66 +97,35 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         getTextView(R.id.etCpfCnpj).setOnKeyListener(new OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (MaskEditUtil.unmask(getTextView(R.id.etCpfCnpj).getText().toString()).length() > 11) {
-                        getTextView(R.id.etCpfCnpj).removeTextChangedListener(cpfCnpjCallback[0]);
-                        cpfCnpjCallback[0] = MaskEditUtil.mask((EditText) getTextView(R.id.etCpfCnpj), MaskEditUtil.FORMAT_CNPJ);
-                        getTextView(R.id.etCpfCnpj).addTextChangedListener(cpfCnpjCallback[0]);
-                    } else {
-                        getTextView(R.id.etCpfCnpj).removeTextChangedListener(cpfCnpjCallback[0]);
-                        cpfCnpjCallback[0] = MaskEditUtil.mask((EditText) getTextView(R.id.etCpfCnpj), MaskEditUtil.FORMAT_CPF);
-                        getTextView(R.id.etCpfCnpj).addTextChangedListener(cpfCnpjCallback[0]);
-                    }
+            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                if (MaskEditUtil.unmask(getTextView(R.id.etCpfCnpj).getText().toString()).length() > 11) {
+                    getTextView(R.id.etCpfCnpj).removeTextChangedListener(cpfCnpjCallback[0]);
+                    cpfCnpjCallback[0] = MaskEditUtil.mask((EditText) getTextView(R.id.etCpfCnpj), MaskEditUtil.FORMAT_CNPJ);
+                    getTextView(R.id.etCpfCnpj).addTextChangedListener(cpfCnpjCallback[0]);
+                } else {
+                    getTextView(R.id.etCpfCnpj).removeTextChangedListener(cpfCnpjCallback[0]);
+                    cpfCnpjCallback[0] = MaskEditUtil.mask((EditText) getTextView(R.id.etCpfCnpj), MaskEditUtil.FORMAT_CPF);
+                    getTextView(R.id.etCpfCnpj).addTextChangedListener(cpfCnpjCallback[0]);
                 }
+            }
 
-                return false;
+            return false;
             }
         });
-
 
         getTextView(R.id.edCelular).addTextChangedListener(MaskEditUtil.mask((EditText) getTextView(R.id.edCelular), MaskEditUtil.FORMAT_CELULAR));
         getTextView(R.id.etCep).addTextChangedListener(MaskEditUtil.mask((EditText) getTextView(R.id.etCep), MaskEditUtil.FORMAT_CEP));
     }
 
     public void bindCep() {
-        final Client client = new Client(this);
+        final Activity ac = (Activity)this;
         getTextView(R.id.etCep).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                boolean enableElem = true;
-                cidadeAutocomplete = new TbCidade();
-
-                System.out.println("TOTAL LENGTH CEP: " + MaskEditUtil.unmask(getTextView(R.id.etCep).getText().toString()).length());
-                if (MaskEditUtil.unmask(charSequence.toString()).length() == 8) {
-                    CepModel cepModel = new CepModel();
-                    client.getParameter().put("cep", MaskEditUtil.unmask(getTextView(R.id.etCep).getText().toString()));
-                    cepModel = (CepModel) client.fromPost("/find-cep-object", CepModel.class);
-
-                    if (cepModel.getId() > 0) {
-                        enableElem = false;
-                        getEditText(R.id.etLogradouro).setText(cepModel.getLogradouro());
-                        getPositionSpinnerByListObject(getSpinner(R.id.spEstado), cepModel.getCidade().getEstado());
-                        cidadeAutocomplete = cepModel.getCidade();
-                        loadCidades(cepModel.getCidade().getEstado());
-                        getEditText(R.id.tvBairro).setText(cepModel.getBairro());
-                        getEditText(R.id.tvNumero).setFocusable(true);
-                        getEditText(R.id.tvNumero).setFocusableInTouchMode(true);
-                        getEditText(R.id.tvNumero).requestFocus();
-                    }
-                } else {
-                    enableElem = true;
-                    getEditText(R.id.etLogradouro).setText("");
-                    getSpinner(R.id.spEstado).setSelection(0);
-                    getSpinner(R.id.spCidade).setSelection(0);
-                    getEditText(R.id.tvBairro).setText("");
-                    getEditText(R.id.tvNumero).setText("");
-                }
-
-                getEditText(R.id.etLogradouro).setEnabled(enableElem);
-                getSpinner(R.id.spEstado).setEnabled(enableElem);
-                getEditText(R.id.tvBairro).setEnabled(enableElem);
+                AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_FIND_CEP);
+                async.delegate = (AsyncResponse) ac;
+                async.execute();
             }
-
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -159,47 +139,100 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         });
     }
 
-    public void test(final AppCompatActivity ctx) {
-        final Client client = new Client(this);
-        boolean enableElem = true;
-        if (
-            MaskEditUtil.unmask(getTextView(R.id.etCpfCnpj).getText().toString()).length() == 11
-            || MaskEditUtil.unmask(getTextView(R.id.etCpfCnpj).getText().toString()).length() == 14
-        ) {
-            TbUsuario usuario = new TbUsuario();
-            client.getParameter().put("cpf_cnpj", MaskEditUtil.unmask(getTextView(R.id.etCpfCnpj).getText().toString()));
-            usuario = (TbUsuario) client.fromPost("/find-cpf-cnpj", TbUsuario.class);
-            usuarioCompra = new TbUsuario();
-            if (usuario.getId() > 0) {
-                enableElem = false;
-                ((TextView)ctx.findViewById(R.id.edRgInscricaoEstadual)).setText(usuario.getRgIncricaoEstadual());
-//                getEditText(R.id.edRgInscricaoEstadual).setText(usuario.getRgIncricaoEstadual());
-//                getEditText(R.id.edNomeCompleto).setText(usuario.getNome());
-//                getEditText(R.id.edCelular).setText(usuario.getTelefone());
-//                getEditText(R.id.edEmail).setText(usuario.getEmail());
-//                usuarioCompra = usuario;
-            }
-        } else {
-            enableElem = true;
-//            getEditText(R.id.edRgInscricaoEstadual).setText("");
-//            getEditText(R.id.edNomeCompleto).setText("");
-//            getEditText(R.id.edCelular).setText("");
-//            getEditText(R.id.edEmail).setText("");
+    public String onFindEstadoTask() {
+        ArrayAdapter<TbEstado> dataAdapter = (ArrayAdapter<TbEstado>)getSpinner(R.id.spEstado).getAdapter();
+        dataAdapter.addAll(estados);
+        getSpinner(R.id.spEstado).setAdapter(dataAdapter);
+        return null;
+    }
+
+    public String onFindCidadeTask() {
+        ArrayAdapter<TbCidade> dataAdapter = (ArrayAdapter<TbCidade>)getSpinner(R.id.spCidade).getAdapter();
+        dataAdapter.clear();
+        TbCidade cidadeDefault = new TbCidade();
+        cidadeDefault.setNome("Selecione");
+        dataAdapter.add(cidadeDefault);
+        dataAdapter.addAll(cidades);
+        getSpinner(R.id.spCidade).setAdapter(dataAdapter);
+
+        if (cidadeAutocomplete.getId() > 0) {
+            getPositionSpinnerByListObject(getSpinner(R.id.spCidade), cidadeAutocomplete);
         }
 
-//        getEditText(R.id.edRgInscricaoEstadual).setEnabled(enableElem);
-//        getEditText(R.id.edNomeCompleto).setEnabled(enableElem);
-//        getEditText(R.id.edCelular).setEnabled(enableElem);
-//        getEditText(R.id.edEmail).setEnabled(enableElem);
+        getSpinner(R.id.spCidade).setFocusable(true);
+        getSpinner(R.id.spCidade).setFocusableInTouchMode(true);
+        getSpinner(R.id.spCidade).requestFocus();
+        return null;
+    }
+
+    public String onFindCepTask() {
+        boolean enableElem = true;
+        cidadeAutocomplete = new TbCidade();
+        if (cepModelCompra instanceof CepModel && cepModelCompra.getId() > 0) {
+            enableElem = false;
+            getEditText(R.id.etLogradouro).setText(cepModelCompra.getLogradouro());
+            getPositionSpinnerByListObject(getSpinner(R.id.spEstado), cepModelCompra.getCidade().getEstado());
+            cidadeAutocomplete = cepModelCompra.getCidade();
+            loadCidades();
+            getEditText(R.id.tvBairro).setText(cepModelCompra.getBairro());
+            getEditText(R.id.tvNumero).setFocusable(true);
+            getEditText(R.id.tvNumero).setFocusableInTouchMode(true);
+            getEditText(R.id.tvNumero).requestFocus();
+        } else {
+            enableElem = true;
+            getEditText(R.id.etLogradouro).setText("");
+            getSpinner(R.id.spEstado).setSelection(0);
+            getSpinner(R.id.spCidade).setSelection(0);
+            getEditText(R.id.tvBairro).setText("");
+            getEditText(R.id.tvNumero).setText("");
+        }
+
+        if (!enableElem) {
+            getValidator(0).validate();
+        }
+        getEditText(R.id.etLogradouro).setEnabled(enableElem);
+        getSpinner(R.id.spEstado).setEnabled(enableElem);
+        getEditText(R.id.tvBairro).setEnabled(enableElem);
+
+        return null;
+    }
+
+    public String onFindCpfCnpjTask() {
+        boolean enableElem = true;
+
+        if (usuarioCompra instanceof TbUsuario && usuarioCompra.getId() > 0) {
+            enableElem = false;
+            getEditText(R.id.edRgInscricaoEstadual).setText(usuarioCompra.getRgIncricaoEstadual());
+            getEditText(R.id.edNomeCompleto).setText(usuarioCompra.getNome());
+            getEditText(R.id.edCelular).setText(usuarioCompra.getTelefone());
+            getEditText(R.id.edEmail).setText(usuarioCompra.getEmail());
+        } else {
+            enableElem = true;
+            getEditText(R.id.edRgInscricaoEstadual).setText("");
+            getEditText(R.id.edNomeCompleto).setText("");
+            getEditText(R.id.edCelular).setText("");
+            getEditText(R.id.edEmail).setText("");
+        }
+
+        if (!enableElem) {
+            getValidator(0).validate();
+        }
+        getEditText(R.id.edRgInscricaoEstadual).setEnabled(enableElem);
+        getEditText(R.id.edNomeCompleto).setEnabled(enableElem);
+        getEditText(R.id.edCelular).setEnabled(enableElem);
+        getEditText(R.id.edEmail).setEnabled(enableElem);
+
+        return null;
     }
 
     public void bindCpfCnpj() {
-        final ProgressLoading progressCpfCnpj = new ProgressLoading(this);
-
+        final Activity ac = (Activity)this;
         getTextView(R.id.etCpfCnpj).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                progressCpfCnpj.execute();
+                AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_FIND_CPF_CNPJ);
+                async.delegate = (AsyncResponse) ac;
+                async.execute();
             }
 
             @Override
@@ -239,8 +272,8 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         getValidator(0).addValidation(
             this,
             R.id.edCelular,
-            "/^(?:(?:\\+|00)?(55)\\s?)?(?:\\(?([1-9][0-9])\\)?\\s?)?(?:((?:9\\d|[2-9])\\d{3})\\-?(\\d{4}))$/",
-            R.string.orc_celular_erro
+            "^(?:(?:\\+|00)?(55)\\s?)?(?:\\(?([1-9][0-9])\\)?\\s?)?(?:((?:9\\d|[2-9])\\d{3})\\-?(\\d{4}))$",
+            R.string.orc_celular_erro//^(\([0-9]{2}\))\s([9]{1})?([0-9]{4})-([0-9]{4})$
         );
 
         getValidator(0).addValidation(
@@ -253,7 +286,7 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         getValidator(0).addValidation(
             this,
             R.id.etCep,
-            "[a-zA-Z 0-9]+",
+            "^[0-9]{2}[0-9]{3}-[0-9]{3}$",
             R.string.orc_cep_erro
         );
 
@@ -261,7 +294,7 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         getValidator(0).addValidation(
             this,
             R.id.etLogradouro,
-            "[a-zA-Z 0-9]+",
+            "[a-zA-Z\\wÀ-ú 0-9]+",
             R.string.orc_logradouro_erro
         );
 
@@ -275,7 +308,7 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         getValidator(0).addValidation(
             this,
             R.id.tvBairro,
-            "[a-zA-Z 0-9]+",
+            "[a-zA-Z\\wÀ-ú 0-9]+",
             R.string.orc_bairro_erro
         );
 
@@ -331,91 +364,146 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
     }
 
     public void loadEstados() {
+        final Activity ac = (Activity)this;
         List<TbEstado> estados = new ArrayList<TbEstado>();
-        Client client = new Client(this);
         TbEstado estadoDefault = new TbEstado();
         estadoDefault.setNome("Selecione");
-
         estados.add(estadoDefault);
-        estados.addAll((List<TbEstado>) client.fromGet("/find-estados", new TypeToken<ArrayList<TbEstado>>(){}.getType()));
         final ArrayAdapter<TbEstado> dataAdapter = new ArrayAdapter<TbEstado>(this, android.R.layout.simple_spinner_item, estados);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_expandable_list_item_1);
         getSpinner(R.id.spEstado).setAdapter(dataAdapter);
-
         getSpinner(R.id.spEstado).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                TbEstado estado = (TbEstado) dataAdapter.getItem(i);
-                loadCidades(estado);
+                cidadeAutocomplete.setEstado((TbEstado) dataAdapter.getItem(i));
+                if (cidadeAutocomplete.getEstado().getId() > 0) {
+                    AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_FIND_CIDADE);
+                    async.delegate = (AsyncResponse) ac;
+                    async.execute();
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
+
+        AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_FIND_ESTADO);
+        async.delegate = (AsyncResponse) this;
+        async.execute();
     }
 
-    public void loadCidades(TbEstado estado) {
+    public void loadCidades() {
         List<TbCidade> cidades = new ArrayList<TbCidade>();
         TbCidade cidadeDefault = new TbCidade();
         cidadeDefault.setNome("Selecione");
         cidades.add(cidadeDefault);
-
-        if (estado.getId() > 0) {
-            Client client = new Client(this);
-            client.getParameter().put("estado_id", String.valueOf(estado.getId()));
-            cidades.addAll((List<TbCidade>) client.fromPost("/find-cidades", new TypeToken<ArrayList<TbCidade>>(){}.getType()));
-            getSpinner(R.id.spCidade).setFocusable(true);
-            getSpinner(R.id.spCidade).setFocusableInTouchMode(true);
-            getSpinner(R.id.spCidade).requestFocus();
-        }
-
         ArrayAdapter<TbCidade> dataAdapter = new ArrayAdapter<TbCidade>(this, android.R.layout.simple_spinner_item, cidades);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_expandable_list_item_1);
         getSpinner(R.id.spCidade).setAdapter(dataAdapter);
-
-        if (cidadeAutocomplete.getId() > 0) {
-            getPositionSpinnerByListObject(getSpinner(R.id.spCidade), cidadeAutocomplete);
-        }
     }
 
     public void validarSubmitEtapa1() {
         if (getValidator(0).validate()) {
             TbUsuario usuario = new TbUsuario();
             TbEndereco endereco = new TbEndereco();
-            Orcamento orcamento = getOrcamentoSession(Orcamento.class);
+            Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
 
             String tipoPessoa = "2";
-            if (MaskEditUtil.unmask(getTexView(R.id.etCpfCnpj).getText().toString()).length() == 11)  {
+            String tipoPessoaName = "Pessoa jurídica";
+            if (MaskEditUtil.unmask(getEditText(R.id.etCpfCnpj).getText().toString()).length() == 11)  {
                 tipoPessoa = "1";
+                tipoPessoaName = "Pessoa física";
             }
 
             if (usuarioCompra.getId() > 0) {
                 usuario = usuarioCompra;
+                usuario.setTipoPessoaNome(tipoPessoaName);
             } else {
-                usuario.setNome(getTexView(R.id.etNomeCompleto).getText().toString());
-                usuario.setCpfCnpj(getTexView(R.id.etCpfCnpj).getText().toString());
-                usuario.setEmail(getTexView(R.id.etEmail).getText().toString());
-                usuario.setRgIncricaoEstadual(getTexView(R.id.etRgInscricaoEstadual).getText().toString());
-                usuario.setTelefone(getTexView(R.id.etCelular).getText().toString());
+                usuario.setNome(getEditText(R.id.edNomeCompleto).getText().toString());
+                usuario.setCpfCnpj(getEditText(R.id.etCpfCnpj).getText().toString());
+                usuario.setEmail(getEditText(R.id.edEmail).getText().toString());
+                usuario.setRgIncricaoEstadual(getEditText(R.id.edRgInscricaoEstadual).getText().toString());
+                usuario.setTelefone(getEditText(R.id.edCelular).getText().toString());
                 usuario.setPerfilId(TbPerfil.CLIENTE);
                 usuario.setTipoPessoa(tipoPessoa);
+                usuario.setTipoPessoaNome(tipoPessoaName);
             }
 
-            endereco.setCep(MaskEditUtil.unmask(getTexView(R.id.etCep).getText().toString()));
-            endereco.setLogradouro(getTexView(R.id.etLogradouro).getText().toString());
-            endereco.setBairro(getTexView(R.id.etBairro).getText().toString());
-            endereco.setNumero(getTexView(R.id.etNumero).getText().toString());
-            endereco.setCidadeId(((TbCidade)getSpinner(R.id.etCidade).getSelectedItem()).getId());
-            endereco.setEstadoId(((TbEstado)getSpinner(R.id.etEstado).getSelectedItem()).getId());
+            endereco.setCep(MaskEditUtil.unmask(getEditText(R.id.etCep).getText().toString()));
+            endereco.setLogradouro(getEditText(R.id.etLogradouro).getText().toString());
+            endereco.setBairro(getEditText(R.id.tvBairro).getText().toString());
+            endereco.setNumero(getEditText(R.id.tvNumero).getText().toString());
+            endereco.setCidadeId(((TbCidade)getSpinner(R.id.spCidade).getSelectedItem()).getId());
+            endereco.setEstadoId(((TbEstado)getSpinner(R.id.spEstado).getSelectedItem()).getId());
 
             orcamento.setUsuario(usuario);
             orcamento.setEndereco(endereco);
 
             // @TODO Validar todos esses campos com isValid()
             if (orcamento.isValid(Orcamento.ETAPA1)) {
-                putOrcamentoSession(orcamento, Orcamento.class);
+                putOrcamentoSession(orcamento, Orcamento.class.getName().toString());
                 // Instancia a nova INTENT
+            } else {
+                String mensagem = orcamento.getFirstMessage();
+                showMessage(this, mensagem);
             }
         }
+    }
+
+    @Override
+    public String onExecTask(String result, int id) {
+        if (id == ASYNC_FIND_CPF_CNPJ){
+            usuarioCompra = new TbUsuario();
+
+            if (
+                MaskEditUtil.unmask(getEditText(R.id.etCpfCnpj).getText().toString()).length() == 11
+                || MaskEditUtil.unmask(getEditText(R.id.etCpfCnpj).getText().toString()).length() == 14
+            ) {
+                Client client = new Client(this);
+                client.getParameter().put("cpf_cnpj", MaskEditUtil.unmask(getEditText(R.id.etCpfCnpj).getText().toString()));
+                usuarioCompra = (TbUsuario) client.fromPost("/find-cpf-cnpj", TbUsuario.class);
+            }
+        } else if (id == ASYNC_FIND_CEP) {
+            cepModelCompra = new CepModel();
+            if (MaskEditUtil.unmask(getEditText(R.id.etCep).getText().toString().toString()).length() == 8) {
+                Client client = new Client(this);
+                client.getParameter().put("cep", MaskEditUtil.unmask(getTextView(R.id.etCep).getText().toString()));
+                cepModelCompra = (CepModel) client.fromPost("/find-cep-object", CepModel.class);
+            }
+        } else if (id == ASYNC_FIND_ESTADO) {
+            Client client = new Client(this);
+            estados = (List<TbEstado>) client.fromGet("/find-estados", new TypeToken<ArrayList<TbEstado>>(){}.getType());
+        } else if (id == ASYNC_FIND_CIDADE) {
+            if (cidadeAutocomplete.getEstado().getId() > 0) {
+                Client client = new Client(this);
+                client.getParameter().put("estado_id", String.valueOf(cidadeAutocomplete.getEstado().getId()));
+                cidades = ((List<TbCidade>) client.fromPost("/find-cidades", new TypeToken<ArrayList<TbCidade>>() {
+                }.getType()));
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String onPreTask(String result, int id) {
+        getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+        return null;
+    }
+
+    @Override
+    public String onPosTask(String result, int id) {
+        if (id == ASYNC_FIND_CPF_CNPJ) {
+            onFindCpfCnpjTask();
+        } else if (id == ASYNC_FIND_CEP) {
+            onFindCepTask();
+        } else if (id == ASYNC_FIND_ESTADO) {
+            onFindEstadoTask();
+        } else if (id == ASYNC_FIND_CIDADE) {
+            onFindCidadeTask();
+        }
+
+        getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+        return null;
     }
 }

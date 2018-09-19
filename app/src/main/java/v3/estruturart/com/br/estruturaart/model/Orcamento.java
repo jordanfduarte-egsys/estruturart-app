@@ -102,9 +102,53 @@ public class Orcamento extends AbstractModel
 
     public boolean isValid() {return true;}
 
-    public boolean isValid(int etapa) throws SQLException
+    public boolean isValid(int etapa)
     {
-        return true;
+        boolean isEtapaValid = false;
+
+        switch (etapa) {
+            case ETAPA1:
+                this.getUsuario().getValidation().clear();
+                this.getEndereco().getValidation().clear();
+                boolean isValidUsuario = getUsuario().isValid();
+                boolean isValidEndereco = getEndereco().isValid();
+                isEtapaValid = isValidUsuario && isValidEndereco;
+                setIsValidEtapa1(isEtapaValid);
+
+                this.getEndereco().getValidation().addAll(getUsuario().getValidation());
+                this.getEndereco().getValidation().addAll(getEndereco().getValidation());
+                break;
+            case ETAPA2:
+                this.getValidation().clear();
+                boolean isValidModelos = getModelos().size() > 0;
+                isEtapaValid = isValidModelos;
+                if (!isEtapaValid) {
+                    this.getValidation().add("Selecione um item no orçamento!");
+                } else {
+                    calcPrevEntrega();
+                }
+
+                setIsValidEtapa2(isEtapaValid);
+                break;
+            case ETAPA3:
+                this.getValidation().clear();
+                boolean isValidPrevEntrega = true;
+                boolean isValidMaoObra = true;
+
+                if (getPrevEntrega() == null) {
+                    this.getValidation().add("Informe a data de previsão de entrega válido!");
+                    isValidPrevEntrega = false;
+                }
+
+                if (getValorMaoObra() <= 0) {
+                    this.getValidation().add("Informe o valor de mão de obra válido!");
+                    isValidMaoObra = false;
+                }
+
+                isEtapaValid = isValidPrevEntrega && isValidMaoObra;
+                break;
+        }
+        return isEtapaValid;
     }
 
     public List<TbModelo> getModelos()

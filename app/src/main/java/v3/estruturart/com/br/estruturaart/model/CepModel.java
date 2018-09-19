@@ -2,7 +2,7 @@ package v3.estruturart.com.br.estruturaart.model;
 
 public class CepModel
 {
-    private Integer id;
+    private Integer id = 0;
     private String cep;
     private String logradouro;
     private String complemento;
@@ -12,7 +12,7 @@ public class CepModel
     private String unidade;
     private String ibge;
     private String gia;
-    private TbCidade cidade;
+    private TbCidade cidade = new TbCidade();
 
     public String getCep()
     {

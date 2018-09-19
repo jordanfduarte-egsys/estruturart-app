@@ -1,5 +1,6 @@
 package v3.estruturart.com.br.estruturaart.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import v3.estruturart.com.br.estruturaart.R;
+import v3.estruturart.com.br.estruturaart.model.Orcamento;
 import v3.estruturart.com.br.estruturaart.model.TbUsuario;
 import v3.estruturart.com.br.estruturaart.service.Client;
 
@@ -36,6 +39,7 @@ public class AbstractActivity extends AppCompatActivity {
     protected DrawerLayout drawerLayout;
     protected NavigationView navigationView;
     protected boolean isValidUser = true;
+    protected Activity activity;
     private List<AwesomeValidation> validators = new ArrayList<AwesomeValidation>();
 
     protected void complementOnCreate() {
@@ -82,6 +86,10 @@ public class AbstractActivity extends AppCompatActivity {
 
     public EditText getEditText(int editName) {
         return (EditText)findViewById(editName);
+    }
+
+    public ProgressBar getProgressBar(int progress) {
+        return (ProgressBar)findViewById(progress);
     }
 
     protected TextView getTextView(int tvName) {return (TextView)findViewById(tvName);}
@@ -177,5 +185,9 @@ public class AbstractActivity extends AppCompatActivity {
         editor.putString(name, gson.toJson(orcamento));
         editor.apply();
         editor.commit();
+    }
+
+    public void setActivityAux(Activity aux) {
+        this.activity = aux;
     }
 }

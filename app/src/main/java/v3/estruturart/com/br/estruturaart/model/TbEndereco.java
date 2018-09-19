@@ -1,8 +1,5 @@
 package v3.estruturart.com.br.estruturaart.model;
 
-import v3.estruturart.com.br.estruturaart.model.TbEstado;
-import v3.estruturart.com.br.estruturaart.model.TbUsuario;
-import v3.estruturart.com.br.estruturaart.model.TbPedido;
 import v3.estruturart.com.br.estruturaart.utility.Util;
 
 public class TbEndereco extends AbstractModel
@@ -147,9 +144,41 @@ public class TbEndereco extends AbstractModel
         this.pedido = pedido;
     }
 
-    public boolean isValid()
-    {
-        return true;
+    public boolean isValid() {
+
+        boolean isValid = true;
+
+        if (getCep().length() < 8 || getCep().length() > 8) {
+            this.getValidation().add("Cep informado inválido!");
+            isValid = false;
+        }
+
+        if (getLogradouro().equals("")) {
+            this.getValidation().add("Logradouro informado inválido!");
+            isValid = false;
+        }
+
+        if (getBairro().equals("")) {
+            this.getValidation().add("Bairro informado inválido!");
+            isValid = false;
+        }
+
+        if (getNumero().equals("")) {
+            this.getValidation().add("Número da casa informado inválido!");
+            isValid = false;
+        }
+
+        if (getCidadeId() <= 0) {
+            this.getValidation().add("Selecione uma cidade!");
+            isValid = false;
+        }
+
+        if (getEstadoId() <= 0) {
+            this.getValidation().add("Selecione um estado!");
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     public Integer getCidadeId()
