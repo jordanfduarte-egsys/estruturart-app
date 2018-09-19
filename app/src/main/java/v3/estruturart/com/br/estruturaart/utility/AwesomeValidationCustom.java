@@ -198,7 +198,10 @@ public class AwesomeValidationCustom {
 
     public AwesomeValidationCustom clearElement(Object obj) {
         mValidator.haltElement(obj);
-
         return this;
+    }
+
+    public boolean validateElement(Object obj, String message) {
+        return mValidator.triggerElement(obj, message);
     }
 }

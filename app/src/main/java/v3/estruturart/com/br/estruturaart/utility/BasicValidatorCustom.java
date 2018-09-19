@@ -13,9 +13,29 @@ public class BasicValidatorCustom extends Validator {
         }
     };
 
+    private ValidationCallback mValidationCallbackElement = new ValidationCallback() {
+        @Override
+        public void execute(ValidationHolder validationHolder, Matcher matcher) {
+            validationHolder.getEditText().setError(validationHolder.getErrMsg());
+        }
+    };
+
     @Override
     public boolean trigger() {
         return checkFields(mValidationCallback);
+    }
+    @Override
+    public boolean triggerElement(Object element, String message) {
+        for (ValidationHolder validationHolder : mValidationHolderList) {
+            if (((Object)validationHolder.getEditText()).equals(ebj)) {
+                EditText editText = validationHolder.getEditText();
+                editText.setError(message);
+                editText.requestFocus();
+                editText.setSelection(editText.getText().length());
+            }
+        }
+
+        return checkFieldsElement(mValidationCallbackElement, element);
     }
 
     @Override
