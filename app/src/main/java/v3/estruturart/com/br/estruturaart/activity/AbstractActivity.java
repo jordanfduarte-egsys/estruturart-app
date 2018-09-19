@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
-import com.basgeekball.awesomevalidation.AwesomeValidation;
+import v3.estruturart.com.br.estruturaart.utility.AwesomeValidationCustom;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.gson.Gson;
 
@@ -40,7 +40,7 @@ public class AbstractActivity extends AppCompatActivity {
     protected NavigationView navigationView;
     protected boolean isValidUser = true;
     protected Activity activity;
-    private List<AwesomeValidation> validators = new ArrayList<AwesomeValidation>();
+    private List<AwesomeValidationCustom> validators = new ArrayList<AwesomeValidationCustom>();
 
     protected void complementOnCreate() {
         TypefaceProvider.registerDefaultIconSets();
@@ -94,11 +94,11 @@ public class AbstractActivity extends AppCompatActivity {
 
     protected TextView getTextView(int tvName) {return (TextView)findViewById(tvName);}
 
-    protected AwesomeValidation getValidator(int formIntName) {
+    protected AwesomeValidationCustom getValidator(int formIntName) {
         try {
             validators.get(formIntName);
         } catch ( IndexOutOfBoundsException e ) {
-            validators.add(formIntName, new AwesomeValidation(ValidationStyle.BASIC));
+            validators.add(formIntName, new AwesomeValidationCustom(ValidationStyle.BASIC));
         }
 
         return validators.get(formIntName);

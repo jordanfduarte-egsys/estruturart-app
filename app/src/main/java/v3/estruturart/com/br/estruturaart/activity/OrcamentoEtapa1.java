@@ -178,6 +178,12 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             getEditText(R.id.tvNumero).setFocusable(true);
             getEditText(R.id.tvNumero).setFocusableInTouchMode(true);
             getEditText(R.id.tvNumero).requestFocus();
+
+            getValidator(0).clearElement(getEditText(R.id.etLogradouro));
+            getValidator(0).clearElement(getEditText(R.id.tvBairro));
+            getValidator(0).clearElement(getEditText(R.id.tvNumero));
+            getValidator(0).clearElement(getEditText(R.id.spEstado));
+            getValidator(0).clearElement(getEditText(R.id.spCidade));
         } else {
             enableElem = true;
             getEditText(R.id.etLogradouro).setText("");
@@ -187,9 +193,6 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             getEditText(R.id.tvNumero).setText("");
         }
 
-        if (!enableElem) {
-            getValidator(0).validate();
-        }
         getEditText(R.id.etLogradouro).setEnabled(enableElem);
         getSpinner(R.id.spEstado).setEnabled(enableElem);
         getEditText(R.id.tvBairro).setEnabled(enableElem);
@@ -206,6 +209,11 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             getEditText(R.id.edNomeCompleto).setText(usuarioCompra.getNome());
             getEditText(R.id.edCelular).setText(usuarioCompra.getTelefone());
             getEditText(R.id.edEmail).setText(usuarioCompra.getEmail());
+
+            getValidator(0).clearElement(getEditText(R.id.edRgInscricaoEstadual));
+            getValidator(0).clearElement(getEditText(R.id.edNomeCompleto));
+            getValidator(0).clearElement(getEditText(R.id.edCelular));
+            getValidator(0).clearElement(getEditText(R.id.edEmail));
         } else {
             enableElem = true;
             getEditText(R.id.edRgInscricaoEstadual).setText("");
@@ -214,9 +222,6 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             getEditText(R.id.edEmail).setText("");
         }
 
-        if (!enableElem) {
-            getValidator(0).validate();
-        }
         getEditText(R.id.edRgInscricaoEstadual).setEnabled(enableElem);
         getEditText(R.id.edNomeCompleto).setEnabled(enableElem);
         getEditText(R.id.edCelular).setEnabled(enableElem);
