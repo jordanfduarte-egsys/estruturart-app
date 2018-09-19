@@ -1,6 +1,7 @@
 package v3.estruturart.com.br.estruturaart.model;
 
 import v3.estruturart.com.br.estruturaart.utility.Util;
+import v3.estruturart.com.br.estruturaart.utility.Param;
 
 public class TbEndereco extends AbstractModel
 {
@@ -149,32 +150,32 @@ public class TbEndereco extends AbstractModel
         boolean isValid = true;
 
         if (getCep().length() < 8 || getCep().length() > 8) {
-            this.getValidation().add("Cep informado inválido!");
+            this.getValidation().add(new Param(R.id.nome, "Cep informado inválido!");
             isValid = false;
         }
 
         if (getLogradouro().equals("")) {
-            this.getValidation().add("Logradouro informado inválido!");
+            this.getValidation().add(new Param(R.id.nome, "Logradouro informado inválido!");
             isValid = false;
         }
 
         if (getBairro().equals("")) {
-            this.getValidation().add("Bairro informado inválido!");
+            this.getValidation().add(new Param(R.id.nome, "Bairro informado inválido!"));
             isValid = false;
         }
 
         if (getNumero().equals("")) {
-            this.getValidation().add("Número da casa informado inválido!");
+            this.getValidation().add(new Param(R.id.nome, "Número da casa informado inválido!"));
             isValid = false;
         }
 
         if (getCidadeId() <= 0) {
-            this.getValidation().add("Selecione uma cidade!");
+            this.getValidation().add(new Param(R.id.nome, "Selecione uma cidade!"));
             isValid = false;
         }
 
         if (getEstadoId() <= 0) {
-            this.getValidation().add("Selecione um estado!");
+            this.getValidation().add(new Param(R.id.nome, "Selecione um estado!"));
             isValid = false;
         }
 

@@ -449,7 +449,9 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
                 putOrcamentoSession(orcamento, Orcamento.class.getName().toString());
                 // Instancia a nova INTENT
             } else {
-                String mensagem = orcamento.getFirstMessage();
+                String mensagem = orcamento.getFirstMessage().getValue();
+                Integer index = orcamento.getFirstMessage().getIndex();
+                //@TODO IMPLEMENTAR MENSGEM NO ELEMENTO
                 showMessage(this, mensagem);
             }
         }

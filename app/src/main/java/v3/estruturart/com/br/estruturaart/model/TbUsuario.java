@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import v3.estruturart.com.br.estruturaart.utility.Util;
+import v3.estruturart.com.br.estruturaart.utility.Param;
 
 public class TbUsuario extends AbstractModel {
     private Integer id = 0;
@@ -317,35 +318,35 @@ public class TbUsuario extends AbstractModel {
         boolean isValid = true;
 
         if (!Util.isNomeCompletoValid(this.getNome())) {
-            this.getValidation().add("Informe o nome completo!");
+            this.getValidation().add(new Param(R.id.nome, "Informe o nome completo!"));
             isValid = false;
         }
 
         if (this.getTipoPessoa().equals("1")) {
             if (!Util.isCPFValid(this.getCpfCnpj())) {
-                this.getValidation().add( "Informe um CPF válido!");
+                this.getValidation().add(new Param(R.id.nome, "Informe um CPF válido!"));
                 isValid = false;
             }
         } else {
             if (!Util.isCNPJValid(this.getCpfCnpj())) {
-                this.getValidation().add("Informe um CNPJ válido!");
+                this.getValidation().add(new Param(R.id.nome, "Informe um CNPJ válido!"));
                 isValid = false;
             }
         }
 
         if (!Util.isEmailValid(this.getEmail())) {
-            this.getValidation().add("Informe um e-mail válido!");
+            this.getValidation().add(new Param(R.id.nome, "Informe um e-mail válido!"));
             isValid = false;
         }
 
         if (getRgIncricaoEstadual().equals("")) {
-            this.getValidation().add("Informe o RG ou inscriçao estadual válida!");
+            this.getValidation().add(new Param(R.id.nome, "Informe o RG ou inscriçao estadual válida!"));
             isValid = false;
         }
 
         if (this.getPerfilId() == TbPerfil.FUNCIONARIO) {
             if (!Util.isPasswordValid(this.getSenha())) {
-                this.getValidation().add("Informe uma senha válida!");
+                this.getValidation().add(new Param(R.id.nome, "Informe uma senha válida!"));
                 isValid = false;
             }
         } else {
@@ -353,7 +354,7 @@ public class TbUsuario extends AbstractModel {
         }
 
         if (this.getTelefone().length() <= 8) {
-            this.getValidation().add("Informe um telefone válida!");
+            this.getValidation().add(new Param(R.id.nome, "Informe um telefone válida!"));
             isValid = false;
         }
 

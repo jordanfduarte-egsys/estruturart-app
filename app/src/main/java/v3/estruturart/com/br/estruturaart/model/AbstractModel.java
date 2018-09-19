@@ -6,12 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import v3.estruturart.com.br.estruturaart.utility.Param;
 
 public abstract class AbstractModel
 {
     private SimpleDateFormat simpleDateFormat;
     private NumberFormat numberFormat;
-    private List<String> validation = new ArrayList<String>();
+    private List<Param> validation = new ArrayList<Param>();
 
     public abstract boolean isValid() throws SQLException;
     /**
@@ -39,7 +40,7 @@ public abstract class AbstractModel
         return numberFormat.format(money).replace("R$", "").trim();
     }
 
-    public List<String> getValidation() {
+    public List<Param> getValidation() {
         return validation;
     }
 

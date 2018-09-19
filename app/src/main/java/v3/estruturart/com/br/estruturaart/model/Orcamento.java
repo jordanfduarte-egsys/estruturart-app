@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import v3.estruturart.com.br.estruturaart.model.TbEndereco;
 import v3.estruturart.com.br.estruturaart.model.TbPedido;
 import v3.estruturart.com.br.estruturaart.utility.Feriados;
+import v3.estruturart.com.br.estruturaart.utility.Param;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class Orcamento extends AbstractModel
                 boolean isValidModelos = getModelos().size() > 0;
                 isEtapaValid = isValidModelos;
                 if (!isEtapaValid) {
-                    this.getValidation().add("Selecione um item no orçamento!");
+                    this.getValidation().add(new Param(R.id.nome, "Selecione um item no orçamento!"));
                 } else {
                     calcPrevEntrega();
                 }
@@ -136,12 +137,12 @@ public class Orcamento extends AbstractModel
                 boolean isValidMaoObra = true;
 
                 if (getPrevEntrega() == null) {
-                    this.getValidation().add("Informe a data de previsão de entrega válido!");
+                    this.getValidation().add(new Param(R.id.nome, "Informe a data de previsão de entrega válido!"));
                     isValidPrevEntrega = false;
                 }
 
                 if (getValorMaoObra() <= 0) {
-                    this.getValidation().add("Informe o valor de mão de obra válido!");
+                    this.getValidation().add(new Param(R.id.nome, "Informe o valor de mão de obra válido!"));
                     isValidMaoObra = false;
                 }
 
