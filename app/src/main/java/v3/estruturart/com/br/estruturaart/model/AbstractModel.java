@@ -44,14 +44,13 @@ public abstract class AbstractModel
         return validation;
     }
 
-    public String getFirstMessage() {
-        String message = "";
+    public Param getFirstMessage() {
+        Param param = new Param(0, "");
         try {
-            message = getValidation().get(0);
+            param = getValidation().get(0);
         } catch (IndexOutOfBoundsException e) {
-            message = "";
         }
 
-        return message;
+        return param;
     }
 }

@@ -1,10 +1,6 @@
 package v3.estruturart.com.br.estruturaart.model;
 
-import v3.estruturart.com.br.estruturaart.model.TbUsuario;
-import v3.estruturart.com.br.estruturaart.model.TbModelo;
-import java.sql.SQLException;
-import v3.estruturart.com.br.estruturaart.model.TbEndereco;
-import v3.estruturart.com.br.estruturaart.model.TbPedido;
+import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.utility.Feriados;
 import v3.estruturart.com.br.estruturaart.utility.Param;
 
@@ -116,15 +112,15 @@ public class Orcamento extends AbstractModel
                 isEtapaValid = isValidUsuario && isValidEndereco;
                 setIsValidEtapa1(isEtapaValid);
 
-                this.getEndereco().getValidation().addAll(getUsuario().getValidation());
-                this.getEndereco().getValidation().addAll(getEndereco().getValidation());
+                this.getValidation().addAll(getUsuario().getValidation());
+                this.getValidation().addAll(getEndereco().getValidation());
                 break;
             case ETAPA2:
                 this.getValidation().clear();
                 boolean isValidModelos = getModelos().size() > 0;
                 isEtapaValid = isValidModelos;
                 if (!isEtapaValid) {
-                    this.getValidation().add(new Param(R.id.nome, "Selecione um item no orçamento!"));
+                    this.getValidation().add(new Param(R.id.edCelular, "Selecione um item no orçamento!"));
                 } else {
                     calcPrevEntrega();
                 }
@@ -137,18 +133,19 @@ public class Orcamento extends AbstractModel
                 boolean isValidMaoObra = true;
 
                 if (getPrevEntrega() == null) {
-                    this.getValidation().add(new Param(R.id.nome, "Informe a data de previsão de entrega válido!"));
+                    this.getValidation().add(new Param(R.id.edCelular, "Informe a data de previsão de entrega válido!"));
                     isValidPrevEntrega = false;
                 }
 
                 if (getValorMaoObra() <= 0) {
-                    this.getValidation().add(new Param(R.id.nome, "Informe o valor de mão de obra válido!"));
+                    this.getValidation().add(new Param(R.id.edCelular, "Informe o valor de mão de obra válido!"));
                     isValidMaoObra = false;
                 }
 
                 isEtapaValid = isValidPrevEntrega && isValidMaoObra;
                 break;
         }
+
         return isEtapaValid;
     }
 

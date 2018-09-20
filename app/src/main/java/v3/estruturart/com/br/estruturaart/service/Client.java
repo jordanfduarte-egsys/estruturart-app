@@ -21,6 +21,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import v3.estruturart.com.br.estruturaart.R;
+import v3.estruturart.com.br.estruturaart.model.Orcamento;
 
 public class Client
 {
@@ -45,8 +46,7 @@ public class Client
         this.url = ctx.getString(R.string.ws_host);
     }
 
-    public Object fromGet(String action, Type type)
-    {
+    public Object fromGet(String action, Type type) {
         try {
             OkHttpClient client2 = new OkHttpClient();
             Request request = new Request.Builder()
@@ -88,7 +88,7 @@ public class Client
 
         Gson gson = new Gson();
         try {
-            System.out.println("ESTADOS: " + this.json);
+            System.out.println("WS JSON: " + this.json);
             if (!this.json.equals("")) {
                 return gson.fromJson(this.json, type);
             }
@@ -100,12 +100,12 @@ public class Client
             this.hasError = true;
             this.message = ex.getMessage();
         }
-
         return gson.fromJson("{}", type);
+//        Class<?> theClass = Class.forName(type.toString());
+//        return theClass.cast(new Object());
     }
 
-    public Object fromPost(String action, Type type)
-    {
+    public Object fromPost(String action, Type type) {
         Gson gson = new Gson();
         try {
             OkHttpClient client2 = new OkHttpClient();
@@ -162,6 +162,8 @@ public class Client
 
 
         return gson.fromJson("{}", type);
+//        Class<?> theClass = Class.forName(type.toString());
+//        return theClass.cast(new Object());
     }
 
     private String toString(HttpURLConnection client) throws IOException

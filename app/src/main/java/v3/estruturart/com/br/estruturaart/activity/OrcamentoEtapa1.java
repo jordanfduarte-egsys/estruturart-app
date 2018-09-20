@@ -2,6 +2,7 @@ package v3.estruturart.com.br.estruturaart.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ import v3.estruturart.com.br.estruturaart.service.Client;
 import v3.estruturart.com.br.estruturaart.utility.AsyncResponse;
 import v3.estruturart.com.br.estruturaart.utility.AsyncTaskCustom;
 import v3.estruturart.com.br.estruturaart.utility.MaskEditUtil;
+import v3.estruturart.com.br.estruturaart.utility.Param;
 
 public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,  AsyncResponse {
 
@@ -155,13 +157,18 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         dataAdapter.addAll(cidades);
         getSpinner(R.id.spCidade).setAdapter(dataAdapter);
 
-        if (cidadeAutocomplete.getId() > 0) {
-            getPositionSpinnerByListObject(getSpinner(R.id.spCidade), cidadeAutocomplete);
-        }
-
         getSpinner(R.id.spCidade).setFocusable(true);
         getSpinner(R.id.spCidade).setFocusableInTouchMode(true);
         getSpinner(R.id.spCidade).requestFocus();
+
+        if (cidadeAutocomplete.getId() > 0) {
+            getPositionSpinnerByListObject(getSpinner(R.id.spCidade), cidadeAutocomplete);
+
+            getEditText(R.id.tvNumero).setFocusable(true);
+            getEditText(R.id.tvNumero).setFocusableInTouchMode(true);
+            getEditText(R.id.tvNumero).requestFocus();
+        }
+
         return null;
     }
 
@@ -182,8 +189,8 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             getValidator(0).clearElement(getEditText(R.id.etLogradouro));
             getValidator(0).clearElement(getEditText(R.id.tvBairro));
             getValidator(0).clearElement(getEditText(R.id.tvNumero));
-            getValidator(0).clearElement(getEditText(R.id.spEstado));
-            getValidator(0).clearElement(getEditText(R.id.spCidade));
+            getValidator(0).clearElement(getSpinner(R.id.spEstado));
+            getValidator(0).clearElement(getSpinner(R.id.spCidade));
         } else {
             enableElem = true;
             getEditText(R.id.etLogradouro).setText("");
@@ -444,15 +451,21 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             orcamento.setUsuario(usuario);
             orcamento.setEndereco(endereco);
 
-            // @TODO Validar todos esses campos com isValid()
             if (orcamento.isValid(Orcamento.ETAPA1)) {
                 putOrcamentoSession(orcamento, Orcamento.class.getName().toString());
-                // Instancia a nova INTENT
+                this.startActivity(new Intent(this, OrcamentoEtapa2.class));
             } else {
-                String mensagem = orcamento.getFirstMessage().getValue();
-                Integer index = orcamento.getFirstMessage().getIndex();
-                //@TODO IMPLEMENTAR MENSGEM NO ELEMENTO
-                showMessage(this, mensagem);
+                for (Param param : orcamento.getValidation()) {
+                    Object ob = findViewById(param.getIndex());
+                    System.out.println("ERRO: " + (String)param.getValue());
+                    System.out.println("CLASS: " + ob.getClass().getName());
+
+                    if (ob instanceof Spinner) {
+                        getValidator(0).validateElement(getSpinner(param.getIndex()), (String)param.getValue());
+                    } else if (ob instanceof EditText) {
+                        getValidator(0).validateElement(getEditText(param.getIndex()), (String)param.getValue());
+                    }
+                }
             }
         }
     }

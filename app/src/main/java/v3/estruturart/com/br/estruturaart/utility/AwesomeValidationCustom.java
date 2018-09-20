@@ -7,49 +7,23 @@ import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.EditText;
 
+import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.model.NumericRange;
 import com.basgeekball.awesomevalidation.utility.custom.CustomErrorReset;
 import com.basgeekball.awesomevalidation.utility.custom.CustomValidation;
 import com.basgeekball.awesomevalidation.utility.custom.CustomValidationCallback;
 import com.basgeekball.awesomevalidation.utility.custom.SimpleCustomValidation;
-import com.basgeekball.awesomevalidation.validators.ColorationValidator;
-import com.basgeekball.awesomevalidation.validators.TextInputLayoutValidator;
-import com.basgeekball.awesomevalidation.validators.UnderlabelValidator;
-import com.basgeekball.awesomevalidation.validators.Validator;
 import com.google.common.collect.Range;
 
 import java.util.regex.Pattern;
 
 public class AwesomeValidationCustom {
 
-    private Validator mValidator = null;
-
+    private BasicValidatorCustom mValidator = null;
     private static boolean autoFocusOnFirstFailure = true;
 
     public AwesomeValidationCustom(ValidationStyle style) {
-        switch (style) {
-            case BASIC:
-                if (mValidator == null || !(mValidator instanceof BasicValidator)) {
-                    mValidator = new BasicValidatorCustom();
-                }
-                return;
-            case COLORATION:
-                if (mValidator == null || !(mValidator instanceof ColorationValidator)) {
-                    mValidator = new ColorationValidator();
-                }
-                return;
-            case UNDERLABEL:
-                if (mValidator == null || !(mValidator instanceof UnderlabelValidator)) {
-                    mValidator = new UnderlabelValidator();
-                }
-                return;
-            case TEXT_INPUT_LAYOUT:
-                if (mValidator == null || !(mValidator instanceof TextInputLayoutValidator)) {
-                    mValidator = new TextInputLayoutValidator();
-                }
-                return;
-            default:
-        }
+        mValidator = new BasicValidatorCustom();
     }
 
     public static boolean isAutoFocusOnFirstFailureEnabled() {
@@ -61,53 +35,45 @@ public class AwesomeValidationCustom {
     }
 
     private void checkIsColorationValidator() {
-        if (!(mValidator instanceof ColorationValidator)) {
-            throw new UnsupportedOperationException("Only supported by ColorationValidator.");
-        }
+        throw new UnsupportedOperationException("Only supported by ColorationValidator.");
     }
 
     private void checkIsUnderlabelValidator() {
-        if (!(mValidator instanceof UnderlabelValidator)) {
-            throw new UnsupportedOperationException("Only supported by UnderlabelValidator.");
-        }
+        throw new UnsupportedOperationException("Only supported by UnderlabelValidator.");
     }
 
     private void checkIsTextInputLayoutValidator() {
-        if (!(mValidator instanceof TextInputLayoutValidator)) {
-            throw new UnsupportedOperationException("Only supported by TextInputLayoutValidator.");
-        }
+        throw new UnsupportedOperationException("Only supported by TextInputLayoutValidator.");
     }
 
     private void checkIsNotTextInputLayoutValidator() {
-        if (mValidator instanceof TextInputLayoutValidator) {
-            throw new UnsupportedOperationException("Not supported by TextInputLayoutValidator.");
-        }
+        throw new UnsupportedOperationException("Not supported by TextInputLayoutValidator.");
     }
 
     public void setContext(Context context) {
         checkIsUnderlabelValidator();
-        ((UnderlabelValidator) mValidator).setContext(context);
+        //((UnderlabelValidator) mValidator).setContext(context);
     }
 
     public void setColor(int color) {
         checkIsColorationValidator();
-        ((ColorationValidator) mValidator).setColor(color);
+        //((ColorationValidator) mValidator).setColor(color);
     }
 
     public void setUnderlabelColor(int colorValue) {
         checkIsUnderlabelValidator();
-        ((UnderlabelValidator) mValidator).setColor(colorValue);
+        //((UnderlabelValidator) mValidator).setColor(colorValue);
     }
 
     public void setUnderlabelColorByResource(int colorResId) {
         checkIsUnderlabelValidator();
-        ((UnderlabelValidator) mValidator).setColorByResource(colorResId);
+        //((UnderlabelValidator) mValidator).setColorByResource(colorResId);
     }
 
     public void setTextInputLayoutErrorTextAppearance(int styleId)
     {
         checkIsTextInputLayoutValidator();
-        ((TextInputLayoutValidator) mValidator).setErrorTextAppearance(styleId);
+        //((TextInputLayoutValidator) mValidator).setErrorTextAppearance(styleId);
     }
 
     public void addValidation(EditText editText, String regex, String errMsg) {

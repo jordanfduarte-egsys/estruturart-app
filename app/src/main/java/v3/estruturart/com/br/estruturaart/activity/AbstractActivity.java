@@ -144,7 +144,8 @@ public class AbstractActivity extends AppCompatActivity {
     }
 
     private void orcamento(MenuItem item) {
-        this.startActivity(new Intent(this, OrcamentoEtapa1.class));
+        //this.startActivity(new Intent(this, OrcamentoEtapa1.class));
+        this.startActivity(new Intent(this, OrcamentoEtapa2.class));
     }
 
     private void home(MenuItem item) {
@@ -176,7 +177,12 @@ public class AbstractActivity extends AppCompatActivity {
 
     protected Orcamento getOrcamentoSession(String name) {
         Gson gson = new Gson();
-        return (Orcamento) gson.fromJson(getSession("orcamentoSession").getString(name, ""), Orcamento.class);
+        String json = getSession("orcamentoSession").getString(name, "");
+        if (json.equals("")) {
+            json = gson.toJson(new Orcamento());
+        }
+
+        return (Orcamento) gson.fromJson(json, Orcamento.class);
     }
 
     protected void putOrcamentoSession(Orcamento orcamento, String name) {
