@@ -33,6 +33,8 @@
         </activity>
         <activity android:name=".activity.OrcamentoEtapa2" >
         </activity>
+		<activity android:name=".activity.OrcamentoEtapa3" >
+        </activity>
     </application>
 
 </manifest>

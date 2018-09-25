@@ -13,12 +13,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
-@TargetApi(Build.VERSION_CODES.O)
 public class Feriados
 {
-    static final private List<LocalDate> datas = new ArrayList<LocalDate>();
 
+    //#https://github.com/dlew/joda-time-android
     static
     {
         Calendar cal = Calendar.getInstance();
@@ -60,40 +58,30 @@ public class Feriados
         }
     }
 
-    static LocalDate easter(int year)
-    {
-        int a = year % 19;
-        int b = year / 100;
-        int c = year % 100;
-        int d = b / 4;
-        int e = b % 4;
-        int f = (b + 8) / 25;
-        int g = (b - f + 1) / 3;
-        int h = (19 * a + b - d - g + 15) % 30;
-        int i = c / 4;
-        int k = c % 4;
-        int l = (32 + 2 * e + 2 * i - h - k) % 7;
-        int m = (a + 11 * h + 22 * l) / 451;
-        int month = (h + l - 7 * m + 114) / 31;
-        int day = ((h + l - 7 * m + 114) % 31) + 1;
-        return LocalDate.of(year, month, day);
-    }
 
-    private static LocalDate date(int year, int month, int day)
+    //#http://www.guj.com.br/t/resolvido-alguem-ja-usou-o-jollyday-para-calcular-duas-datas-sem-contar-os-feriados/135674/8
+    public boolean verificaFeriado(Date dataInicio) throws ParseException
     {
-        return LocalDate.of(year, month, day);
-    }
+        int totalHorasNesseDia = 0;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dataInicio);
 
-    public boolean verificaFeriado(Date data) throws ParseException
-    {
-        if (datas.contains(data.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))
-            return true;
+        Calendar cal1 = Calendar.getInstance();
+        int year = cal1.get(Calendar.YEAR);
 
-        return false;
-    }
+        //Lista todos os feriados do ano de 2011, pelo jollyday
+        HolidayManager m = HolidayManager.getInstance(HolidayCalendar.BRAZIL);
+        Set<Holiday> holidays = m.getHolidays(year, "br", "s");
+        boolean feriado = false;
 
-    public static List<LocalDate> getDatas()
-    {
-        return datas;
+        // Verifica se o dia atual é um dia de feriado
+        for (Holiday h : holidays){
+            if (h.getDate().equals(new DateTime(cal.getInstance().getTime()))) {
+                feriado = true;
+                break;
+            }
+        }
+
+        return feriado;
     }
 }
