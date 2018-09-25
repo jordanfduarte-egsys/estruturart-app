@@ -12,6 +12,7 @@ public class MaskEditUtil {
     public static final String FORMAT_CEP = "#####-###";
     public static final String FORMAT_DATE = "##/##/####";
     public static final String FORMAT_HOUR = "##:##";
+    public static final String FORMAT_FLOAT = "###,##";
 
     /**
      * Método que deve ser chamado para realizar a formatação

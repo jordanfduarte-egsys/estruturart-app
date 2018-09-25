@@ -120,7 +120,7 @@ public class Orcamento extends AbstractModel
                 boolean isValidModelos = getModelos().size() > 0;
                 isEtapaValid = isValidModelos;
                 if (!isEtapaValid) {
-                    this.getValidation().add(new Param(R.id.edCelular, "Selecione um item no orçamento!"));
+                    this.getValidation().add(new Param(R.id.etBuscaModelo, "Selecione um item no orçamento!"));
                 } else {
                     calcPrevEntrega();
                 }

@@ -1,5 +1,7 @@
 package v3.estruturart.com.br.estruturaart.model;
 
+import com.google.gson.Gson;
+
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -8,15 +10,15 @@ import java.util.List;
 
 // import org.apache.commons.fileupload.FileItem;
 
-public class TbModelo extends AbstractModel
+public class TbModelo extends AbstractModel implements Cloneable
 {
     private Integer id = 0;
     private String nome = "";
     private String descricao = "";
     private float larguraPadrao;
     private float alturaPadrao;
-    private float larguraNova;
-    private float alturaNova;
+    private float larguraNova = 0;
+    private float alturaNova = 0;
     private String imagem;
     private String imagemSource = "";
     private float precoPintura = 0;
@@ -28,10 +30,14 @@ public class TbModelo extends AbstractModel
     private List<TbMaterial> materiais = new ArrayList<TbMaterial>();
     //private FileItem fileItem;
     private float precoTotalSubQuery;
-    private String precoTotalQtdStr;
     private int index = 0;
     private boolean isPintura = false;
     private int quantidadeCompra = 1;
+    private String base64Image = "";
+
+    public String getBase64Image() {
+        return base64Image;
+    }
 
     public TbModelo()
     {
@@ -51,6 +57,25 @@ public class TbModelo extends AbstractModel
     public String getNome()
     {
         return nome;
+    }
+
+    public String getNomeString()
+    {
+        return String.format(
+            "%s - %s x %smm",
+            this.getNome(),
+            this.getLarguraPadraoString(),
+            this.getAlturaPadraoString()
+        );
+    }
+
+    public String getMedidaString()
+    {
+        return String.format(
+            "%s x %smm",
+            this.getLarguraNovaString(),
+            this.getAlturaNovaString()
+        );
     }
 
     public void setNome(String nome)
@@ -76,7 +101,19 @@ public class TbModelo extends AbstractModel
     public String getLarguraPadraoString()
     {
         DecimalFormat twoPlaces = new DecimalFormat("0.00");
-        return twoPlaces.format(larguraPadrao).equals("0,00") ? "" : twoPlaces.format(larguraPadrao);
+        return (twoPlaces.format(larguraPadrao).equals("0,00") ? "" : twoPlaces.format(larguraPadrao)).replace(".", ",");
+    }
+
+    public String getLarguraNovaString()
+    {
+        DecimalFormat twoPlaces = new DecimalFormat("0.00");
+        return (twoPlaces.format(larguraNova).equals("0,00") ? "" : twoPlaces.format(larguraNova)).replace(".", ",");
+    }
+
+    public String getAlturaNovaString()
+    {
+        DecimalFormat twoPlaces = new DecimalFormat("0.00");
+        return (twoPlaces.format(alturaNova).equals("0,00") ? "" : twoPlaces.format(alturaNova)).replace(".", ",");
     }
 
     public void setLarguraPadrao(float larguraPadrao)
@@ -92,7 +129,7 @@ public class TbModelo extends AbstractModel
     public String getAlturaPadraoString()
     {
         DecimalFormat twoPlaces = new DecimalFormat("0.00");
-        return twoPlaces.format(alturaPadrao).equals("0,00") ? "" : twoPlaces.format(alturaPadrao);
+        return (twoPlaces.format(alturaPadrao).equals("0,00") ? "" : twoPlaces.format(alturaPadrao)).replace(".", ",");
     }
 
     public void setAlturaPadrao(float alturaPadrao)
@@ -337,18 +374,29 @@ public class TbModelo extends AbstractModel
 
     public String getPrecoTotalQuantidadeString()
     {
-        if (this.precoTotalQtdStr == null) {
-            float total = 0;
-            for (TbMaterial material : materiais) {
-                total += material.getPreco();
-            }
-
-            total = ((total * this.porcentagemAcrescimo) / 100) + total;
-            this.precoTotalQtdStr = String.valueOf(total * this.quantidadeCompra);
+        float total = 0;
+        for (TbMaterial material : materiais) {
+            total += material.getPreco();
         }
 
-        return this.precoTotalQtdStr;
+        total = ((total * this.porcentagemAcrescimo) / 100) + total;
+        total = total * this.quantidadeCompra;
+        return formatMoney(total);
     }
+
+    public Float getPrecoTotalQuantidade()
+    {
+        float total = 0;
+        for (TbMaterial material : materiais) {
+            total += material.getPreco();
+        }
+
+        total = ((total * this.porcentagemAcrescimo) / 100) + total;
+        total = total * this.quantidadeCompra;
+
+        return total;
+    }
+
 
     public String getPrecoTotalMateriaisString()
     {
@@ -391,11 +439,39 @@ public class TbModelo extends AbstractModel
             getLarguraPadrao(),
             getAlturaNova(),
             getLarguraNova(),
-            Float.valueOf(getPrecoTotalQuantidadeString()),
+            getPrecoTotalQuantidade(),
             false,
             getPrecoPintura(),
             getQuantidadeCompra()
         );
+    }
+
+    public String getPrecoItemTotalComAcrescimoSemPinturaString()
+    {
+        return formatMoney(calculoGeral(
+            getAlturaPadrao(),
+            getLarguraPadrao(),
+            getAlturaNova(),
+            getLarguraNova(),
+            getPrecoTotalQuantidade(),
+            false,
+            getPrecoPintura(),
+            getQuantidadeCompra()
+        ));
+    }
+
+    public String getPrecoItemTotalComAcrescimoComPinturaString()
+    {
+        return formatMoney(calculoGeral(
+            getAlturaPadrao(),
+            getLarguraPadrao(),
+            getAlturaNova(),
+            getLarguraNova(),
+            getPrecoTotalQuantidade(),
+            true,
+            getPrecoPintura(),
+            getQuantidadeCompra()
+        ));
     }
 
     public String getPrecoItemTotalString()
@@ -410,7 +486,7 @@ public class TbModelo extends AbstractModel
             getLarguraPadrao(),
             getAlturaNova(),
             getLarguraNova(),
-            Float.valueOf(getPrecoTotalQuantidadeString()),
+            getPrecoTotalQuantidade(),
             getIsPintura(),
             getPrecoPintura(),
             getQuantidadeCompra()
@@ -554,5 +630,17 @@ public class TbModelo extends AbstractModel
     public void setAlturaNova(float alturaNova)
     {
         this.alturaNova = alturaNova;
+    }
+
+    public TbModelo cloneCurrent() {
+        Gson gson = new Gson();
+
+        try {
+            return (TbModelo) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return this;
     }
 }

@@ -100,9 +100,16 @@ public class Client
             this.hasError = true;
             this.message = ex.getMessage();
         }
-        return gson.fromJson("{}", type);
-//        Class<?> theClass = Class.forName(type.toString());
-//        return theClass.cast(new Object());
+
+        try {
+            return (Object)type.getClass().newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return new Object();
     }
 
     public Object fromPost(String action, Type type) {
@@ -161,9 +168,15 @@ public class Client
         }
 
 
-        return gson.fromJson("{}", type);
-//        Class<?> theClass = Class.forName(type.toString());
-//        return theClass.cast(new Object());
+        try {
+            return type.getClass().newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return new Object();
     }
 
     private String toString(HttpURLConnection client) throws IOException

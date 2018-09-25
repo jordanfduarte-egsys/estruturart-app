@@ -99,19 +99,19 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         getTextView(R.id.etCpfCnpj).setOnKeyListener(new OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                if (MaskEditUtil.unmask(getTextView(R.id.etCpfCnpj).getText().toString()).length() > 11) {
-                    getTextView(R.id.etCpfCnpj).removeTextChangedListener(cpfCnpjCallback[0]);
-                    cpfCnpjCallback[0] = MaskEditUtil.mask((EditText) getTextView(R.id.etCpfCnpj), MaskEditUtil.FORMAT_CNPJ);
-                    getTextView(R.id.etCpfCnpj).addTextChangedListener(cpfCnpjCallback[0]);
-                } else {
-                    getTextView(R.id.etCpfCnpj).removeTextChangedListener(cpfCnpjCallback[0]);
-                    cpfCnpjCallback[0] = MaskEditUtil.mask((EditText) getTextView(R.id.etCpfCnpj), MaskEditUtil.FORMAT_CPF);
-                    getTextView(R.id.etCpfCnpj).addTextChangedListener(cpfCnpjCallback[0]);
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (MaskEditUtil.unmask(getTextView(R.id.etCpfCnpj).getText().toString()).length() > 11) {
+                        getTextView(R.id.etCpfCnpj).removeTextChangedListener(cpfCnpjCallback[0]);
+                        cpfCnpjCallback[0] = MaskEditUtil.mask((EditText) getTextView(R.id.etCpfCnpj), MaskEditUtil.FORMAT_CNPJ);
+                        getTextView(R.id.etCpfCnpj).addTextChangedListener(cpfCnpjCallback[0]);
+                    } else {
+                        getTextView(R.id.etCpfCnpj).removeTextChangedListener(cpfCnpjCallback[0]);
+                        cpfCnpjCallback[0] = MaskEditUtil.mask((EditText) getTextView(R.id.etCpfCnpj), MaskEditUtil.FORMAT_CPF);
+                        getTextView(R.id.etCpfCnpj).addTextChangedListener(cpfCnpjCallback[0]);
+                    }
                 }
-            }
 
-            return false;
+                return false;
             }
         });
 
@@ -507,7 +507,7 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
 
     @Override
     public String onPreTask(String result, int id) {
-        getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+        getProgressBar(R.id.progressBar1).setVisibility(View.VISIBLE);
         return null;
     }
 

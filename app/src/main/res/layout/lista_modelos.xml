@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_span="2"
+        android:background="@color/bootstrap_brand_secondary_text"
+        android:padding="5dp"
+        android:layout_marginBottom="@dimen/bootstrap_button_default_font_size"
+        android:layout_height="wrap_content">
+
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="0dp">
+
+            <TableLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:gravity="center_horizontal"
+                android:weightSum="1"
+                tools:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imgListaModelo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:adjustViewBounds="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:padding="0dp"
+                android:src="@drawable/logo_branco" />
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:weightSum="1"
+                tools:orientation="horizontal">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    tools:layout_weight="0.6">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/nomeModelo"
+                        android:gravity="left|center_vertical"
+                        android:text="Janela 1x2"></TextView>
+
+                    <com.beardedhen.androidbootstrap.BootstrapButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Icone"
+                        android:id="@+id/addModelo"
+                        android:paddingRight="0dp"
+                        android:layout_marginRight="0dp"
+                        android:gravity="center_vertical|center_horizontal"
+                        app:bootstrapText="{fa_plus}"
+                        app:bootstrapBrand="primary"
+                        app:fontAwesomeIcon="fa_cart_plus" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <EditText
+                        android:id="@+id/valorLargura"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal|numberSigned"
+                        android:digits="0123456789,$"
+                        android:gravity="left|center_horizontal"
+                        android:hint="Largura">
+
+                    </EditText>
+
+
+                    <EditText
+                        android:id="@+id/valorAltura"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal|numberSigned"
+                        android:digits="0123456789,$"
+                        android:gravity="left"
+                        android:hint="Altura">
+
+                    </EditText>
+
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="0dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_span="2"
+                android:id="@+id/modeloDescricao"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Janela de correr com dkosokd ksdkooks">
+
+            </TextView>
+        </TableRow>
+
+    </TableLayout>
+</TableRow>

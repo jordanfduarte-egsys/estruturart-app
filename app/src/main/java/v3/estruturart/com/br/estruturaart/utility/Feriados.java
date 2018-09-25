@@ -1,20 +1,32 @@
 package v3.estruturart.com.br.estruturaart.utility;
 
+import android.annotation.TargetApi;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
+@TargetApi(Build.VERSION_CODES.O)
 public class Feriados
 {
     static final private List<LocalDate> datas = new ArrayList<LocalDate>();
 
     static
     {
-        for (AtomicInteger year = new AtomicInteger(LocalDate.now().getYear() - 1); year.get() <= LocalDate.now().getYear() + 1; year.getAndIncrement()) {
+        Calendar cal = Calendar.getInstance();
+        for (AtomicInteger year = new AtomicInteger(
+                cal.getTime().getYear() - 1);
+             year.get() <=
+                     cal.getTime().getYear() + 1;
+                year.getAndIncrement()) {
             // new year
             datas.add(date(year.get(), 1, 1));
             // carnival
