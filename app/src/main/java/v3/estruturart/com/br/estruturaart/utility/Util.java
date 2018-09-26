@@ -277,10 +277,8 @@ public class Util
 
                     ed.removeTextChangedListener(this);
                     ed.setText(cashAmountBuilder.toString());
-
                     ed.setTextKeepState("" + cashAmountBuilder.toString());
-                    Selection.setSelection(ed.getText(), cashAmountBuilder.toString().length() + 1);
-
+                    ed.setSelection(ed.getText().toString().length());
                     ed.addTextChangedListener(this);
                 }
             }

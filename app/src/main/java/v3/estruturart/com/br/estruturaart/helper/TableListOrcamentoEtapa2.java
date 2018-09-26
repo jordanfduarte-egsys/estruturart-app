@@ -91,8 +91,8 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
                 ((TextView)rowModelo.findViewById(R.id.nomeModelo)).setText(modelo.getNomeString());
 
                 // Mascar numerica
-                getEditText(R.id.valorLargura, ac).addTextChangedListener(Util.getMaskValidatorFloat(getEditText(R.id.valorLargura, ac)));
-                getEditText(R.id.valorAltura, ac).addTextChangedListener(Util.getMaskValidatorFloat(getEditText(R.id.valorAltura, ac)));
+                getEditText(R.id.valorLargura, rowModelo).addTextChangedListener(Util.getMaskValidatorFloat(getEditText(R.id.valorLargura, rowModelo)));
+                getEditText(R.id.valorAltura, rowModelo).addTextChangedListener(Util.getMaskValidatorFloat(getEditText(R.id.valorAltura, rowModelo)));
 
                 // Apresenta a descrição
                 ((TextView)rowModelo.findViewById(R.id.modeloDescricao)).setText(modelo.getDescricao());
