@@ -20,6 +20,8 @@
     <string name="orc_cidade_erro">Selecione uma cidade!</string>
     <string name="orc_numero_erro">Informe o número da casa!</string>
     <string name="orc_bairro_erro">Informe o bairro!</string>
+    <string name="orc_dta_prev">Informe a data de previsão de instalação!</string>
+    <string name="orc_desconto">Informe o desconto!</string>
 
     <string name="spinner_title_cidade">Selecione!</string>
     <string name="spinner_title_estado">Selecione!</string>

@@ -146,6 +146,7 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
     }
 
     public void validarFormularioEtapa2() {
+		getProgressBar(R.id.progressBar1).setVisibility(View.VISIBLE);
         Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
         orcamento.getModelos().clear();
         TableLayout itens = (TableLayout)findViewById(R.id.tbListItensAdicionados);
@@ -174,5 +175,7 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
                 }
             }
         }
+		
+		getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
     }
 }

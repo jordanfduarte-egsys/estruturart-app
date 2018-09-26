@@ -10,8 +10,13 @@ import com.google.gson.Gson;
 import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.model.TbUsuario;
 import v3.estruturart.com.br.estruturaart.service.Client;
+import v3.estruturart.com.br.estruturaart.utility.AsyncResponse;
+import v3.estruturart.com.br.estruturaart.utility.AsyncTaskCustom;
 
-public class Login extends AbstractActivity implements View.OnClickListener {
+public class Login extends AbstractActivity implements View.OnClickListener, AsyncResponse {
+	private static final int ASYNC_LOGIN = 4;
+	private TbUsuario usuarioModel = new TbUsuario();
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,30 +73,56 @@ public class Login extends AbstractActivity implements View.OnClickListener {
     }
 
     public void onLogin(View view) {
-        if (getValidator(0).validate()) {
-            String usuario = getEditText(R.id.input_email).getText().toString();
-            String senha = getEditText(R.id.input_password).getText().toString();
-
-            SharedPreferences.Editor editor = getSession(this.getClass().toString()).edit();
-            Client client = new Client(view.getContext());
-            client.getParameter().put("email", usuario);
-            client.getParameter().put("senha", senha);
-            TbUsuario usuarioModel = (TbUsuario) client.fromPost("/find-usuario", TbUsuario.class);
-
-            if (client.hasError()) {
-                showMessage(view.getContext(), "Sistema temporariamente indisponível. Tente novamente mais tarde!");
-                System.out.println("Ex: " + client.getMessage());
-            } else if (usuarioModel.getId() > 0) {
-                editor.putString("login", usuario);
-                editor.putString("senha", senha);
-                editor.putString("loginJson", client.getJson());
-                editor.apply();
-                editor.commit();
-
-                view.getContext().startActivity(new Intent(view.getContext(), Home.class));
-            } else {
-                showMessage(view.getContext(), "Usuário ou senha informada inválida. Verifique!");
-            }
+        if (getValidator(0).validate()) {			
+			AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_LOGIN);
+			async.delegate = (AsyncResponse) ac;
+			async.execute();
         }
     }
+	
+	@Override
+    public String onExecTask(String result, int id) {
+        if (id == ASYNC_LOGIN){			
+            String usuario = getEditText(R.id.input_email).getText().toString();
+            String senha = getEditText(R.id.input_password).getText().toString();
+            SharedPreferences.Editor editor = getSession(Login.class.toString()).edit();			
+			Client client = new Client(view.getContext());
+            client.getParameter().put("email", usuario);
+            client.getParameter().put("senha", senha);
+            usuarioModel = (TbUsuario) client.fromPost("/find-usuario", TbUsuario.class);  
+			
+			if (client.hasError()) {
+				usuarioModel.setMessage("Sistema temporariamente indisponível. Tente novamente mais tarde!");				
+			}			
+		}
+	}
+	
+	@Override
+    public String onPreTask(String result, int id) {
+        getProgressBar(R.id.progressBar1).setVisibility(View.VISIBLE);
+        return null;
+    }
+	
+	 @Override
+    public String onPosTask(String result, int id) {
+		getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+		
+		if (!usuarioModel.getMessage().equals("")) {
+			showMessage(view.getContext(), usuarioModel.getMessage());
+			System.out.println("Ex: " + client.getMessage());
+			usuarioModel = new TbUsuario();
+		} else {		
+			if (usuarioModel.getId() > 0) {
+				editor.putString("login", usuario);
+				editor.putString("senha", senha);
+				editor.putString("loginJson", client.getJson());
+				editor.apply();
+				editor.commit();
+
+				view.getContext().startActivity(new Intent(view.getContext(), Home.class));
+			} else {
+				showMessage(view.getContext(), "Usuário ou senha informado inválido. Verifique!");
+			}
+		}
+	}
 }

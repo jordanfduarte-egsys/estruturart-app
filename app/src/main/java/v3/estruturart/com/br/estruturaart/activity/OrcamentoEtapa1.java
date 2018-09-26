@@ -44,7 +44,7 @@ import v3.estruturart.com.br.estruturaart.utility.AsyncTaskCustom;
 import v3.estruturart.com.br.estruturaart.utility.MaskEditUtil;
 import v3.estruturart.com.br.estruturaart.utility.Param;
 
-public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,  AsyncResponse {
+public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, AsyncResponse {
 
     private TbUsuario usuarioCompra = new TbUsuario();
     private CepModel cepModelCompra = new CepModel();
@@ -415,6 +415,7 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
     }
 
     public void validarSubmitEtapa1() {
+		getProgressBar(R.id.progressBar1).setVisibility(View.VISIBLE);
         if (getValidator(0).validate()) {
             TbUsuario usuario = new TbUsuario();
             TbEndereco endereco = new TbEndereco();
@@ -468,6 +469,8 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
                 }
             }
         }
+		
+		getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
     }
 
     @Override

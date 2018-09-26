@@ -51,6 +51,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         getBootstrapButton(R.id.btCriarOrcamento).setOnClickListener(this);
         getBootstrapButton(R.id.btCriarPedido).setOnClickListener(this);
         initResumo();
+        initValidator();
         loadValues();
         initMask();
     }
@@ -107,6 +108,22 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                 }
             }
         }
+    }
+
+    public void initValidator() {
+        getValidator(0).addValidation(
+            this,
+            R.id.prevEntrega,
+            "([0-2][0-9]|3[0-1])\/(0[0-9]|1[0-2])\/[0-9]{4}",
+            R.string.orc_dta_prev
+        );
+
+        getValidator(0).addValidation(
+            this,
+            R.id.desconto,
+            "^[+-]?([0-9]*[,])?[0-9]+$",
+            R.string.orc_desconto
+        );
     }
 
     public void initResumo() {
