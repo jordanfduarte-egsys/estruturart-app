@@ -69,6 +69,16 @@ public class TbModelo extends AbstractModel implements Cloneable
         );
     }
 
+    public String getNomeNovoString()
+    {
+        return String.format(
+            "%s - %s x %smm",
+            this.getNome(),
+            this.getLarguraNovaString(),
+            this.getAlturaNovaString()
+        );
+    }
+
     public String getMedidaString()
     {
         return String.format(

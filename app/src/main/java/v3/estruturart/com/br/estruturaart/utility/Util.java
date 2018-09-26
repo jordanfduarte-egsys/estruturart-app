@@ -1,5 +1,10 @@
 package v3.estruturart.com.br.estruturaart.utility;
 
+import android.text.Editable;
+import android.text.Selection;
+import android.text.TextWatcher;
+import android.widget.EditText;
+
 import java.util.InputMismatchException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -243,5 +248,42 @@ public class Util
         }
 
         return strFinal;
+    }
+
+    public static TextWatcher getMaskValidatorFloat(final EditText ed) {
+        return new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!s.toString().matches("^\\$(\\d{1,3}(\\,\\d{3})*|(\\d+))(\\.\\d{2})?$")) {
+                    String userInput = "" + s.toString().replaceAll("[^\\d]", "");
+                    StringBuilder cashAmountBuilder = new StringBuilder(userInput);
+
+                    while (cashAmountBuilder.length() > 3 && cashAmountBuilder.charAt(0) == '0') {
+                        cashAmountBuilder.deleteCharAt(0);
+                    }
+                    while (cashAmountBuilder.length() < 3) {
+                        cashAmountBuilder.insert(0, '0');
+                    }
+                    cashAmountBuilder.insert(cashAmountBuilder.length() - 2, ',');
+
+                    ed.removeTextChangedListener(this);
+                    ed.setText(cashAmountBuilder.toString());
+
+                    ed.setTextKeepState("" + cashAmountBuilder.toString());
+                    Selection.setSelection(ed.getText(), cashAmountBuilder.toString().length() + 1);
+
+                    ed.addTextChangedListener(this);
+                }
+            }
+        };
     }
 }

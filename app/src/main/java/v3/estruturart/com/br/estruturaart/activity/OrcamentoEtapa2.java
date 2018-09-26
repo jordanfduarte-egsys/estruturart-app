@@ -1,6 +1,7 @@
 package v3.estruturart.com.br.estruturaart.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -161,9 +162,7 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         getValidator(0).clearElement(getEditText(R.id.etBuscaModelo));
         if (orcamento.isValid(Orcamento.ETAPA2)) {
             putOrcamentoSession(orcamento, Orcamento.class.getName().toString());
-            //this.startActivity(new Intent(this, OrcamentoEtapa2.class));
-
-            showMessage(this, "TOTAL: " + orcamento.getModelos().size());
+            this.startActivity(new Intent(this, OrcamentoEtapa3.class));
         } else {
             for (Param param : orcamento.getValidation()) {
                 Object ob = findViewById(param.getIndex());

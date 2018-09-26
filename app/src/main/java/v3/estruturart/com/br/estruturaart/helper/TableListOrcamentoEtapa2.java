@@ -27,6 +27,7 @@ import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.model.Orcamento;
 import v3.estruturart.com.br.estruturaart.model.TbModelo;
 import v3.estruturart.com.br.estruturaart.utility.MaskEditUtil;
+import v3.estruturart.com.br.estruturaart.utility.Util;
 
 /**
  * Helper para construção do datatable de listagem
@@ -76,10 +77,11 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
         if (modelos.size() > 0) {
             // Desabilita a mensagem de filtragem
             trMessage.setVisibility(View.GONE);
-            View rowModelo = ac.getLayoutInflater().inflate(R.layout.lista_modelos, null);
 
             // Pega os elementos retornados
             for (TbModelo modelo : modelos) {
+                View rowModelo = ac.getLayoutInflater().inflate(R.layout.lista_modelos, null);
+
                 // Coloca a imagem no campo
                 ImageView tb = (ImageView)rowModelo.findViewById(R.id.imgListaModelo);
                 tb.setZ(999);
@@ -89,8 +91,8 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
                 ((TextView)rowModelo.findViewById(R.id.nomeModelo)).setText(modelo.getNomeString());
 
                 // Mascar numerica
-                MaskEditUtil.mask((EditText) getEditText(R.id.valorLargura, ac), MaskEditUtil.FORMAT_FLOAT);
-                MaskEditUtil.mask((EditText) getEditText(R.id.valorAltura, ac), MaskEditUtil.FORMAT_FLOAT);
+                getEditText(R.id.valorLargura, ac).addTextChangedListener(Util.getMaskValidatorFloat(getEditText(R.id.valorLargura, ac)));
+                getEditText(R.id.valorAltura, ac).addTextChangedListener(Util.getMaskValidatorFloat(getEditText(R.id.valorAltura, ac)));
 
                 // Apresenta a descrição
                 ((TextView)rowModelo.findViewById(R.id.modeloDescricao)).setText(modelo.getDescricao());

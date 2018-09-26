@@ -4,11 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/bootstrap_button_default_font_size"
         android:layout_span="2"
         android:background="@drawable/border_x1"
@@ -39,14 +39,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:text="Qtd" />
-
-                    <EditText
-                        android:id="@+id/qtdAdd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:inputType="number"
-                        android:text="1" />
+                        android:id="@+id/precoItemEtapa3"
+                        android:text="Preço: R$ 2,44" />
                 </TableRow>
             </TableLayout>
 
@@ -56,64 +50,35 @@
 
                 <TableRow
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
+                    android:layout_height="match_parent">
 
-                    <com.beardedhen.androidbootstrap.BootstrapButton
-                        android:id="@+id/duplicarItem"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:background="@android:color/transparent"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:text="Icone"
-                        app:bootstrapBrand="regular"
-                        app:bootstrapText="{fa_clone}"
-                        app:fontAwesomeIcon="fa_cart_plus" />
-
-                    <com.beardedhen.androidbootstrap.BootstrapButton
-                        android:id="@+id/removerItem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@android:color/transparent"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:text="Icone"
-                        app:bootstrapBrand="danger"
-                        app:bootstrapText="{fa_times}"
-                        app:fontAwesomeIcon="fa_cart_plus" />
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:id="@+id/isPinturaString"
+                        android:layout_marginLeft="@dimen/bootstrap_alert_paddings"
+                        android:layout_marginRight="@dimen/bootstrap_alert_paddings"
+                        android:text="Sem pintura" />
                 </TableRow>
             </TableLayout>
-        </TableRow>
 
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/medidaItem"
+            <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="2x1,5mm" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/precoItem"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:paddingLeft="5dp"
-                android:text="Preço: R$ 49,90" />
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
 
-            <CheckBox
-                android:id="@+id/pinturaItem"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Pintura" />
-
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/quantidadeCompra"
+                        android:gravity="center_vertical"
+                        android:text="Qtd: 1un." />
+                </TableRow>
+            </TableLayout>
         </TableRow>
 
         <TableRow
