@@ -133,12 +133,12 @@ public class Orcamento extends AbstractModel
                 boolean isValidMaoObra = true;
 
                 if (getPrevEntrega() == null) {
-                    this.getValidation().add(new Param(R.id.edCelular, "Informe a data de previsão de entrega válido!"));
+                    this.getValidation().add(new Param(R.id.prevEntrega, "Informe a data de previsão de entrega válido!"));
                     isValidPrevEntrega = false;
                 }
 
                 if (getValorMaoObra() <= 0) {
-                    this.getValidation().add(new Param(R.id.edCelular, "Informe o valor de mão de obra válido!"));
+                    this.getValidation().add(new Param(R.id.maoObra, "Informe o valor de mão de obra válido!"));
                     isValidMaoObra = false;
                 }
 

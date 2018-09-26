@@ -144,8 +144,15 @@ public class AbstractActivity extends AppCompatActivity {
     }
 
     private void orcamento(MenuItem item) {
-        //this.startActivity(new Intent(this, OrcamentoEtapa1.class));
-        this.startActivity(new Intent(this, OrcamentoEtapa2.class));
+        Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+
+        if (orcamento.isValidEtapa1() && orcamento.isValidEtapa2()) {
+            this.startActivity(new Intent(this, OrcamentoEtapa3.class));
+        } else if (orcamento.isValidEtapa1()) {
+            this.startActivity(new Intent(this, OrcamentoEtapa2.class));
+        } else {
+            this.startActivity(new Intent(this, OrcamentoEtapa1.class));
+        }
     }
 
     private void home(MenuItem item) {

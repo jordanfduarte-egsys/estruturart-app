@@ -91,8 +91,8 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
 
     public void validarFormularioEtapa3() {
         Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
-        orcamento.getModelos().clear();    
-        
+        orcamento.getModelos().clear();
+
         if (orcamento.isValid(Orcamento.ETAPA3)) {
             putOrcamentoSession(orcamento, Orcamento.class.getName().toString());
             //this.startActivity(new Intent(this, OrcamentoEtapa2.class));
@@ -125,6 +125,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         getEditText(R.id.qtdTotalItens).setText(orcamento.getModelos().size());
         getEditText(R.id.prevEntrega).setText(orcamento.getPrevEntregaString());
         getEditText(R.id.maxDesconto).setText(orcamento.getPorcentagemMaximaSomaString() + " %");
+        getEditText(R.id.desconto).setText(String.valueOf(orcamento.getDesconto()) + " %");
         getEditText(R.id.subTotal).setText("R$ " + String.valueOf(orcamento.getPrecoSubTotalString()));
     }
 
