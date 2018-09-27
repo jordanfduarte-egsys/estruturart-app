@@ -88,6 +88,10 @@ public class AbstractActivity extends AppCompatActivity {
         return (EditText)findViewById(editName);
     }
 
+    public EditText getEditText(int editName, Context ctx) {
+        return (EditText)ctx.findViewById(editName);
+    }
+
     public ProgressBar getProgressBar(int progress) {
         return (ProgressBar)findViewById(progress);
     }

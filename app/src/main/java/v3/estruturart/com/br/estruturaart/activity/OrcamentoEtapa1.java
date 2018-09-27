@@ -74,6 +74,7 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         initValidationForm();
         bindCep();
         bindCpfCnpj();
+        popularFormulario();
         getBootstrapButton(R.id.btAvancarEtapa1).setOnClickListener(this);
     }
 
@@ -469,8 +470,26 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
                 }
             }
         }
-		
+
 		getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+    }
+
+    public void popularFormulario() {
+        Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+
+        if (orcamento.getIsValidEtapa1()) {
+            getEditText(R.id.edNomeCompleto).setText(usuario.getNome());
+            getEditText(R.id.etCpfCnpj).getText(usuario.getCpfCnpj());
+            getEditText(R.id.edEmail).getText(usuario.getEmail());
+            getEditText(R.id.edRgInscricaoEstadual).getText(usuario.getRgIncricaoEstadual());
+            getEditText(R.id.edCelular).getText(usuario.getTelefone());
+
+            getEditText(R.id.etCep).setText(endereco.getCep());
+            getEditText(R.id.etLogradouro).setText(endereco.getLogradouro());
+            getEditText(R.id.tvBairro).setText(endereco.getBairro());
+            getEditText(R.id.tvNumero).setText(endereco.getNumero());
+            getPositionSpinnerByListObject(getSpinner(R.id.spEstado), endereco.getCidade().getEstado());
+        }
     }
 
     @Override

@@ -171,8 +171,19 @@ public class Client
 
 
         try {
-            Class<?> clazz = Class.forName(type.getClass().getName().toString());
-            return clazz.newInstance();
+            // #http://www.rndblog.com/how-to-dynamically-create-an-object-in-java-from-a-class-name-given-as-string-format/
+            String classPatch = type.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+            String tentativa2 = type.getClass().getPackage().getName();
+
+            // Class cls = Class.forName(tentativa2 + "/" + type.getClass().getName());
+            // return cls.newInstance();
+
+            Class cls = Class.forName(classPatch);
+            return cls.newInstance();
+
+
+            // Class<?> clazz = Class.forName(type.getClass().getName().toString());
+            //return clazz.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

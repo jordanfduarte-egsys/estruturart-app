@@ -42,12 +42,13 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         // Metodos iniciais
         super.complementOnCreate();
 
-        // Atribui qual Ã© a view
+        // Atribui qual é a view
         setContentView(R.layout.activity_orcamento_etapa2);
 
         initNavigationBar().setNavigationItemSelectedListener(this);
 
         bindBuscarModelo();
+        populaFormulario();
 
         getValidator(0).addValidation(
             this,
@@ -56,6 +57,7 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
             R.string.orc_cpf_cnpj_erro
         );
         getBootstrapButton(R.id.btAvancarEtapa2).setOnClickListener(this);
+        getBootstrapButton(R.id.btVoltar).setOnClickListener(this);
     }
 
     @Override
@@ -64,6 +66,9 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
             case R.id.btAvancarEtapa2:
                 validarFormularioEtapa2();
                 break;
+            case R.id.btVoltar:
+                this.startActivity(new Intent(this, OrcamentoEtapa1.class));
+            break;
             default: break;
         }
     }
@@ -131,6 +136,15 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void populaFormulario() {
+        Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+        if (orcamento.getIsValidEtapa2()) {
+            modelos = orcamento.getModelos();
+            onFindModeloTask();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void onFindModeloTask() {
         //Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
         // @TODO POPULA A TABELA COM A BUSCA E FAZ BIND NOS BUTONS
@@ -177,7 +191,7 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
                 }
             }
         }
-		
+
 		getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
     }
 }

@@ -34,6 +34,7 @@ import v3.estruturart.com.br.estruturaart.utility.Param;
 import v3.estruturart.com.br.estruturaart.utility.Util;
 
 public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,  AsyncResponse {
+    public final NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +55,15 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         initValidator();
         loadValues();
         initMask();
+        bindDesconto();
+        bindMaoObra();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btVoltar:
+                this.startActivity(new Intent(this, OrcamentoEtapa2.class));
             break;
             case R.id.btCriarOrcamento:
             break;
@@ -147,6 +151,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         getEditText(R.id.maxDesconto).setText(orcamento.getPorcentagemMaximaSomaString() + " %");
         getEditText(R.id.desconto).setText(orcamento.getDescontoString());
         getEditText(R.id.subTotal).setText("R$ " + String.valueOf(orcamento.getPrecoSubTotalString()));
+        getEditText(R.id.maoObra).setText(orcamento.getValorMaoObraString());
     }
 
     public void initMask() {
@@ -154,5 +159,85 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
 
         EditText desconto = getEditText(R.id.desconto);
         desconto.addTextChangedListener(Util.getMaskValidatorFloat(desconto));
+    }
+
+    public void bindDesconto() {
+        final Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+        getEditText(R.id.desconto).setKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP) {
+                    float totalItensSemPintura = orcamento.getTotalItensAcrescimoSemPintura();
+                    float maoObra = getEditText(R.id.maoObra, v.getContext()).getText().toString().replace(".", ",").replace(",", ".");
+                    float porcentagemDesconto = getEditText(R.id.desconto, v.getContext()).getText().replace(".", ",").replace(",", ".");
+                    float totalPintura = orcamento.getTotalPintura();
+                    float subTotal = this.calcSubTotal(totalItensSemPintura, totalPintura, porcentagemDesconto, maoObra);
+
+
+                    getEditText(R.id.subTotal, v.getContext()).setText("R$ " + numberFormat.format(subTotal).replace("R$", "").trim());
+                    float porcentagemMaxima = getEditText(R.id.maxDesconto, v.getContext()).setText().replace(".", ",").replace(",", ".");
+
+                    if (porcentagemDesconto > porcentagemMaxima) {
+                       getEditText(R.id.subTotal, v.getContext()).setTextColor(Color.RED);
+                    } else {
+                       getEditText(R.id.subTotal, v.getContext()).setTextColor(R.android.color.transparent);
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    public void bindMaoObra() {
+        final Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+        getEditText(R.id.maoObra).setKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP) {
+                    float totalItensSemPintura = orcamento.getTotalItensAcrescimoSemPintura();
+                    float maoObra = getEditText(R.id.maoObra, v.getContext()).getText().toString().replace(".", ",").replace(",", ".");
+                    float porcentagemDesconto = getEditText(R.id.desconto, v.getContext()).getText().replace(".", ",").replace(",", ".");
+                    float totalPintura = orcamento.getTotalPintura();
+                    float subTotal = this.calcSubTotal(totalItensSemPintura, totalPintura, porcentagemDesconto, maoObra);
+
+
+                    getEditText(R.id.subTotal, v.getContext()).setText("R$ " + numberFormat.format(subTotal).replace("R$", "").trim());
+                    float porcentagemMaxima = getEditText(R.id.maxDesconto, v.getContext()).setText().replace(".", ",").replace(",", ".");
+
+                    if (porcentagemDesconto > porcentagemMaxima) {
+                       getEditText(R.id.subTotal, v.getContext()).setTextColor(Color.RED);
+                    } else {
+                       getEditText(R.id.subTotal, v.getContext()).setTextColor(R.android.color.transparent);
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    /**
+    * float totalItensSemPintura = orcamento.getTotalItensAcrescimoSemPintura();
+    * float maoObra = getEditText(R.id.maoObra).getText().toString().replace(".", ",").replace(",", ".");
+    * float porcentagemDesconto = getEditText(R.id.desconto).getText().replace(".", ",").replace(",", ".");
+    * float totalPintura = orcamento.getTotalPintura();
+    * float subTotal = calcSubTotal(totalItensSemPintura, totalPintura, porcentagemDesconto, maoObra)
+    *
+    * NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+    *
+    * getEditText(R.id.subTotal).setText("R$ " + numberFormat.format(subTotal).replace("R$", "").trim());
+    * float porcentagemMaxima = getEditText(R.id.maxDesconto).setText().replace(".", ",").replace(",", ".");
+    * if (porcentagemDesconto > porcentagemMaxima) {
+    *    getEditText(R.id.subTotal).setTextColor(Color.RED);
+    * } else {
+    *    getEditText(R.id.subTotal).setTextColor(R.android.color.transparent);
+    * }
+    *
+    *
+    /**
+    public float calcSubTotal(Integer totalItensSemPintura, float totalPintura, float porcentagemDesconto, float maoObra) {
+        flaot total = totalItensSemPintura - ((totalItensSemPintura * porcentagemDesconto) / 100);
+        total += totalPintura + maoObra;
+
+        return total;
     }
 }
