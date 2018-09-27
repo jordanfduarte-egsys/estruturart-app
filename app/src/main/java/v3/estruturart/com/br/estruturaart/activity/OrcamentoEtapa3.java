@@ -114,7 +114,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         getValidator(0).addValidation(
             this,
             R.id.prevEntrega,
-            "([0-2][0-9]|3[0-1])\/(0[0-9]|1[0-2])\/[0-9]{4}",
+            "([0-2][0-9]|3[0-1])/(0[0-9]|1[0-2])/[0-9]{4}",
             R.string.orc_dta_prev
         );
 
@@ -138,11 +138,14 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
 
     public void loadValues() {
         Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
-        getEditText(R.id.precoTotalItens).setText(orcamento.getPrecoItensGeralString());
-        getEditText(R.id.qtdTotalItens).setText(orcamento.getModelos().size());
+        System.out.println("\n\n\nJSON=================\n\n\n");
+        System.out.println(orcamento.toJson());
+        System.out.println("\n\nJSON=================\n\n");
+        getEditText(R.id.precoTotalItens).setText("R$ " + orcamento.getPrecoItensGeralString());
+        getEditText(R.id.qtdTotalItens).setText(String.valueOf(orcamento.getModelos().size()));
         getEditText(R.id.prevEntrega).setText(orcamento.getPrevEntregaString());
         getEditText(R.id.maxDesconto).setText(orcamento.getPorcentagemMaximaSomaString() + " %");
-        getEditText(R.id.desconto).setText(String.valueOf(orcamento.getDesconto()) + " %");
+        getEditText(R.id.desconto).setText(orcamento.getDescontoString());
         getEditText(R.id.subTotal).setText("R$ " + String.valueOf(orcamento.getPrecoSubTotalString()));
     }
 

@@ -13,6 +13,7 @@ public abstract class AbstractModel
     private SimpleDateFormat simpleDateFormat;
     private NumberFormat numberFormat;
     private List<Param> validation = new ArrayList<Param>();
+    private String message = "";
 
     public abstract boolean isValid() throws SQLException;
     /**
@@ -37,6 +38,7 @@ public abstract class AbstractModel
             numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
         }
 
+
         return numberFormat.format(money).replace("R$", "").trim();
     }
 
@@ -52,5 +54,13 @@ public abstract class AbstractModel
         }
 
         return param;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

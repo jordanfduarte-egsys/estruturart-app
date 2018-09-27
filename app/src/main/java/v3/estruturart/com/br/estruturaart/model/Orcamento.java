@@ -1,5 +1,7 @@
 package v3.estruturart.com.br.estruturaart.model;
 
+import com.google.gson.Gson;
+
 import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.utility.Feriados;
 import v3.estruturart.com.br.estruturaart.utility.Param;
@@ -374,5 +376,11 @@ public class Orcamento extends AbstractModel
         }
 
         return totalPintura;
+    }
+
+    public String toJson()
+    {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

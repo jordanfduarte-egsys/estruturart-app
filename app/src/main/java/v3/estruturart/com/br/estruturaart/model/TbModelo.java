@@ -1,8 +1,6 @@
 package v3.estruturart.com.br.estruturaart.model;
 
 import com.google.gson.Gson;
-
-import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -15,8 +13,8 @@ public class TbModelo extends AbstractModel implements Cloneable
     private Integer id = 0;
     private String nome = "";
     private String descricao = "";
-    private float larguraPadrao;
-    private float alturaPadrao;
+    private float larguraPadrao = 0;
+    private float alturaPadrao = 0;
     private float larguraNova = 0;
     private float alturaNova = 0;
     private String imagem;
@@ -24,12 +22,11 @@ public class TbModelo extends AbstractModel implements Cloneable
     private float precoPintura = 0;
     private float porcentagemAcrescimo = 1;
     private int qtdDiasProducao = 1;
-    private Date dataInclusao;
-    private int statusModeloId;
+    private int statusModeloId = 0;
     private TbStatusModelo statusModelo;
     private List<TbMaterial> materiais = new ArrayList<TbMaterial>();
     //private FileItem fileItem;
-    private float precoTotalSubQuery;
+    private float precoTotalSubQuery = 0;
     private int index = 0;
     private boolean isPintura = false;
     private int quantidadeCompra = 1;
@@ -37,6 +34,10 @@ public class TbModelo extends AbstractModel implements Cloneable
 
     public String getBase64Image() {
         return base64Image;
+    }
+
+    public void setBase64Image(String base) {
+        base64Image = base;
     }
 
     public TbModelo()
@@ -203,16 +204,6 @@ public class TbModelo extends AbstractModel implements Cloneable
         this.qtdDiasProducao = qtdDiasProducao;
     }
 
-    public Date getDataInclusao()
-    {
-        return dataInclusao;
-    }
-
-    public void setDataInclusao(Date dataInclusao)
-    {
-        this.dataInclusao = dataInclusao;
-    }
-
     public int getStatusModeloId()
     {
         return statusModeloId;
@@ -221,11 +212,6 @@ public class TbModelo extends AbstractModel implements Cloneable
     public void setStatusModeloId(int statusModeloId)
     {
         this.statusModeloId = statusModeloId;
-    }
-
-    public String getDateFormat(String format)
-    {
-        return this.getSimpleDateFormat(format).format(this.getDataInclusao());
     }
 
     @Override

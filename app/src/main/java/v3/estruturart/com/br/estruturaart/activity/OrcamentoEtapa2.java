@@ -155,7 +155,9 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
             if (view instanceof TableRow) {
                 TableRow row = (TableRow) view;
                 if (row.getTag() instanceof TbModelo) {
-                    orcamento.setModelo((TbModelo)row.getTag());
+                    TbModelo modelo = (TbModelo)row.getTag();
+                    modelo.setBase64Image("");
+                    orcamento.setModelo(modelo);
                 }
             }
         }

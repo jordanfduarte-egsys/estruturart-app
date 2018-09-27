@@ -59,7 +59,7 @@ public class TableListOrcamentoEtapa3 extends AbstractHelper {
                 getTextView(R.id.nomeModeloAdd, rowModelo).setText(modelo.getNomeNovoString());
                 if (modelo.getIsPintura()) {
                     getTextView(R.id.precoItemEtapa3, rowModelo).setText(
-                        "Preço + pintura: R$ " + modelo.getPrecoItemTotalComAcrescimoComPinturaString()
+                        "Preço: R$ " + modelo.getPrecoItemTotalComAcrescimoComPinturaString()
                     );
 
                     getTextView(R.id.isPinturaString, rowModelo).setText("Com Pintura");

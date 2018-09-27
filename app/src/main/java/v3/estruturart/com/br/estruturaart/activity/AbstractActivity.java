@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,15 +24,16 @@ import com.beardedhen.androidbootstrap.TypefaceProvider;
 import v3.estruturart.com.br.estruturaart.utility.AwesomeValidationCustom;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.model.Orcamento;
 import v3.estruturart.com.br.estruturaart.model.TbUsuario;
-import v3.estruturart.com.br.estruturaart.service.Client;
+import v3.estruturart.com.br.estruturaart.utility.GsonDeserializeExclusion;
 
 public class AbstractActivity extends AppCompatActivity {
     protected DrawerLayout drawerLayout;
@@ -183,18 +183,36 @@ public class AbstractActivity extends AppCompatActivity {
     }
 
     protected Orcamento getOrcamentoSession(String name) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+            .addDeserializationExclusionStrategy(new GsonDeserializeExclusion()).create();
+//        Gson gson = new Gson();
         String json = getSession("orcamentoSession").getString(name, "");
+
+        System.out.println("JSON\n\n\n");
+        System.out.println("JSON\n\n\n" + json);
+
         if (json.equals("")) {
             json = gson.toJson(new Orcamento());
         }
 
-        return (Orcamento) gson.fromJson(json, Orcamento.class);
+
+        //try {
+         return (Orcamento) gson.fromJson(json, Orcamento.class);
+//
+//        } catch (JsonSyntaxException e) {
+//            System.out.println("ERRO \n\n\n");
+//            e.printStackTrace();
+//        } catch (RuntimeException e) {
+//            System.out.println("ERRO \n\n\n");
+//            e.printStackTrace();
+//        }
+//
+//        return new Orcamento();
     }
 
     protected void putOrcamentoSession(Orcamento orcamento, String name) {
         Gson gson = new Gson();
-        SharedPreferences.Editor editor = getSession(Login.class.toString()).edit();
+        SharedPreferences.Editor editor = getSession("orcamentoSession").edit();
         editor.putString(name, gson.toJson(orcamento));
         editor.apply();
         editor.commit();

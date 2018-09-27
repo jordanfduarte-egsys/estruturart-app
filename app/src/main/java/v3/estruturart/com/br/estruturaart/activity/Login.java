@@ -75,7 +75,7 @@ public class Login extends AbstractActivity implements View.OnClickListener, Asy
     public void onLogin(View view) {
         if (getValidator(0).validate()) {			
 			AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_LOGIN);
-			async.delegate = (AsyncResponse) ac;
+			async.delegate = (AsyncResponse) view.getContext();
 			async.execute();
         }
     }
@@ -85,16 +85,17 @@ public class Login extends AbstractActivity implements View.OnClickListener, Asy
         if (id == ASYNC_LOGIN){			
             String usuario = getEditText(R.id.input_email).getText().toString();
             String senha = getEditText(R.id.input_password).getText().toString();
-            SharedPreferences.Editor editor = getSession(Login.class.toString()).edit();			
-			Client client = new Client(view.getContext());
+			Client client = new Client(this);
             client.getParameter().put("email", usuario);
             client.getParameter().put("senha", senha);
             usuarioModel = (TbUsuario) client.fromPost("/find-usuario", TbUsuario.class);  
 			
 			if (client.hasError()) {
-				usuarioModel.setMessage("Sistema temporariamente indisponível. Tente novamente mais tarde!");				
+				usuarioModel.setMessage("Sistema temporariamente indisponível. Tente novamente mais tarde!");
 			}			
 		}
+
+		return "";
 	}
 	
 	@Override
@@ -108,21 +109,25 @@ public class Login extends AbstractActivity implements View.OnClickListener, Asy
 		getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
 		
 		if (!usuarioModel.getMessage().equals("")) {
-			showMessage(view.getContext(), usuarioModel.getMessage());
-			System.out.println("Ex: " + client.getMessage());
+			showMessage(this, usuarioModel.getMessage());
 			usuarioModel = new TbUsuario();
 		} else {		
 			if (usuarioModel.getId() > 0) {
+                SharedPreferences.Editor editor = getSession(Login.class.toString()).edit();
+                String usuario = getEditText(R.id.input_email).getText().toString();
+                String senha = getEditText(R.id.input_password).getText().toString();
 				editor.putString("login", usuario);
 				editor.putString("senha", senha);
-				editor.putString("loginJson", client.getJson());
+				editor.putString("loginJson", usuarioModel.toJson());
 				editor.apply();
 				editor.commit();
 
-				view.getContext().startActivity(new Intent(view.getContext(), Home.class));
+				this.startActivity(new Intent(this, Home.class));
 			} else {
-				showMessage(view.getContext(), "Usuário ou senha informado inválido. Verifique!");
+				showMessage(this, "Usuário ou senha informado inválido. Verifique!");
 			}
 		}
+
+		return "";
 	}
 }

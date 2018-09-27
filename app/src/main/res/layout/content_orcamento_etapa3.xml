@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:text="Resumo"
                     android:gravity="center_horizontal"
-                    android:layout_span="2"
+                    android:layout_span="3"
                     android:textSize="24sp" />
             </TableRow>
 
@@ -68,8 +68,7 @@
                 <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_span="2"
-                    android:paddingBottom="@dimen/bootstrap_button_default_font_size"
+                    android:layout_span="3"
                     android:id="@+id/tbListItensResumo"
                     android:stretchColumns="1">
                 </TableLayout>
@@ -82,13 +81,14 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/bootstrap_brand_secondary_text"
                     android:gravity="left|center_vertical|end"
                     android:text="Preço total itens:" />
 
                 <EditText
                     android:layout_width="0dp"
                     android:editable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/precoTotalItens"
                     android:layout_height="fill_parent"
                     android:layout_weight="1" />
@@ -98,12 +98,12 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_span="3"
                 android:gravity="center_horizontal">
 
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/bootstrap_brand_secondary_text"
                     android:gravity="center_vertical"
                     android:text="Total itens:" />
 
@@ -111,6 +111,8 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:editable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/qtdTotalItens"
                     android:layout_height="fill_parent"/>
 
@@ -124,7 +126,6 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/bootstrap_brand_secondary_text"
                     android:gravity="center_vertical"
                     android:text="Prev. entrega:" />
 
@@ -145,7 +146,6 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/bootstrap_brand_secondary_text"
                     android:gravity="center_vertical"
                     android:text="% max desconto:" />
 
@@ -153,6 +153,8 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:editable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/maxDesconto"
                     android:layout_height="fill_parent"/>
             </TableRow>
@@ -165,16 +167,15 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/bootstrap_brand_secondary_text"
                     android:gravity="center_vertical"
-                    android:inputType="numberDecimal|numberSigned"
-                    android:digits="0123456789,$"
                     android:text="% desconto:" />
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:id="@+id/desconto"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:digits="0123456789,$"
                     android:hint="0,0 %"
                     android:layout_height="fill_parent"/>
             </TableRow>
@@ -187,7 +188,6 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/bootstrap_brand_secondary_text"
                     android:gravity="center_vertical"
                     android:text="Mão de obra:" />
 
@@ -209,7 +209,6 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/bootstrap_brand_secondary_text"
                     android:gravity="center_vertical"
                     android:text="Sub total:" />
 
@@ -218,6 +217,8 @@
                     android:layout_weight="1"
                     android:editable="false"
                     android:id="@+id/subTotal"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:layout_height="fill_parent"/>
             </TableRow>
 
@@ -229,7 +230,6 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/bootstrap_brand_secondary_text"
                     android:gravity="center_vertical"
                     android:text="Observação:" />
 
@@ -244,47 +244,56 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_height="match_parent">
-
-                <com.beardedhen.androidbootstrap.BootstrapButton
-                    android:layout_width="match_parent"
+                <com.beardedhen.androidbootstrap.BootstrapButtonGroup
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Icone"
-                    android:id="@+id/btVoltar"
-                    android:paddingRight="0dp"
-                    android:layout_marginRight="0dp"
-                    app:bootstrapText="{fa_cart_plus} Voltar"
-                    app:bootstrapBrand="regular"
-                    app:fontAwesomeIcon="fa_cart_plus" />
-
-                <com.beardedhen.androidbootstrap.BootstrapButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Icone"
-                    android:id="@+id/btCriarPedido"
-                    android:paddingRight="0dp"
-                    android:layout_marginRight="0dp"
-                    app:bootstrapText="{fa-shopping-cart} Criar orçamento"
+                    app:roundedCorners="true"
                     app:bootstrapBrand="primary"
-                    app:fontAwesomeIcon="fa_cart_plus" />
+                    android:background="@android:color/transparent"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_span="3">
 
-                <com.beardedhen.androidbootstrap.BootstrapButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Icone"
-                    android:id="@+id/btCriarOrcamento"
-                    android:paddingRight="0dp"
-                    android:layout_marginRight="0dp"
-                    app:bootstrapText="{fa-shopping-cart} Criar Pedido"
-                    app:bootstrapBrand="success"
-                    app:fontAwesomeIcon="fa_cart_plus" />
+                    <com.beardedhen.androidbootstrap.BootstrapButton
+                        android:id="@+id/btVoltar"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="2dp"
+                        android:paddingRight="0dp"
+                        android:layout_weight="1"
+                        android:text="Icone"
+
+                        app:bootstrapBrand="regular"
+                        app:bootstrapText="{fa_cart_plus} Voltar"
+                        app:fontAwesomeIcon="fa_cart_plus" />
+
+                    <com.beardedhen.androidbootstrap.BootstrapButton
+                        android:id="@+id/btCriarPedido"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="2dp"
+                        android:paddingRight="0dp"
+                        android:layout_weight="1"
+                        android:text="Icone"
+                        app:bootstrapBrand="primary"
+                        app:bootstrapText="{fa-shopping-cart} Criar orçamento"
+                        app:fontAwesomeIcon="fa_cart_plus" />
+
+                    <com.beardedhen.androidbootstrap.BootstrapButton
+                        android:id="@+id/btCriarOrcamento"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="0dp"
+                        android:paddingRight="0dp"
+                        android:layout_weight="1"
+                        android:text="Icone"
+                        app:bootstrapBrand="success"
+                        app:bootstrapText="{fa-shopping-cart} Criar Pedido"
+                        app:fontAwesomeIcon="fa_cart_plus" />
+                </com.beardedhen.androidbootstrap.BootstrapButtonGroup>
             </TableRow>
-            </LinearLayout>
         </TableLayout>
 
     </ScrollView>

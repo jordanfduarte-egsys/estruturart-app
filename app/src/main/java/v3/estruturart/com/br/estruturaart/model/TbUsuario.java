@@ -1,7 +1,7 @@
 package v3.estruturart.com.br.estruturaart.model;
 
-import java.sql.Date;
-import java.sql.SQLException;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +19,6 @@ public class TbUsuario extends AbstractModel {
     private String telefone;
     private String codigo;
     private String senha;
-    private Date dataInclusao;
     private Integer perfilId;
     private Integer statusUsuarioId;
     private TbPerfil perfil;
@@ -357,27 +356,7 @@ public class TbUsuario extends AbstractModel {
         return isValid;
     }
 
-    /**
-     * @return the dataInclusao
-     */
-    public Date getDataInclusao()
-    {
-        return dataInclusao;
-    }
 
-    public String getDataInclusao(String format)
-    {
-        return this.getSimpleDateFormat(format).format(this.getDataInclusao());
-    }
-
-    /**
-     * @param dataInclusao
-     *            the dataInclusao to set
-     */
-    public void setDataInclusao(Date dataInclusao)
-    {
-        this.dataInclusao = dataInclusao;
-    }
 
     /**
      * @return the tipoPessoaNome
@@ -394,5 +373,9 @@ public class TbUsuario extends AbstractModel {
     public void setTipoPessoaNome(String tipoPessoaNome)
     {
         this.tipoPessoaNome = tipoPessoaNome;
+    }
+
+    public String toJson() {
+        return (new Gson()).toJson(this);
     }
 }

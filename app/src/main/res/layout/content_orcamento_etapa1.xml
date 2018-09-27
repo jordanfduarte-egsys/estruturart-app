@@ -28,6 +28,7 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:stretchColumns="1">
 
             <TableRow
@@ -267,7 +268,8 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -284,32 +286,23 @@
 
             <TableRow
                 android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_height="match_parent">
 
 
-                <com.beardedhen.androidbootstrap.BootstrapButtonGroup
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:text="Avançar"
-                    android:layout_span="2"
-                    android:paddingTop="50dp"
-                    android:orientation="horizontal"
-                    app:bootstrapBrand="primary"
-                    app:roundedCorners="true"
-                    >
 
                     <com.beardedhen.androidbootstrap.BootstrapButton
+                        android:id="@+id/btAvancarEtapa1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        app:roundedCorners="true"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:layout_span="2"
                         android:text="Icone"
-                        android:id="@+id/btAvancarEtapa1"
-                        android:paddingRight="0dp"
-                        android:layout_marginRight="0dp"
-                        app:bootstrapText="{fa_cart_plus} Avançar"
                         app:bootstrapBrand="primary"
+                        app:bootstrapText="{fa_cart_plus} Avançar"
                         app:fontAwesomeIcon="fa_cart_plus" />
-
-                </com.beardedhen.androidbootstrap.BootstrapButtonGroup>
             </TableRow>
 
         </TableLayout>

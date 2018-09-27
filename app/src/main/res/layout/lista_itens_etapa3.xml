@@ -29,23 +29,6 @@
 
             <TableLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TableRow
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:id="@+id/precoItemEtapa3"
-                        android:text="Preço: R$ 2,44" />
-                </TableRow>
-            </TableLayout>
-
-            <TableLayout
-                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
                 <TableRow
@@ -92,6 +75,23 @@
                 android:layout_span="3"
                 android:layout_weight="1"
                 android:text="dskodko ksoodk sokdoks okdsok okdsok" />
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:id="@+id/precoItemEtapa3"
+                        android:text="Preço: R$ 2,44" />
+                </TableRow>
+            </TableLayout>
         </TableRow>
 
     </TableLayout>

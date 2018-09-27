@@ -159,18 +159,43 @@
 
             <TableRow
                 android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_height="match_parent">
 
+
+                <com.beardedhen.androidbootstrap.BootstrapButtonGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:roundedCorners="true"
+                    app:bootstrapBrand="primary"
+                    android:background="@android:color/transparent"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_span="3">
+
                     <com.beardedhen.androidbootstrap.BootstrapButton
-                        android:layout_width="match_parent"
+                        android:id="@+id/btVoltar"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="Icone"
-                        android:id="@+id/btAvancarEtapa2"
+                        android:layout_marginRight="2dp"
                         android:paddingRight="0dp"
-                        android:layout_marginRight="0dp"
-                        app:bootstrapText="{fa_cart_plus} Avançar"
-                        app:bootstrapBrand="primary"
+                        android:layout_weight="1"
+                        android:text="Icone"
+                        app:bootstrapBrand="regular"
+                        app:bootstrapText="{fa_cart_plus} Voltar"
                         app:fontAwesomeIcon="fa_cart_plus" />
+
+                    <com.beardedhen.androidbootstrap.BootstrapButton
+                        android:id="@+id/btAvancarEtapa2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="2dp"
+                        android:paddingRight="0dp"
+                        android:layout_weight="1"
+                        android:text="Icone"
+                        app:bootstrapBrand="primary"
+                        app:bootstrapText="{fa_cart_plus} Avançar"
+                        app:fontAwesomeIcon="fa_cart_plus" />
+                </com.beardedhen.androidbootstrap.BootstrapButtonGroup>
 
             </TableRow>
 
