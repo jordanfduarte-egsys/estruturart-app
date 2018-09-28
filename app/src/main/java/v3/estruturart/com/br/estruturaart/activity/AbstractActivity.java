@@ -210,6 +210,32 @@ public class AbstractActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    protected void putSincronizeOrcamento(List<Orcamento> orcamentos) {
+        Gson gson = new Gson();
+        SharedPreferences.Editor editor = getSession("sincronizeOrcamento").edit();
+        editor.putString('orcamentos', gson.toJson(orcamentos));
+        editor.apply();
+        editor.commit();
+    }
+
+    protected List<Orcamento> gutSincronizeOrcamento() {
+        Gson gson = new GsonBuilder()
+            .addDeserializationExclusionStrategy(new GsonDeserializeExclusion()).create();
+        String json = getSession("sincronizeOrcamento").getString("orcamentos", "");
+
+        System.out.println("JSON\n\n\n");
+        System.out.println("JSON\n\n\n" + json);
+
+        if (json.equals("")) {
+            json = gson.toJson(new ArrayList<Orcamento>());
+        }
+
+        return (List<Orcamento>) gson.fromJson(
+            json,
+            new TypeToken<ArrayList<Orcamento>>() {}.getType()
+        );
+    }
+
     public void setActivityAux(Activity aux) {
         this.activity = aux;
     }

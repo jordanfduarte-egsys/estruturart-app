@@ -41,8 +41,11 @@ import v3.estruturart.com.br.estruturaart.utility.Util;
 
 import static android.graphics.Color.WHITE;
 
-public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,  AsyncResponse {
+public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, AsyncResponse {
     public final NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+    private static final int ASYNC_SAVE = 4;
+    private JsonModel jsonModel = new JsonModel();
+    private String message = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         // Metodos iniciais
         super.complementOnCreate();
 
-        // Atribui qual é a view
+        // Atribui qual Ã© a view
         setContentView(R.layout.activity_orcamento_etapa3);
 
         initNavigationBar().setNavigationItemSelectedListener(this);
@@ -74,25 +77,86 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                 this.startActivity(new Intent(this, OrcamentoEtapa2.class));
             break;
             case R.id.btCriarOrcamento:
+                salvarOrcamento(true, view);
             break;
             case R.id.btCriarPedido:
+                salvarOrcamento(false, view);
             break;
         }
     }
 
     @Override
     public String onExecTask(String result, int id) {
+        if (id == ASYNC_SAVE) {
+            Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+            Client client = new Client(this);
+            client.getParameter().put("orcamento", orcamento.toJson());
+            client.getParameter().put("is_orcamento", orcamento.getIsOrcamento());
+            jsonModel = (JsonModel) client.fromPost("/find-cpf-cnpj", JsonModel.class);
+
+            if (!client.getMessage().equals("")) {
+                message = client.getMessage();
+            }
+        }
+
         return null;
     }
 
     @Override
     public String onPreTask(String result, int id) {
+        if (id == ASYNC_SAVE) {
+
+        }
         getProgressBar(R.id.progressBar1).setVisibility(View.VISIBLE);
         return null;
     }
 
+    public  boolean verificaConexao() {
+        boolean conectado;
+        ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conectivtyManager.getActiveNetworkInfo() != null
+                && conectivtyManager.getActiveNetworkInfo().isAvailable()
+                && conectivtyManager.getActiveNetworkInfo().isConnected()) {
+            conectado = true;
+        } else {
+            conectado = false;
+        }
+        return conectado;
+    }
+
     @Override
     public String onPosTask(String result, int id) {
+        if (id == ASYNC_SAVE) {
+            if (!message.equals("")) {
+                showMessage(this, message);
+                if (!verificaConexao) {
+                    Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+                    List<Orcamento> orcamentos = gutSincronizeOrcamento();
+                    orcamentos.add(orcamento);
+                    putSincronizeOrcamento(orcamentos);
+
+                    //!TODO ALERTA CONFIRM
+
+                    //LIMPA SESSÂO
+                    putOrcamentoSession(new Orcamento(), Orcamento.class.getName().toString());
+                }
+
+                message = "";
+            } else {
+                if (!jsonModel.getStatus()) {
+                    showMessage(jsonModel.getMessage());
+                } else {
+                    Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+                    putOrcamentoSession(new Orcamento(), Orcamento.class.getName().toString());
+                    if (orcamento.getIsOrcamento()) {
+                        showMessage("Orçamento realizado com sucesso!");
+                    ) else {
+                        showMessage("Pedido realizado com sucesso!");
+                    }
+                    this.startActivity(new Intent(this, Home.class));
+                }
+            }
+        }
         getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
         return null;
     }
@@ -100,26 +164,6 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return onNavigationItemSelectedActions(item);
-    }
-
-    public void validarFormularioEtapa3() {
-        Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
-        orcamento.getModelos().clear();
-
-        if (orcamento.isValid(Orcamento.ETAPA3)) {
-            putOrcamentoSession(orcamento, Orcamento.class.getName().toString());
-            //this.startActivity(new Intent(this, OrcamentoEtapa2.class));
-        } else {
-            for (Param param : orcamento.getValidation()) {
-                Object ob = findViewById(param.getIndex());
-                System.out.println("ERRO 2: " + (String)param.getValue());
-                System.out.println("CLASS 2: " + ob.getClass().getName());
-
-                if (ob instanceof EditText) {
-                    getValidator(0).validateElement(getEditText(param.getIndex()), (String)param.getValue());
-                }
-            }
-        }
     }
 
     public void initValidator() {
@@ -263,5 +307,38 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         total += totalPintura + maoObra;
 
         return total;
+    }
+
+    public void salvarOrcamento(boolean isOrcamento, View v) {
+        Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+        if (getValidator(0).validate()) {
+            float porcentagemDesconto = Float.valueOf(getEditText(R.id.desconto, v).getText().toString().replace(".", ",").replace(",", "."));
+
+            String maoObraStr = getEditText(R.id.maoObra, v).getText().toString().replace(",", ".").replace(".", "").replace("R$", "").trim();
+            float maoObra = Float.valueOf(maoObraStr.equals("") ? "0" : maoObraStr);
+            String obs = getEditText(R.id.observacao).getText().toString();
+            orcamento.setDesconto(porcentagemDesconto);
+            orcamento.setValorMaoObra(maoObra);
+            orcamento.setObservacao(obs);
+            orcamento.setIsOrcamento(isOrcamento);
+            if (orcamento.isValid(Orcamento.ETAPA3)) {
+                putOrcamentoSession(orcamento, Orcamento.class.getName().toString());
+                AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_SAVE);
+                async.delegate = (AsyncResponse) v.getContext();
+                async.execute();
+            }
+        } else {
+            for (Param param : orcamento.getValidation()) {
+                Object ob = findViewById(param.getIndex());
+                System.out.println("ERRO: " + (String)param.getValue());
+                System.out.println("CLASS: " + ob.getClass().getName());
+
+                if (ob instanceof Spinner) {
+                    getValidator(0).validateElement(getSpinner(param.getIndex()), (String)param.getValue());
+                } else if (ob instanceof EditText) {
+                    getValidator(0).validateElement(getEditText(param.getIndex()), (String)param.getValue());
+                }
+            }
+        }
     }
 }

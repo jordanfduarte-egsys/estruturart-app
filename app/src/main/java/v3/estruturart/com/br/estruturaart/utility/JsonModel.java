@@ -8,6 +8,7 @@ public class JsonModel implements IJsonModel
     private String message;
     private List<?> list;
     private Object object;
+    private Integer id;
 
     public boolean isStatus()
     {
@@ -47,5 +48,15 @@ public class JsonModel implements IJsonModel
     public void setObject(Object object)
     {
         this.object = object;
+    }
+
+    public Object getId()
+    {
+        return id;
+    }
+
+    public void setId(Integer id)
+    {
+        this.id = id;
     }
 }

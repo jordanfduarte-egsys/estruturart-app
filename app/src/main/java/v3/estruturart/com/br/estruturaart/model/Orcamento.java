@@ -24,6 +24,7 @@ public class Orcamento extends AbstractModel
     private Date prevEntrega;
     private float valorMaoObra = 0;
     private String observacao;
+    private boolean isOrcamento = false;
 
     private boolean isValidEtapa1;
     private boolean isValidEtapa2;
@@ -382,5 +383,15 @@ public class Orcamento extends AbstractModel
     {
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    public void setIsOrcamento(boolean isOrcamento)
+    {
+        this.isOrcamento = isOrcamento;
+    }
+
+    public boolean getIsOrcamento()
+    {
+        return this.isOrcamento;
     }
 }

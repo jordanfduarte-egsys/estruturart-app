@@ -55,6 +55,7 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
     private static final int ASYNC_FIND_CEP = 2;
     private static final int ASYNC_FIND_ESTADO = 3;
     private static final int ASYNC_FIND_CIDADE = 4;
+    private String message = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -512,6 +513,10 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
                 Client client = new Client(this);
                 client.getParameter().put("cpf_cnpj", MaskEditUtil.unmask(getEditText(R.id.etCpfCnpj).getText().toString()));
                 usuarioCompra = (TbUsuario) client.fromPost("/find-cpf-cnpj", TbUsuario.class);
+
+                if (!client.getMessage().equals("")) {
+                    message = client.getMessage();
+                }
             }
         } else if (id == ASYNC_FIND_CEP) {
             cepModelCompra = new CepModel();
@@ -519,6 +524,10 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
                 Client client = new Client(this);
                 client.getParameter().put("cep", MaskEditUtil.unmask(getTextView(R.id.etCep).getText().toString()));
                 cepModelCompra = (CepModel) client.fromPost("/find-cep-object", CepModel.class);
+
+                if (!client.getMessage().equals("")) {
+                    message = client.getMessage();
+                }
             }
         } else if (id == ASYNC_FIND_ESTADO) {
             Client client = new Client(this);
@@ -529,6 +538,10 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
                 client.getParameter().put("estado_id", String.valueOf(cidadeAutocomplete.getEstado().getId()));
                 cidades = ((List<TbCidade>) client.fromPost("/find-cidades", new TypeToken<ArrayList<TbCidade>>() {
                 }.getType()));
+
+                if (!client.getMessage().equals("")) {
+                    message = client.getMessage();
+                }
             }
         }
 
@@ -558,6 +571,10 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             onFindCidadeTask();
         }
 
+        if (!message.equals("")) {
+            showMessage(this, message);
+            message = "";
+        }
         getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
         return null;
     }
