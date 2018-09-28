@@ -32,9 +32,10 @@ import v3.estruturart.com.br.estruturaart.utility.Param;
 public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,  AsyncResponse {
 
     private static final int ASYNC_FIND_MODELO = 1;
-
+    private String message = "";
     private List<TbModelo> modelos = new ArrayList<TbModelo>();
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +43,7 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         // Metodos iniciais
         super.complementOnCreate();
 
-        // Atribui qual é a view
+        // Atribui qual Ã© a view
         setContentView(R.layout.activity_orcamento_etapa2);
 
         initNavigationBar().setNavigationItemSelectedListener(this);
@@ -81,6 +82,10 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
                     Client client = new Client(this);
                     client.getParameter().put("nome", getEditText(R.id.etBuscaModelo).getText().toString());
                     modelos = (List<TbModelo>) client.fromPost("/buscar-modelo", new TypeToken<ArrayList<TbModelo>>(){}.getType());
+
+                    if (!client.getMessage().equals("")) {
+                        message = client.getMessage();
+                    }
                 }
             break;
         }
@@ -104,6 +109,11 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         }
 
         getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+
+        if (!message.equals("")) {
+            showMessage(this, message);
+            message = "";
+        }
         return null;
     }
 
@@ -139,15 +149,20 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
     public void populaFormulario() {
         Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
         if (orcamento.getIsValidEtapa2()) {
-            modelos = orcamento.getModelos();
-            onFindModeloTask();
+            TableListOrcamentoEtapa2 tableListOrcamentoEtapa2 = new TableListOrcamentoEtapa2(
+                orcamento.getModelos(),
+                (TableLayout)findViewById(R.id.tbListItensFilter),
+                (TableLayout)findViewById(R.id.tbListItensAdicionados)
+            );
+
+            for (TbModelo modelo : orcamento.getModelos()) {
+                tableListOrcamentoEtapa2.popularListaItens(modelo, (Activity) this);
+            }
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void onFindModeloTask() {
-        //Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
-        // @TODO POPULA A TABELA COM A BUSCA E FAZ BIND NOS BUTONS
         TableListOrcamentoEtapa2 tableListOrcamentoEtapa2 = new TableListOrcamentoEtapa2(
             modelos,
             (TableLayout)findViewById(R.id.tbListItensFilter),

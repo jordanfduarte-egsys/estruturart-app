@@ -89,7 +89,7 @@ public class AbstractActivity extends AppCompatActivity {
     }
 
     public EditText getEditText(int editName, Context ctx) {
-        return (EditText)ctx.findViewById(editName);
+        return (EditText)(((Activity)ctx).findViewById(editName));
     }
 
     public ProgressBar getProgressBar(int progress) {
@@ -144,6 +144,7 @@ public class AbstractActivity extends AppCompatActivity {
         editor.apply();
         editor.commit();
 
+        putOrcamentoSession(new Orcamento(), Orcamento.class.getName().toString());
         this.startActivity(new Intent(this, Login.class));
     }
 
@@ -198,20 +199,7 @@ public class AbstractActivity extends AppCompatActivity {
         if (json.equals("")) {
             json = gson.toJson(new Orcamento());
         }
-
-
-        //try {
          return (Orcamento) gson.fromJson(json, Orcamento.class);
-//
-//        } catch (JsonSyntaxException e) {
-//            System.out.println("ERRO \n\n\n");
-//            e.printStackTrace();
-//        } catch (RuntimeException e) {
-//            System.out.println("ERRO \n\n\n");
-//            e.printStackTrace();
-//        }
-//
-//        return new Orcamento();
     }
 
     protected void putOrcamentoSession(Orcamento orcamento, String name) {

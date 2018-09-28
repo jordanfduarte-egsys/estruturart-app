@@ -15,6 +15,7 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import okhttp3.MediaType;
@@ -65,9 +66,9 @@ public class Client
                     break;
                 default:
                     throw new IOException(
-                            "Erro ao chamar o web service. Codigo: "
-                                    + responseO.code()
-                                    + responseO.message()
+                        "Erro ao chamar o web service. Codigo: "
+                        + responseO.code()
+                        + responseO.message()
                     );
             }
         } catch (MalformedURLException ex) {
@@ -104,10 +105,17 @@ public class Client
         }
 
         try {
-            return (Object)type.getClass().newInstance();
+            String tentativa2 = type.toString();
+            System.out.println("DYNAMIC INSTANCE: " + tentativa2.replace("class ", ""));
+            Class cls = Class.forName(tentativa2.replace("class ", ""));
+
+            this.message = "Sistema temporariamente indisponível. Tente novamente mais tarde!";
+            return cls.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -169,21 +177,17 @@ public class Client
             this.message = ex.getMessage();
         }
 
-
         try {
-            // #http://www.rndblog.com/how-to-dynamically-create-an-object-in-java-from-a-class-name-given-as-string-format/
-            String classPatch = type.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-            String tentativa2 = type.getClass().getPackage().getName();
+            String tentativa2 = type.toString();
+            System.out.println("DYNAMIC INSTANCE: " + tentativa2.replace("class ", ""));
 
-            // Class cls = Class.forName(tentativa2 + "/" + type.getClass().getName());
-            // return cls.newInstance();
+            this.message = "Sistema temporariamente indisponível. Tente novamente mais tarde!";
+            if (tentativa2.matches("(.*)ArrayList(.*)")) {
+                return new ArrayList<Object>();
+            }
 
-            Class cls = Class.forName(classPatch);
+            Class cls = Class.forName(tentativa2.replace("class ", "").trim());
             return cls.newInstance();
-
-
-            // Class<?> clazz = Class.forName(type.getClass().getName().toString());
-            //return clazz.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

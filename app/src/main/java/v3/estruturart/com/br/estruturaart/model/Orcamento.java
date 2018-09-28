@@ -343,7 +343,7 @@ public class Orcamento extends AbstractModel
 
         float porcentagem = (100 - ((totalSemAcrescimo * 100) / totalComAcrescimo));
 
-        return new DecimalFormat("#.##").format(porcentagem);
+        return (new DecimalFormat("#.##").format(porcentagem)).replace(".", ",");
     }
 
     public int getTotalDiasProducao()

@@ -201,8 +201,10 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
     }
 
     public void onClickAddModel(View v) {
-        final TbModelo modelo = (TbModelo)v.getTag();
-        final Activity ac = (Activity)v.getContext();
+        popularListaItens((TbModelo)v.getTag(), (Activity)v.getContext());
+    }
+
+    public void popularListaItens(final TbModelo modelo, Activity ac) {
         final View rowModelo = ac.getLayoutInflater().inflate(R.layout.lista_itens_etapa2, null);
 
         // Habilita ou desabilia a mensagem de filtragem
@@ -217,7 +219,8 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
 
         BootstrapButton btnDuplicar = getBootstrapButton(R.id.duplicarItem, rowModelo);
         BootstrapButton btnRemover = getBootstrapButton(R.id.removerItem, rowModelo);
-        CheckBox isPintura = rowModelo.findViewById(R.id.pinturaItem);
+        CheckBox isPintura = (CheckBox)rowModelo.findViewById(R.id.pinturaItem);
+        isPintura.setChecked(modelo.getIsPintura());
         final EditText qtd = getEditText(R.id.qtdAdd, rowModelo);
 
         btnDuplicar.setTag(modelo);
@@ -249,11 +252,11 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
 
                 if (modelo.getIsPintura()) {
                     getTextView(R.id.precoItem, rowModelo).setText(
-                        String.format("Preço: R$ " + modelo.getPrecoItemTotalComAcrescimoComPinturaString())
+                            String.format("Preço: R$ " + modelo.getPrecoItemTotalComAcrescimoComPinturaString())
                     );
                 } else {
                     getTextView(R.id.precoItem, rowModelo).setText(
-                        String.format("Preço: R$ " + modelo.getPrecoItemTotalComAcrescimoSemPinturaString())
+                            String.format("Preço: R$ " + modelo.getPrecoItemTotalComAcrescimoSemPinturaString())
                     );
                 }
             }
@@ -274,11 +277,11 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
 
                     if (modelo.getIsPintura()) {
                         getTextView(R.id.precoItem, rowModelo).setText(
-                            String.format("Preço: R$ " + modelo.getPrecoItemTotalComAcrescimoComPinturaString())
+                                String.format("Preço: R$ " + modelo.getPrecoItemTotalComAcrescimoComPinturaString())
                         );
                     } else {
                         getTextView(R.id.precoItem, rowModelo).setText(
-                            String.format("Preço: R$ " + modelo.getPrecoItemTotalComAcrescimoSemPinturaString())
+                                String.format("Preço: R$ " + modelo.getPrecoItemTotalComAcrescimoSemPinturaString())
                         );
                     }
                 }

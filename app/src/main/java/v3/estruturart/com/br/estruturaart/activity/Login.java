@@ -88,11 +88,11 @@ public class Login extends AbstractActivity implements View.OnClickListener, Asy
 			Client client = new Client(this);
             client.getParameter().put("email", usuario);
             client.getParameter().put("senha", senha);
-            usuarioModel = (TbUsuario) client.fromPost("/find-usuario", TbUsuario.class);  
-			
+            usuarioModel = (TbUsuario) client.fromPost("/find-usuario", TbUsuario.class);
+
 			if (client.hasError()) {
-				usuarioModel.setMessage("Sistema temporariamente indisponível. Tente novamente mais tarde!");
-			}			
+				usuarioModel.setMessage(client.getMessage());
+			}
 		}
 
 		return "";

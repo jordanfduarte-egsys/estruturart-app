@@ -164,7 +164,12 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
 
         if (cidadeAutocomplete.getId() > 0) {
             getPositionSpinnerByListObject(getSpinner(R.id.spCidade), cidadeAutocomplete);
+        }
 
+        Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+        if (orcamento.getIsValidEtapa1()) {
+            getEditText(R.id.tvNumero).setText(orcamento.getEndereco().getNumero());
+        } else if (cidadeAutocomplete.getId() > 0) {
             getEditText(R.id.tvNumero).setFocusable(true);
             getEditText(R.id.tvNumero).setFocusableInTouchMode(true);
             getEditText(R.id.tvNumero).requestFocus();
@@ -449,6 +454,8 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             endereco.setNumero(getEditText(R.id.tvNumero).getText().toString());
             endereco.setCidadeId(((TbCidade)getSpinner(R.id.spCidade).getSelectedItem()).getId());
             endereco.setEstadoId(((TbEstado)getSpinner(R.id.spEstado).getSelectedItem()).getId());
+            endereco.setCidade((TbCidade)getSpinner(R.id.spCidade).getSelectedItem());
+            endereco.getCidade().setEstado((TbEstado)getSpinner(R.id.spEstado).getSelectedItem());
 
             orcamento.setUsuario(usuario);
             orcamento.setEndereco(endereco);
@@ -478,17 +485,18 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
 
         if (orcamento.getIsValidEtapa1()) {
+            TbUsuario usuario = orcamento.getUsuario();
             getEditText(R.id.edNomeCompleto).setText(usuario.getNome());
-            getEditText(R.id.etCpfCnpj).getText(usuario.getCpfCnpj());
-            getEditText(R.id.edEmail).getText(usuario.getEmail());
-            getEditText(R.id.edRgInscricaoEstadual).getText(usuario.getRgIncricaoEstadual());
-            getEditText(R.id.edCelular).getText(usuario.getTelefone());
+            getEditText(R.id.etCpfCnpj).setText(usuario.getCpfCnpjString());
+            getEditText(R.id.edEmail).setText(usuario.getEmail());
+            getEditText(R.id.edRgInscricaoEstadual).setText(usuario.getRgIncricaoEstadual());
+            getEditText(R.id.edCelular).setText(usuario.getTelefone());
 
+            TbEndereco endereco = orcamento.getEndereco();
             getEditText(R.id.etCep).setText(endereco.getCep());
             getEditText(R.id.etLogradouro).setText(endereco.getLogradouro());
             getEditText(R.id.tvBairro).setText(endereco.getBairro());
             getEditText(R.id.tvNumero).setText(endereco.getNumero());
-            getPositionSpinnerByListObject(getSpinner(R.id.spEstado), endereco.getCidade().getEstado());
         }
     }
 
@@ -541,6 +549,11 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             onFindCepTask();
         } else if (id == ASYNC_FIND_ESTADO) {
             onFindEstadoTask();
+
+            Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+            if (orcamento.getIsValidEtapa1()) {
+                getPositionSpinnerByListObject(getSpinner(R.id.spEstado), orcamento.getEndereco().getCidade().getEstado());
+            }
         } else if (id == ASYNC_FIND_CIDADE) {
             onFindCidadeTask();
         }
