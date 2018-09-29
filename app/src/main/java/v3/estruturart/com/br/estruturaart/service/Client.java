@@ -5,6 +5,9 @@ import android.os.StrictMode;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,6 +28,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.model.Orcamento;
+import v3.estruturart.com.br.estruturaart.utility.GsonDeserializeExclusion;
 
 public class Client
 {
@@ -128,7 +132,9 @@ public class Client
     }
 
     public Object fromPost(String action, Type type) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .setDateFormat("MMM d, yyyy").create();
         try {
             OkHttpClient client2 = new OkHttpClient();
             RequestBody body = RequestBody.create(FORMURLENCODED, getParametersToString());
@@ -173,13 +179,19 @@ public class Client
             if (!this.json.equals("")) {
                 return gson.fromJson(this.json, type);
             }
-        } catch (NullPointerException ex) {
+        } catch (JsonSyntaxException ex) {
+            System.out.println("ddd\n\n\n\n\ndsds455");
+            ex.printStackTrace();
             this.hasError = true;
             this.message = ex.getMessage();
+            System.out.println("\n\n\n\n\n\nds");
 
         } catch (Exception ex) {
+            System.out.println("\n\n\n\n\n\ndsds1");
+            ex.printStackTrace();
             this.hasError = true;
             this.message = ex.getMessage();
+            System.out.println("\n\n\n\n\n\ndsds");
         }
 
         try {

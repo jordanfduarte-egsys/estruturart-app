@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#007bff</color>
+
+
+    <color name="statusDefault">#007bff</color>
+    <color name="statusAtrasado">#dc3545</color>
+    <color name="statusNodia">#ffc107</color>
+    <color name="statusCancelado">#CCC</color>
 </resources>

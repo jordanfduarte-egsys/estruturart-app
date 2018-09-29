@@ -3,6 +3,8 @@ package v3.estruturart.com.br.estruturaart.model;
 import java.util.Date;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+
+import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.utility.StringUtilsPad;
 import v3.estruturart.com.br.estruturaart.model.TbPedidoItem;
 import v3.estruturart.com.br.estruturaart.model.TbStatusPedido;
@@ -308,6 +310,30 @@ public class TbPedido extends AbstractModel
 
         if (getStatusPedidoId() == 7) {
             color = "#CCC";
+        }
+
+        return color;
+    }
+
+    public int getCorPrevisaoInstalacaoInt()
+    {
+        SimpleDateFormat df = new SimpleDateFormat("yyy-MM-dd");
+        int color = R.color.statusDefault;
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date dateWithoutTime = cal.getTime();
+
+        if (getDataPrevisaoInstalacao().compareTo(dateWithoutTime) < 0) {
+            color = R.color.statusAtrasado;
+        } else if (df.format(getDataPrevisaoInstalacao().getTime()).equals(df.format(new Date().getTime()))) {
+            color = R.color.statusNodia;
+        }
+
+        if (getStatusPedidoId() == 7) {
+            color = R.color.statusCancelado;
         }
 
         return color;

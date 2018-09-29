@@ -7,6 +7,7 @@ import android.widget.EditText;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.InputMismatchException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,6 +17,8 @@ import java.time.format.ResolverStyle;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.text.SimpleDateFormat;
+
+import v3.estruturart.com.br.estruturaart.R;
 
 public class Util
 {
@@ -286,5 +289,25 @@ public class Util
                 }
             }
         };
+    }
+
+    public static String getMesNomeAbreviado(int mes, int ano) {
+        String mesNome = "";
+        switch (mes) {
+            case Calendar.JANUARY: mesNome = String.format("Jan %s", ano); break;
+            case Calendar.FEBRUARY: mesNome = String.format("Fev %s", ano); break;
+            case Calendar.MARCH: mesNome = String.format("Mar %s", ano); break;
+            case Calendar.APRIL: mesNome = String.format("Abr %s", ano); break;
+            case Calendar.MAY: mesNome = String.format("Mai %s", ano); break;
+            case Calendar.JUNE: mesNome = String.format("Jun %s", ano); break;
+            case Calendar.JULY: mesNome = String.format("Jul %s", ano); break;
+            case Calendar.AUGUST: mesNome = String.format("Ago %s", ano); break;
+            case Calendar.SEPTEMBER: mesNome = String.format("Set %s", ano); break;
+            case Calendar.OCTOBER: mesNome = String.format("Out %s", ano); break;
+            case Calendar.NOVEMBER: mesNome = String.format("Nov %s", ano); break;
+            case Calendar.DECEMBER: mesNome = String.format("Dez %s", ano); break;
+        }
+
+        return mesNome;
     }
 }

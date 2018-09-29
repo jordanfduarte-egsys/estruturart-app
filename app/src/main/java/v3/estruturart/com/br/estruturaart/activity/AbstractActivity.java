@@ -76,6 +76,7 @@ public class AbstractActivity extends AppCompatActivity {
 
         List<Orcamento> orcamentos = gutSincronizeOrcamento();
         if (orcamentos.size() > 0) {
+            navigationView.getMenu().getItem(2).setTitle(String.format("Sincronizar (%s)", orcamentos.size()));
             navigationView.getMenu().getItem(2).setVisible(true);
         }
 
@@ -139,6 +140,8 @@ public class AbstractActivity extends AppCompatActivity {
             orcamento(item);
         } else if (id == R.id.nav_sair) {
             logout(item);
+        } else if (id == R.id.nav_sincronizar) {
+            //sincronizar(item);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
