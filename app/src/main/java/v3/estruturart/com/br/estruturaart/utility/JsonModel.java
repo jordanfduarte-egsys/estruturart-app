@@ -59,4 +59,8 @@ public class JsonModel implements IJsonModel
     {
         this.id = id;
     }
+
+    public boolean getStatus() {
+        return this.status;
+    }
 }

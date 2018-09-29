@@ -107,9 +107,13 @@ public class Client
         try {
             String tentativa2 = type.toString();
             System.out.println("DYNAMIC INSTANCE: " + tentativa2.replace("class ", ""));
-            Class cls = Class.forName(tentativa2.replace("class ", ""));
 
             this.message = "Sistema temporariamente indisponível. Tente novamente mais tarde!";
+            if (tentativa2.matches("(.*)ArrayList(.*)")) {
+                return new ArrayList<Object>();
+            }
+
+            Class cls = Class.forName(tentativa2.replace("class ", "").trim());
             return cls.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -118,6 +122,7 @@ public class Client
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
 
         return new Object();
     }

@@ -22,6 +22,9 @@
     <string name="orc_bairro_erro">Informe o bairro!</string>
     <string name="orc_dta_prev">Informe a data de previsão de instalação!</string>
     <string name="orc_desconto">Informe o desconto!</string>
+    <string name="orc_mao_obra">Informe um valor da mão de obra!</string>
+    <string name="orc_prev_entrega_picker">Previsão de entrega</string>
+
 
     <string name="spinner_title_cidade">Selecione!</string>
     <string name="spinner_title_estado">Selecione!</string>

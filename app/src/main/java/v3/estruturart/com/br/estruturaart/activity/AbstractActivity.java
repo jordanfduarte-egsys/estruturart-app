@@ -26,6 +26,7 @@ import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class AbstractActivity extends AppCompatActivity {
     private List<AwesomeValidationCustom> validators = new ArrayList<AwesomeValidationCustom>();
 
     protected void complementOnCreate() {
+
         TypefaceProvider.registerDefaultIconSets();
     }
 
@@ -71,6 +73,12 @@ public class AbstractActivity extends AppCompatActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         TextView tv = (TextView)navigationView.getHeaderView(0).findViewById(R.id.textViewNameLogin);
         tv.setText(getUsuarioLogado().getNome());
+
+        List<Orcamento> orcamentos = gutSincronizeOrcamento();
+        if (orcamentos.size() > 0) {
+            navigationView.getMenu().getItem(2).setVisible(true);
+        }
+
         return navigationView;
     }
 
@@ -102,6 +110,7 @@ public class AbstractActivity extends AppCompatActivity {
         try {
             validators.get(formIntName);
         } catch ( IndexOutOfBoundsException e ) {
+            System.out.println("CATCH FORM");
             validators.add(formIntName, new AwesomeValidationCustom(ValidationStyle.BASIC));
         }
 
@@ -213,7 +222,7 @@ public class AbstractActivity extends AppCompatActivity {
     protected void putSincronizeOrcamento(List<Orcamento> orcamentos) {
         Gson gson = new Gson();
         SharedPreferences.Editor editor = getSession("sincronizeOrcamento").edit();
-        editor.putString('orcamentos', gson.toJson(orcamentos));
+        editor.putString("orcamentos", gson.toJson(orcamentos));
         editor.apply();
         editor.commit();
     }

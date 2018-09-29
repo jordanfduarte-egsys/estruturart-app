@@ -5,6 +5,8 @@ import android.text.Selection;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.InputMismatchException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,19 +19,20 @@ import java.text.SimpleDateFormat;
 
 public class Util
 {
-//    public static boolean isDateValid(String strDate)
-//    {
-//        String dateFormat = "dd/MM/uuuu";
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
-//                .ofPattern(dateFormat)
-//                .withResolverStyle(ResolverStyle.STRICT);
-//        try {
-//            LocalDate date = LocalDate.parse(strDate, dateTimeFormatter);
-//            return true;
-//        } catch (DateTimeParseException e) {
-//            return false;
-//        }
-//    }
+    public static boolean isDateValid(String strDate)
+    {
+        try {
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            df.setLenient(false);
+            df.parse(strDate);
+
+            return true;
+        } catch (ParseException e) {
+
+        }
+
+        return false;
+    }
 
     public static Date toDate(String dataStr) throws java.text.ParseException
     {

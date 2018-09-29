@@ -11,6 +11,11 @@
             android:icon="@drawable/ic_orcamento_24dp"
             android:title="Orçamento" />
         <item
+            android:id="@+id/nav_sincronizar"
+            android:icon="@drawable/ic_sincronizar_24dp"
+            android:visible="false"
+            android:title="Sincronizar" />
+        <item
             android:id="@+id/nav_sair"
             android:icon="@drawable/ic_sair_24dp"
             android:title="Sair" />
