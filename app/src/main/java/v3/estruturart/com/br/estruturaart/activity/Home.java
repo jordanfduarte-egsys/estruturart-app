@@ -1,5 +1,8 @@
 package v3.estruturart.com.br.estruturaart.activity;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -159,12 +162,14 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
                     // A busca é por nome e com data
                     idPedido = "";
                     nome = buscaFiltro;
+                    dateBusca.set(Calendar.DAY_OF_MONTH, 1);
                     dataFiltro = dateFormat.format(dateBusca.getTime());
                 }
             } else {
                 // Não tem busca é so busca por data
                 idPedido = "";
                 nome = buscaFiltro;
+                dateBusca.set(Calendar.DAY_OF_MONTH, 1);
                 dataFiltro = dateFormat.format(dateBusca.getTime());
             }
 
@@ -193,6 +198,7 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
     @Override
     public String onPosTask(String result, int id) {
         if (id == ASYNC_FIND_PEDIDOS) {
+            final Activity ac = (Activity)this;
             ListView listView = (ListView)findViewById(R.id.listPedidos);
 
             if (dataModels.size() == 0) {
@@ -208,7 +214,10 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    TbPedido dataModel= dataModels.get(position);
+                TbPedido dataModel = (TbPedido)dataModels.get(position);
+                Intent intent = new Intent((Context) ac, DetalhePedido.class);
+                intent.putExtra("id", String.valueOf(dataModel.getId()));
+                ac.startActivity(intent);
 //                Snackbar.make(view, dataModel.getName()+"\n"+dataModel.getName()+" API: "+dataModel.getData(), Snackbar.LENGTH_LONG)
 //                        .setAction("No action", null).show();
                 }

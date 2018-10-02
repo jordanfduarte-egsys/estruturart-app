@@ -120,7 +120,7 @@ public class TbUsuario extends AbstractModel {
     public String getCpfCnpjString()
     {
         if (getTipoPessoa().equals("1")) {
-            return Util.mask("###.###.###-##", cpfCnpj);
+            return Util.mask("###.###.###-##", this.cpfCnpj);
         }
 
         return Util.mask("##.###.###/####-##", cpfCnpj);

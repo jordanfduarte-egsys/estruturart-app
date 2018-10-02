@@ -16,9 +16,9 @@ public class TbEndereco extends AbstractModel
     private Integer cidadeId = 0;
     private Integer usuarioId = 0;
     private Integer pedidoId = 0;
-    private TbEstado estado;
-    private TbCidade cidade;
-    private TbUsuario usuario;
+    private TbEstado estado = new TbEstado();
+    private TbCidade cidade = new TbCidade();
+    private TbUsuario usuario = new TbUsuario();
     private TbPedido pedido;
 
     public Integer getId()

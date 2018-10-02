@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/border_x1"
+    android:layout_height="wrap_content">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_span="2"
+        android:padding="5dp">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_span="2"
+                android:id="@+id/numItem"
+                android:gravity="center_vertical"
+                android:text="#1010" />
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/btPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="2dp"
+                android:paddingRight="0dp"
+                android:layout_weight="1"
+                app:bootstrapSize="md"
+                app:bootstrapBrand="primary"
+                app:bootstrapText="{fa_camera}" />
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/nomeModelo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="Modelo" />
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:id="@+id/isPinturaString"
+                        android:layout_marginLeft="@dimen/bootstrap_alert_paddings"
+                        android:layout_marginRight="@dimen/bootstrap_alert_paddings"
+                        android:text="Sem pintura" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/quantidadeCompra"
+                        android:gravity="center_vertical"
+                        android:text="Qtd: 1un." />
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/descModelo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_span="3"
+                android:layout_weight="1"
+                android:text="dskodko ksoodk sokdoks okdsok okdsok" />
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:id="@+id/precoItem"
+                        android:text="Preço: R$ 2,44" />
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+
+    </TableLayout>
+</TableRow>

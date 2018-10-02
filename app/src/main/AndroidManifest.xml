@@ -35,6 +35,8 @@
         </activity>
 		<activity android:name=".activity.OrcamentoEtapa3" >
         </activity>
+        <activity android:name=".activity.DetalhePedido" >
+        </activity>
     </application>
 
 </manifest>

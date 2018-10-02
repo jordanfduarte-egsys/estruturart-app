@@ -21,11 +21,11 @@ public class TbPedido extends AbstractModel
     private float valorMaoObra;
     private int pedidoPago = 0;
     private float descontoGeral = 0;
-    private String observacao;
+    private String observacao = "";
     private int usuarioId;
     private int statusPedidoId;
-    private TbEndereco endereco;
-    private TbUsuario usuario;
+    private TbEndereco endereco = new TbEndereco();
+    private TbUsuario usuario = new TbUsuario();
     private List<TbPedidoItem> itens;
     private TbStatusPedido statusPedido;
 
