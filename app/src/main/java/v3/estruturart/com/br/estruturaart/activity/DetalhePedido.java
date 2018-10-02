@@ -125,6 +125,10 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
     }
 
     public void popularPedido() {
+        if (pedido.getId() == 0) {
+            showMessage(this, "Ocorreu um erro ao consultar o pedido. Tente novamente mais tarde!");
+            finish();
+        }
         getTextView(R.id.numPedido).setText("Pedido #" + pedido.getIdString());
         getTextView(R.id.totalItens).setText("Total itens: " + pedido.getItens().size());
         getTextView(R.id.precoItensTotal).setText("Preço total itens: R$ " + pedido.getPrecoGeralString());
@@ -167,7 +171,30 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
         }
     }
 
-    public void modalGaleriaOuFoto(View v) {
+    public void modalGaleriaOuFoto(final View v) {
+        TbPedidoItem item = (TbPedidoItem)v.getTag();
+        new AlertDialog.Builder(v.getContext()).setTitle("Foto")
+            .setMessage(String.format("Deseja tirar uma nova foto ou acessar a galeria do item #%s ?", item.getIdString()))
+            .setIcon(android.R.drawable.stat_notify_alert)//@ICONE DE FOTO
+            .setPositiveButton("Foto", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    acessarCamera(v);
+                }
+            })
+            .setNegativeButton("Galeria", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    acessarGaleria(v);
+                }
+            }).show();
+    }
+
+    public void acessarCamera(View v) {
+
+    }
+
+    public void acessarGaleria(View v) {
 
     }
 }

@@ -146,7 +146,15 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
     public String onPosTask(String result, int id) {
         if (id == ASYNC_SAVE) {
             if (!message.equals("")) {
-                showMessage(this, message);
+                //showMessage(this, message);
+
+                Snackbar snackbar = Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG)
+                    .setAction("Salvar", null).show();
+
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(Color.RED);
+                snackbar.show();
+
                 if (!verificaConexao()) {
                     Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
                     List<Orcamento> orcamentos = gutSincronizeOrcamento();
@@ -177,9 +185,23 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                     Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
                     putOrcamentoSession(new Orcamento(), Orcamento.class.getName().toString());
                     if (orcamento.getIsOrcamento()) {
-                        showMessage(this, "Orçamento realizado com sucesso!");
+                        Snackbar snackbar = Snackbar.make(this, "Orçamento realizado com sucesso!", Snackbar.LENGTH_LONG)
+                            .setAction("Salvar", null).show();
+
+                        View sbView = snackbar.getView();
+                        sbView.setBackgroundColor(Color.GREEN);
+                        snackbar.show();
+
+                        //showMessage(this, "Orçamento realizado com sucesso!");
                     } else {
-                        showMessage(this, "Pedido realizado com sucesso!");
+                        Snackbar snackbar = Snackbar.make(this.getView(), "Pedido realizado com sucesso!", Snackbar.LENGTH_LONG)
+                            .setAction("Salvar", null).show();
+
+                        View sbView = snackbar.getView();
+                        sbView.setBackgroundColor(Color.GREEN);
+                        snackbar.show();
+
+                        //showMessage(this, "Pedido realizado com sucesso!");
                     }
                     this.startActivity(new Intent(this, Home.class));
                 }
