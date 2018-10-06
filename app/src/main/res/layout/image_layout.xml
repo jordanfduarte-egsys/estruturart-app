@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:padding="@dimen/bootstrap_alert_paddings"
+    android:layout_margin="@dimen/bootstrap_button_default_font_size"
+    android:id="@+id/layoutImagem"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/viewImagem"
+            android:background="@drawable/border_x1"
+            android:layout_width="match_parent"
+            android:padding="@dimen/bootstrap_alert_paddings"
+            android:layout_height="match_parent"
+            android:src="@drawable/logo" />
+
+    </RelativeLayout>
+
+
+    <EditText
+        android:id="@+id/obsImagem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Observação" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:id="@+id/btEnviarImagem"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="lg"
+        app:buttonMode="regular"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        app:roundedCorners="true"
+        app:showOutline="false" />
+</LinearLayout>

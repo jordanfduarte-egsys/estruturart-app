@@ -22,6 +22,9 @@
         android:id="@+id/progressBar1"
         />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,6 +33,7 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:background="@color/bootstrap_brand_secondary_text"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_height="wrap_content" >
 
             <TextView
@@ -38,7 +42,7 @@
                 android:gravity="center"
                 android:textSize="20dp"
                 android:id="@+id/numPedido"
-                android:text="Pedido #10201"/>
+                android:text="Pedido #"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -48,7 +52,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total itens: 2"
+                android:text=""
                 android:id="@+id/totalItens"
                 android:layout_alignParentLeft="true"/>
         </RelativeLayout>
@@ -61,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/precoItensTotal"
-                android:text="Preço total itens: R$299,80"
+                android:text=""
                 android:layout_alignParentLeft="true"/>
         </RelativeLayout>
 
@@ -72,7 +76,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Desconto: 10%"
+                android:text=""
                 android:id="@+id/desconto"
                 android:layout_alignParentLeft="true"/>
         </RelativeLayout>
@@ -84,14 +88,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mão obra: R$ 120,00"
+                android:text=""
                 android:id="@+id/valorMaoObra"
                 android:layout_alignParentLeft="true"/>
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:background="@drawable/border_x1"
             android:layout_height="wrap_content">
 
             <TextView
@@ -100,10 +103,7 @@
                 android:layout_alignParentLeft="true"
                 android:id="@+id/observacao"
                 android:gravity="center_vertical|top"
-                android:paddingBottom="10dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:text="Observação: dosokdkskdk okosko dkos" />
+                android:text="" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:id="@+id/precoTotalPedido"
-                android:text="Preço total: R$ 419,80"
+                android:text=""
                 android:textSize="18dp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -131,7 +131,7 @@
                 android:id="@+id/previsao"
                 android:paddingLeft="2dp"
                 android:paddingRight="2dp"
-                android:text="Prev. Inst: 10/10/2018"
+                android:text=""
                 android:textSize="18dp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:id="@+id/statusNome"
-                android:text="Cancelado"
+                android:text=""
                 android:textSize="18dp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -153,6 +153,7 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:background="@color/bootstrap_brand_secondary_text"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_height="wrap_content" >
 
             <TextView
@@ -173,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:id="@+id/enderecoCompleto1"
-                android:text="R. Jose de Abreu 244" />
+                android:text="" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -185,13 +186,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="Cep: 8360350 - Curitiba PR - Casa" />
+                android:text="" />
         </RelativeLayout>
 
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:background="@color/bootstrap_brand_secondary_text"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_height="wrap_content" >
 
             <TextView
@@ -210,7 +212,7 @@
                 android:id="@+id/nomeClienteCpf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Jordan Duarte" />
+                android:text="" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -251,4 +253,5 @@
         </TableLayout>
 
     </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

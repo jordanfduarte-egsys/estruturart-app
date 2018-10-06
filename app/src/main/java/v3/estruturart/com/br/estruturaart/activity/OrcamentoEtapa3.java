@@ -1,5 +1,6 @@
 package v3.estruturart.com.br.estruturaart.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -85,7 +87,6 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         getBootstrapButton(R.id.btVoltar).setOnClickListener(this);
         getBootstrapButton(R.id.btCriarOrcamento).setOnClickListener(this);
         getBootstrapButton(R.id.btCriarPedido).setOnClickListener(this);
-
     }
 
     @Override
@@ -148,8 +149,8 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
             if (!message.equals("")) {
                 //showMessage(this, message);
 
-                Snackbar snackbar = Snackbar.make(this.getView(), message, Snackbar.LENGTH_LONG)
-                    .setAction("Salvar", null).show();
+                @SuppressLint("ResourceType") Snackbar snackbar = Snackbar.make( findViewById(R.layout.activity_orcamento_etapa3), message, Snackbar.LENGTH_LONG)
+                    .setAction("Salvar", null);
 
                 View sbView = snackbar.getView();
                 sbView.setBackgroundColor(Color.RED);
@@ -185,8 +186,8 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                     Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
                     putOrcamentoSession(new Orcamento(), Orcamento.class.getName().toString());
                     if (orcamento.getIsOrcamento()) {
-                        Snackbar snackbar = Snackbar.make(this, "Orçamento realizado com sucesso!", Snackbar.LENGTH_LONG)
-                            .setAction("Salvar", null).show();
+                        @SuppressLint("ResourceType") Snackbar snackbar = Snackbar.make(findViewById(R.layout.activity_orcamento_etapa3), "Orçamento realizado com sucesso!", Snackbar.LENGTH_LONG)
+                            .setAction("Salvar", null);
 
                         View sbView = snackbar.getView();
                         sbView.setBackgroundColor(Color.GREEN);
@@ -194,8 +195,8 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
 
                         //showMessage(this, "Orçamento realizado com sucesso!");
                     } else {
-                        Snackbar snackbar = Snackbar.make(this.getView(), "Pedido realizado com sucesso!", Snackbar.LENGTH_LONG)
-                            .setAction("Salvar", null).show();
+                        @SuppressLint("ResourceType") Snackbar snackbar = Snackbar.make(findViewById(R.layout.activity_orcamento_etapa3), "Pedido realizado com sucesso!", Snackbar.LENGTH_LONG)
+                            .setAction("Salvar", null);
 
                         View sbView = snackbar.getView();
                         sbView.setBackgroundColor(Color.GREEN);

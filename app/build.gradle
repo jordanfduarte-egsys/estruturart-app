@@ -28,4 +28,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.okhttp3:mockwebserver:3.11.0'
     implementation 'de.galgtonold.jollydayandroid:jollyday-android:+'
+    implementation 'commons-codec:commons-codec:1.11'
 }
