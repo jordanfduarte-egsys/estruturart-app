@@ -543,6 +543,8 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
                     message = client.getMessage();
                 }
             }
+        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoInBackground();
         }
 
         return null;
@@ -569,6 +571,8 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             }
         } else if (id == ASYNC_FIND_CIDADE) {
             onFindCidadeTask();
+        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
         }
 
         if (!message.equals("")) {

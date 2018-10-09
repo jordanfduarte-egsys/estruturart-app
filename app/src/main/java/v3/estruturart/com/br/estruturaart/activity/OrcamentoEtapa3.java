@@ -116,6 +116,8 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
             if (!client.getMessage().equals("")) {
                 message = client.getMessage();
             }
+        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoInBackground();
         }
 
         return null;
@@ -207,7 +209,10 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                     this.startActivity(new Intent(this, Home.class));
                 }
             }
+        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
         }
+
         getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
         return null;
     }

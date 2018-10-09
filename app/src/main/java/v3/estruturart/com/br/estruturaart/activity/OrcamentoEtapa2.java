@@ -43,7 +43,7 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         // Metodos iniciais
         super.complementOnCreate();
 
-        // Atribui qual é a view
+        // Atribui qual e a view
         setContentView(R.layout.activity_orcamento_etapa2);
 
         initNavigationBar().setNavigationItemSelectedListener(this);
@@ -88,6 +88,9 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
                     }
                 }
             break;
+            case ASYNC_ORCAMENTO_ACCESS:
+                sincronizeOrcamentoInBackground();
+            break;
         }
 
         return null;
@@ -105,6 +108,9 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         switch (id) {
             case ASYNC_FIND_MODELO:
                 onFindModeloTask();
+            break;
+            case ASYNC_ORCAMENTO_ACCESS:
+                sincronizeOrcamentoPost();
             break;
         }
 

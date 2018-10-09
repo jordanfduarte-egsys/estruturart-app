@@ -89,6 +89,8 @@ public class Galeria extends AbstractActivity implements View.OnClickListener, N
             if (!client.getMessage().equals("")) {
                 message = client.getMessage();
             }
+        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoInBackground();
         }
 
         return null;
@@ -105,6 +107,8 @@ public class Galeria extends AbstractActivity implements View.OnClickListener, N
     public String onPosTask(String result, int id) {
         if (id == ASYNC_IMAGEM) {
             popularFotos();
+        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
         }
 
         if (!message.equals("")) {

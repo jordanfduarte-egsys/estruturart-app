@@ -25,6 +25,7 @@ public class Orcamento extends AbstractModel
     private float valorMaoObra = 0;
     private String observacao;
     private boolean isOrcamento = false;
+    private boolean hasError = false;
 
     private boolean isValidEtapa1;
     private boolean isValidEtapa2;
@@ -393,5 +394,13 @@ public class Orcamento extends AbstractModel
     public boolean getIsOrcamento()
     {
         return this.isOrcamento;
+    }
+
+    public void setHasError(boolean hasError) {
+        this.hasError = hasError;
+    }
+
+    public boolean hasError() {
+        return this.hasError;
     }
 }

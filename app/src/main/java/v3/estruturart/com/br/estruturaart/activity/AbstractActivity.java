@@ -43,6 +43,8 @@ public class AbstractActivity extends AppCompatActivity {
     protected Activity activity;
     private List<AwesomeValidationCustom> validators = new ArrayList<AwesomeValidationCustom>();
 
+    protected static final int ASYNC_ORCAMENTO_ACCESS = 9191944;
+
     protected void complementOnCreate() {
 
         TypefaceProvider.registerDefaultIconSets();
@@ -141,12 +143,89 @@ public class AbstractActivity extends AppCompatActivity {
         } else if (id == R.id.nav_sair) {
             logout(item);
         } else if (id == R.id.nav_sincronizar) {
-            //sincronizar(item);
+            modalSincronizar(item);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    protected void modalSincronizar() {
+        // Modal três botão, Confirmar, Cancelar, Limpar
+        // Ação Confirmar instancia o CLient
+    }
+
+    protected void sincronizar() {
+        AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_ORCAMENTO_ACCESS);
+        async.delegate = (AsyncResponse) ac;
+        async.execute();
+    }
+
+    protected void sincronizeOrcamentoInBackground() {
+
+        if (getNextOrcamentoSincronizacao() instanceof Orcamento) {
+            Orcamento orc = getNextOrcamentoSincronizacao();
+            Client client = new Client(this);
+            client.getParameter().put("orcamento", orc.toJson());
+            client.getParameter().put("is_orcamento", orc.getIsOrcamento() ? "0" : "1");
+            JsonModel jsonModel = (JsonModel) client.fromPost("/salvar-orcamento", JsonModel.class);
+
+            if (!client.getMessage().equals("")) {
+                showMessage(this, client.getMessage());
+
+                List<Orcamento> orcamentos = gutSincronizeOrcamento()
+                orcamentos.remove(orc);
+                orc.setHasError(true);
+                orcamentos.add(orc);
+                putSincronizeOrcamento(orcamentos);
+            } else if (!jsonModel.getStatus()) {
+                showMessage(this, jsonModel.getMessage());
+
+                List<Orcamento> orcamentos = gutSincronizeOrcamento()
+                orcamentos.remove(orc);
+                orc.setHasError(true);
+                orcamentos.add(orc);
+                putSincronizeOrcamento(orcamentos);
+            } else {
+                List<Orcamento> orcamentos = gutSincronizeOrcamento()
+                orcamentos.remove(orc);
+                putSincronizeOrcamento(orcamentos);
+
+                if (orc.getIsOrcamento()) {
+                    showMessage(this, "Orçamento salvo com sucesso!");
+                } else {
+                    showMessage(this, "Pedido salvo com sucesso!");
+                }
+            }
+        }
+    }
+
+    protected Object getNextOrcamentoSincronizacao() {
+        List<Orcamento> orcamentos = gutSincronizeOrcamento();
+        for (Orcamento orc : orcamentos) {
+            if (!orc.hasError()) {
+                return orc;
+            }
+        }
+
+        return new Object();
+    }
+
+    protected void sincronizeOrcamentoPost() {
+        if (getNextOrcamentoSincronizacao() instanceof Orcamento) {
+            sincronizar();
+        } else {
+            // Valida o menu
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+            List<Orcamento> orcamentos = gutSincronizeOrcamento();
+            navigationView.getMenu().getItem(2).setTitle(String.format("Sincronizar (%s)", orcamentos.size()));
+
+            if (orcamentos.size() == 0) {
+                navigationView.getMenu().getItem(2).setVisible(false);
+            }
+        }
     }
 
     private void logout(MenuItem item) {

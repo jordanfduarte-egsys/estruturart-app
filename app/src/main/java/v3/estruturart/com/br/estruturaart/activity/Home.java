@@ -153,20 +153,20 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
             // Filtrando algo
             if (!buscaFiltro.equals("")) {
                 try {
-                    // A busca é por pedido
+                    // A busca Ã© por pedido
                     Integer.parseInt(buscaFiltro);
                     nome = "";
                     dataFiltro = "";
                     idPedido = buscaFiltro;
                 } catch (NumberFormatException e) {
-                    // A busca é por nome e com data
+                    // A busca Ã© por nome e com data
                     idPedido = "";
                     nome = buscaFiltro;
                     dateBusca.set(Calendar.DAY_OF_MONTH, 1);
                     dataFiltro = dateFormat.format(dateBusca.getTime());
                 }
             } else {
-                // Não tem busca é so busca por data
+                // NÃ£o tem busca Ã© so busca por data
                 idPedido = "";
                 nome = buscaFiltro;
                 dateBusca.set(Calendar.DAY_OF_MONTH, 1);
@@ -184,6 +184,8 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
             if (!client.getMessage().equals("")) {
                 message = client.getMessage();
             }
+        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoInBackground();
         }
 
         return null;
@@ -222,6 +224,8 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
 //                        .setAction("No action", null).show();
                 }
             });
+        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
         }
 
         if (!message.equals("")) {

@@ -153,6 +153,8 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
             if (!client.getMessage().equals("")) {
                 message = client.getMessage();
             }
+        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoInBackground();
         }
         return null;
     }
@@ -175,6 +177,8 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
                 showMessage(this, retornoCamera.getMessage());
                 retornoCamera = new JsonModel();
             }
+        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
         }
 
         if (!message.equals("")) {
