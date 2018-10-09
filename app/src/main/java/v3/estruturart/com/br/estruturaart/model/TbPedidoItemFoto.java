@@ -15,6 +15,7 @@ public class TbPedidoItemFoto extends AbstractModel
     private String observacao;
     private String observacaoLimitado;
     private Integer pedidoItensId = 0;
+    private String base64Imagem = "";
 
     public Integer getId()
     {
@@ -71,6 +72,11 @@ public class TbPedidoItemFoto extends AbstractModel
         return this.pedidoItensId;
     }
 
+    public String getPedidoItensIdString()
+    {
+        return StringUtilsPad.padLeft(String.valueOf(pedidoItensId), 5, "0");
+    }
+
     public void setPedidoItensId(Integer pedidoItensId)
     {
         this.pedidoItensId = pedidoItensId;
@@ -87,15 +93,13 @@ public class TbPedidoItemFoto extends AbstractModel
         this.caminhoArquivoCompleto = caminhoArquivoCompleto;
     }
 
-//    public FileItem getFileFoto()
-//    {
-//        return this.fileFoto;
-//    }
+    public String getBase64Imagem() {
+        return base64Imagem;
+    }
 
-//    public void setFileFoto(FileItem fileFoto)
-//    {
-//        this.fileFoto = fileFoto;
-//    }
+    public void setBase64Imagem(String base64Image) {
+        this.base64Imagem = base64Image;
+    }
 
     public boolean isValid()
     {

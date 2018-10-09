@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/bootstrap_alert_paddings"
+    android:paddingLeft="@dimen/bootstrap_alert_paddings"
+    android:paddingRight="@dimen/bootstrap_alert_paddings"
+    android:paddingTop="@dimen/bootstrap_alert_paddings"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="v3.estruturart.com.br.estruturaart.activity.Galeria"
+    tools:showIn="@layout/app_bar_galeria">
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:translationZ="2dp"
+        android:id="@+id/progressBar1"/>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/gallery"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v4.view.ViewPager>
+        </LinearLayout>
+</RelativeLayout>

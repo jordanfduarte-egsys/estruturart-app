@@ -38,6 +38,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -170,7 +171,7 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
             imagemBase64 = "";
             idCameraItem = 0;
             mCurrentPhotoPath = "";
-            if (message.equals("")) {
+            if (!retornoCamera.getMessage().equals("")) {
                 showMessage(this, retornoCamera.getMessage());
                 retornoCamera = new JsonModel();
             }
@@ -341,7 +342,6 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
                         settingsDialog.dismiss();
                     }
                 });
-
                 int orientation;
                 String path = mCurrentPhotoPath;
                 try {
@@ -408,7 +408,9 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
     }
 
     public void acessarGaleria(View v) {
-
+        Intent intent = new Intent(v.getContext(), Galeria.class);
+        intent.putExtra("id", String.valueOf(((TbPedidoItem)v.getTag()).getId()));
+        startActivity(intent);
     }
 
     public void enviarArteParaServidor(View v) {
