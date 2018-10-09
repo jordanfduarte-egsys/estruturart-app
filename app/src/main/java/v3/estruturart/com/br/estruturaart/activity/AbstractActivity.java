@@ -154,6 +154,20 @@ public class AbstractActivity extends AppCompatActivity {
     protected void modalSincronizar() {
         // Modal três botão, Confirmar, Cancelar, Limpar
         // Ação Confirmar instancia o CLient
+        View rowModelo = getLayoutInflater().inflate(R.layout.confirmar_sincronizacao, null);
+
+        //eventos
+        //rowModelo
+
+        // rowModelo
+        Dialog settingsDialog = new Dialog(DetalhePedido.this, R.style.Theme_Dialog);
+            settingsDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+            settingsDialog.setTitle("Sincronização")
+            settingsDialog.setIcon(android.R.drawable.ic_menu_camera)//@TODO TROCAR ICONE DE FOTO
+            settingsDialog.setCancelable(true);
+            settingsDialog.setCanceledOnTouchOutside(true);
+            settingsDialog.setContentView(rowModelo);
+            settingsDialog.show();
     }
 
     protected void sincronizar() {

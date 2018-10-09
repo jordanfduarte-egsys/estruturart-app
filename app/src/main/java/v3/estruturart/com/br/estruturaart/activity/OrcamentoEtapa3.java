@@ -165,8 +165,9 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                     putSincronizeOrcamento(orcamentos);
 
                     final Context ctx = this;
-                    new AlertDialog.Builder(this)
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this)
                         .setTitle("Sincronização")
+                        .setIcon(android.R.drawable.ic_menu_camera)//@TODO TROCAR ICONE DE FOTO
                         .setMessage("Ocorreu um erro na sincronização. Tente sincronizar novamente mais tarde quando o dispositivo estiver acessível com a internet.")
                         .setIcon(android.R.drawable.stat_notify_error)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -175,7 +176,11 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                                 showMessage(ctx, "Acesso o menu lateral para tentar sincronizar novamente!");
                                 ctx.startActivity(new Intent(ctx, Home.class));
                             }
-                        }).show();
+                        });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
 
                     putOrcamentoSession(new Orcamento(), Orcamento.class.getName().toString());
                 }

@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:padding="@dimen/bootstrap_alert_paddings"
+    android:layout_margin="@dimen/bootstrap_button_default_font_size"
+    android:id="@+id/layoutSincronizacao"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Deseja sincronizar os pedidos da sessão ?" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:id="@+id/limpar"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="lg"
+        app:buttonMode="regular"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        app:roundedCorners="true"
+        app:showOutline="false" />
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:id="@+id/voltar"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="lg"
+        app:buttonMode="regular"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        app:roundedCorners="true"
+        app:showOutline="false" />
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:id="@+id/confirmar"
+        app:bootstrapBrand="primary"
+        app:bootstrapSize="lg"
+        app:buttonMode="regular"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        app:roundedCorners="true"
+        app:showOutline="false" />
+</LinearLayout>
