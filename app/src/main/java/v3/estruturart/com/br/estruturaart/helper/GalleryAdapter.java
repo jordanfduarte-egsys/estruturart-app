@@ -49,12 +49,13 @@ public class GalleryAdapter extends PagerAdapter {
         ll.setLayoutParams(lp);
         container.addView(ll);
 
+        TbPedidoItemFoto foto = getFotos().get(position);
         ImageView iv = new ImageView(ctx);
-        iv.setImageBitmap(stringToBitmap(getFotos().get(position).getBase64Imagem()));
+        iv.setImageBitmap(stringToBitmap(foto.getBase64Imagem()));
         lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
         lp.weight = 1;
         lp.gravity = Gravity.CENTER;
-        iv.setBackground(ctx.getResources().getDrawable(R.drawable.border_x1));
+        iv.setBackground(ctx.getResources().getDrawable(R.drawable.border_shadown)); // R.drawable.border_x1
         iv.setPadding(
             16,
             16,
@@ -68,7 +69,7 @@ public class GalleryAdapter extends PagerAdapter {
         TextView tv = new TextView(ctx);
         lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 50);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
-        tv.setText("#" + getFotos().get(position).getPedidoItensIdString() + " - " + getFotos().get(position).getObservacao());
+        tv.setText("#" + foto.getPedidoItensIdString() + (!foto.getObservacao().equals("") ? " - " + foto.getObservacao() : ""));
         tv.setLayoutParams(lp);
         ll.addView(tv);
 
