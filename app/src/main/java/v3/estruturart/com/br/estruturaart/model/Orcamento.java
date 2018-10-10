@@ -26,6 +26,7 @@ public class Orcamento extends AbstractModel
     private String observacao;
     private boolean isOrcamento = false;
     private boolean hasError = false;
+    private String hasCodeValidation = "";
 
     private boolean isValidEtapa1;
     private boolean isValidEtapa2;
@@ -39,6 +40,8 @@ public class Orcamento extends AbstractModel
         usuario = new TbUsuario();
         endereco = new TbEndereco();
         modelos = new ArrayList<TbModelo>();
+
+        hasCodeValidation = String.valueOf(new Date().getTime());
     }
 
     public boolean getIsValidEtapa2()
@@ -402,5 +405,22 @@ public class Orcamento extends AbstractModel
 
     public boolean hasError() {
         return this.hasError;
+    }
+
+    public String getHasCodeValidation() {
+        return hasCodeValidation;
+    }
+
+    public void setHasCodeValidation(String hasCodeValidation) {
+        this.hasCodeValidation = hasCodeValidation;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this.hasCodeValidation.equals(((Orcamento)obj).getHasCodeValidation())) {
+            return true;
+        }
+
+        return false;
     }
 }

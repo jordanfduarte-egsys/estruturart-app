@@ -150,13 +150,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         if (id == ASYNC_SAVE) {
             if (!message.equals("")) {
                 //showMessage(this, message);
-
-                @SuppressLint("ResourceType") Snackbar snackbar = Snackbar.make( findViewById(R.layout.activity_orcamento_etapa3), message, Snackbar.LENGTH_LONG)
-                    .setAction("Salvar", null);
-
-                View sbView = snackbar.getView();
-                sbView.setBackgroundColor(Color.RED);
-                snackbar.show();
+                showMessageError(this, message);
 
                 if (!verificaConexao()) {
                     Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
@@ -167,14 +161,14 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                     final Context ctx = this;
                     AlertDialog.Builder builder = new AlertDialog.Builder(this)
                         .setTitle("Sincronização")
-                        .setIcon(android.R.drawable.ic_menu_camera)//@TODO TROCAR ICONE DE FOTO
+                        .setIcon(R.drawable.ic_sincronizar_24dp)
                         .setMessage("Ocorreu um erro na sincronização. Tente sincronizar novamente mais tarde quando o dispositivo estiver acessível com a internet.")
                         .setIcon(android.R.drawable.stat_notify_error)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                showMessage(ctx, "Acesso o menu lateral para tentar sincronizar novamente!");
-                                ctx.startActivity(new Intent(ctx, Home.class));
+                            showMessage(ctx, "Acesso o menu lateral para tentar sincronizar novamente!");
+                            ctx.startActivity(new Intent(ctx, Home.class));
                             }
                         });
                     AlertDialog dialog = builder.create();
@@ -193,32 +187,25 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                     Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
                     putOrcamentoSession(new Orcamento(), Orcamento.class.getName().toString());
                     if (orcamento.getIsOrcamento()) {
-                        @SuppressLint("ResourceType") Snackbar snackbar = Snackbar.make(findViewById(R.layout.activity_orcamento_etapa3), "Orçamento realizado com sucesso!", Snackbar.LENGTH_LONG)
-                            .setAction("Salvar", null);
-
-                        View sbView = snackbar.getView();
-                        sbView.setBackgroundColor(Color.GREEN);
-                        snackbar.show();
+                        showMessageSuccess(this, "Orçamento realizado com sucesso!");
 
                         //showMessage(this, "Orçamento realizado com sucesso!");
                     } else {
-                        @SuppressLint("ResourceType") Snackbar snackbar = Snackbar.make(findViewById(R.layout.activity_orcamento_etapa3), "Pedido realizado com sucesso!", Snackbar.LENGTH_LONG)
-                            .setAction("Salvar", null);
-
-                        View sbView = snackbar.getView();
-                        sbView.setBackgroundColor(Color.GREEN);
-                        snackbar.show();
-
+                        showMessageSuccess(this, "Pedido realizado com sucesso!");
                         //showMessage(this, "Pedido realizado com sucesso!");
                     }
                     this.startActivity(new Intent(this, Home.class));
                 }
             }
-        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
-            sincronizeOrcamentoPost();
         }
 
         getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+
+
+        if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
+        }
+
         return null;
     }
 

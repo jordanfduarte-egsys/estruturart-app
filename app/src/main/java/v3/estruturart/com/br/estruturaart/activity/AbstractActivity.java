@@ -1,6 +1,7 @@
 package v3.estruturart.com.br.estruturaart.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +12,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -21,6 +26,10 @@ import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
+
+import v3.estruturart.com.br.estruturaart.service.Client;
+import v3.estruturart.com.br.estruturaart.utility.AsyncResponse;
+import v3.estruturart.com.br.estruturaart.utility.AsyncTaskCustom;
 import v3.estruturart.com.br.estruturaart.utility.AwesomeValidationCustom;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.gson.Gson;
@@ -35,6 +44,7 @@ import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.model.Orcamento;
 import v3.estruturart.com.br.estruturaart.model.TbUsuario;
 import v3.estruturart.com.br.estruturaart.utility.GsonDeserializeExclusion;
+import v3.estruturart.com.br.estruturaart.utility.JsonModel;
 
 public class AbstractActivity extends AppCompatActivity {
     protected DrawerLayout drawerLayout;
@@ -42,6 +52,8 @@ public class AbstractActivity extends AppCompatActivity {
     protected boolean isValidUser = true;
     protected Activity activity;
     private List<AwesomeValidationCustom> validators = new ArrayList<AwesomeValidationCustom>();
+    private String message = "";
+    private String typeMessage = "success";
 
     protected static final int ASYNC_ORCAMENTO_ACCESS = 9191944;
 
@@ -143,7 +155,8 @@ public class AbstractActivity extends AppCompatActivity {
         } else if (id == R.id.nav_sair) {
             logout(item);
         } else if (id == R.id.nav_sincronizar) {
-            modalSincronizar(item);
+            item.setCheckable(false);
+            modalSincronizar();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -152,67 +165,118 @@ public class AbstractActivity extends AppCompatActivity {
     }
 
     protected void modalSincronizar() {
-        // Modal três botão, Confirmar, Cancelar, Limpar
-        // Ação Confirmar instancia o CLient
         View rowModelo = getLayoutInflater().inflate(R.layout.confirmar_sincronizacao, null);
+        final Dialog settingsDialog = new Dialog(this);
+        settingsDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        settingsDialog.setCancelable(true);
+        settingsDialog.setCanceledOnTouchOutside(true);
+        settingsDialog.setContentView(rowModelo);
 
-        //eventos
-        //rowModelo
+        ((BootstrapButton)rowModelo.findViewById(R.id.limpar)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                limpar();
+                settingsDialog.dismiss();
+            }
+        });
+        ((BootstrapButton)rowModelo.findViewById(R.id.cancelar)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                settingsDialog.dismiss();
+            }
+        });
+        ((BootstrapButton)rowModelo.findViewById(R.id.confirmar)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Orcamento> orcamentos = gutSincronizeOrcamento();
+                for (Orcamento orc : orcamentos) {
+                    orc.setHasError(false);
+                }
+                putSincronizeOrcamento(orcamentos);
 
-        // rowModelo
-        Dialog settingsDialog = new Dialog(DetalhePedido.this, R.style.Theme_Dialog);
-            settingsDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-            settingsDialog.setTitle("Sincronização")
-            settingsDialog.setIcon(android.R.drawable.ic_menu_camera)//@TODO TROCAR ICONE DE FOTO
-            settingsDialog.setCancelable(true);
-            settingsDialog.setCanceledOnTouchOutside(true);
-            settingsDialog.setContentView(rowModelo);
-            settingsDialog.show();
+                sincronizar();
+                settingsDialog.dismiss();
+            }
+        });
+
+        settingsDialog.show();
+    }
+
+    protected void limpar() {
+        putSincronizeOrcamento(new ArrayList<Orcamento>());
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        List<Orcamento> orcamentos = gutSincronizeOrcamento();
+        navigationView.getMenu().getItem(2).setTitle(String.format("Sincronizar (%s)", orcamentos.size()));
+
+        if (orcamentos.size() == 0) {
+            navigationView.getMenu().getItem(2).setVisible(false);
+        }
     }
 
     protected void sincronizar() {
         AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_ORCAMENTO_ACCESS);
-        async.delegate = (AsyncResponse) ac;
+        async.delegate = (AsyncResponse) this;
         async.execute();
     }
 
     protected void sincronizeOrcamentoInBackground() {
 
         if (getNextOrcamentoSincronizacao() instanceof Orcamento) {
-            Orcamento orc = getNextOrcamentoSincronizacao();
-            Client client = new Client(this);
-            client.getParameter().put("orcamento", orc.toJson());
-            client.getParameter().put("is_orcamento", orc.getIsOrcamento() ? "0" : "1");
-            JsonModel jsonModel = (JsonModel) client.fromPost("/salvar-orcamento", JsonModel.class);
+            Object orc = getNextOrcamentoSincronizacao();
+            if (orc instanceof Orcamento) {
+                Orcamento orcamentoAux = (Orcamento)orc;
+                Client client = new Client(this);
+                client.getParameter().put("orcamento", orcamentoAux.toJson());
+                client.getParameter().put("is_orcamento", orcamentoAux.getIsOrcamento() ? "0" : "1");
+                JsonModel jsonModel = (JsonModel) client.fromPost("/salvar-orcamento", JsonModel.class);
 
-            if (!client.getMessage().equals("")) {
-                showMessage(this, client.getMessage());
+                if (!client.getMessage().equals("")) {
+                    message = client.getMessage();
+                    typeMessage = "error";
 
-                List<Orcamento> orcamentos = gutSincronizeOrcamento()
-                orcamentos.remove(orc);
-                orc.setHasError(true);
-                orcamentos.add(orc);
-                putSincronizeOrcamento(orcamentos);
-            } else if (!jsonModel.getStatus()) {
-                showMessage(this, jsonModel.getMessage());
+                    List<Orcamento> orcamentos = removeOrcamentoSincronizacao(orcamentoAux);
+                    orcamentoAux.setHasError(true);
+                    orcamentos.add(orcamentoAux);
 
-                List<Orcamento> orcamentos = gutSincronizeOrcamento()
-                orcamentos.remove(orc);
-                orc.setHasError(true);
-                orcamentos.add(orc);
-                putSincronizeOrcamento(orcamentos);
-            } else {
-                List<Orcamento> orcamentos = gutSincronizeOrcamento()
-                orcamentos.remove(orc);
-                putSincronizeOrcamento(orcamentos);
+                    System.out.println("DEU ERRO: ");
+                    putSincronizeOrcamento(orcamentos);
+                } else if (!jsonModel.getStatus()) {
+                    message = jsonModel.getMessage();
+                    typeMessage = "error";
 
-                if (orc.getIsOrcamento()) {
-                    showMessage(this, "Orçamento salvo com sucesso!");
+                    List<Orcamento> orcamentos = removeOrcamentoSincronizacao(orcamentoAux);
+                    orcamentoAux.setHasError(true);
+                    orcamentos.add(orcamentoAux);
+                    putSincronizeOrcamento(orcamentos);
                 } else {
-                    showMessage(this, "Pedido salvo com sucesso!");
+                    List<Orcamento> orcamentos = removeOrcamentoSincronizacao(orcamentoAux);
+                    putSincronizeOrcamento(orcamentos);
+                    typeMessage = "success";
+                    if (orcamentoAux.getIsOrcamento()) {
+                        message = "Orçamento salvo com sucesso!";
+                    } else {
+                        message = "Pedido salvo com sucesso!";
+                    }
                 }
             }
         }
+    }
+    protected List<Orcamento> removeOrcamentoSincronizacao(Orcamento orc) {
+        List<Orcamento> orcamentos = gutSincronizeOrcamento();
+
+        List<Orcamento> orcamentosAyx = new ArrayList<Orcamento>();
+        for (Orcamento orc1 : orcamentos) {
+            System.out.println("OB1: " + orc1);
+            System.out.println("OB2: " + orc);
+            if (!orc1.equals(orc)) {
+                orcamentosAyx.add(orc1);
+            }
+        }
+
+        System.out.println("Antes: " + orcamentos.size() + " DEPOIS: " + orcamentosAyx.size());
+        return orcamentosAyx;
     }
 
     protected Object getNextOrcamentoSincronizacao() {
@@ -227,6 +291,15 @@ public class AbstractActivity extends AppCompatActivity {
     }
 
     protected void sincronizeOrcamentoPost() {
+        if (!message.equals("") && typeMessage.equals("success")) {
+            showMessageSuccess(this, message);
+            message = "";
+        } else {
+            showMessage(this, message);
+            message = "";
+            typeMessage = "success";
+        }
+
         if (getNextOrcamentoSincronizacao() instanceof Orcamento) {
             sincronizar();
         } else {
@@ -343,5 +416,37 @@ public class AbstractActivity extends AppCompatActivity {
 
     public void setActivityAux(Activity aux) {
         this.activity = aux;
+    }
+
+    public void showMessageSuccess(Context ctx, CharSequence text) {
+        // Get the custom layout view.
+        View toastView = getLayoutInflater().inflate(R.layout.toast_success, null);
+
+        TextView tv = (TextView)toastView.findViewById(R.id.customToastText);
+        tv.setText(text);
+
+        // Initiate the Toast instance.
+        Toast toast = new Toast(ctx);
+        // Set custom view in toast.
+        toast.setView(toastView);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.TOP, 0,0);
+        toast.show();
+    }
+
+    public void showMessageError(Context ctx, CharSequence text) {
+        // Get the custom layout view.
+        View toastView = getLayoutInflater().inflate(R.layout.toast_error, null);
+
+        TextView tv = (TextView)toastView.findViewById(R.id.customToastText);
+        tv.setText(text);
+
+        // Initiate the Toast instance.
+        Toast toast = new Toast(ctx);
+        // Set custom view in toast.
+        toast.setView(toastView);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.TOP, 0,0);
+        toast.show();
     }
 }

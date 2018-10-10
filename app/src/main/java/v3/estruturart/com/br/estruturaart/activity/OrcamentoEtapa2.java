@@ -109,12 +109,15 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
             case ASYNC_FIND_MODELO:
                 onFindModeloTask();
             break;
-            case ASYNC_ORCAMENTO_ACCESS:
-                sincronizeOrcamentoPost();
-            break;
         }
 
         getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+
+
+        if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
+        }
+
 
         if (!message.equals("")) {
             showMessage(this, message);

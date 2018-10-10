@@ -1,54 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    android:padding="@dimen/bootstrap_alert_paddings"
-    android:layout_margin="@dimen/bootstrap_button_default_font_size"
+    android:padding="@dimen/bootstrap_h3_hori_padding"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
     android:id="@+id/layoutSincronizacao"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/bootstrap_h3_text_size"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="Sincronização" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Deseja sincronizar os pedidos da sessão ?" />
 
-    <com.beardedhen.androidbootstrap.BootstrapButton
-        android:layout_width="fill_parent"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ok"
-        android:id="@+id/limpar"
-        app:bootstrapBrand="primary"
-        app:bootstrapSize="lg"
-        app:buttonMode="regular"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:padding="12dp"
-        app:roundedCorners="true"
-        app:showOutline="false" />
-    <com.beardedhen.androidbootstrap.BootstrapButton
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Ok"
-        android:id="@+id/voltar"
-        app:bootstrapBrand="primary"
-        app:bootstrapSize="lg"
-        app:buttonMode="regular"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:padding="12dp"
-        app:roundedCorners="true"
-        app:showOutline="false" />
-    <com.beardedhen.androidbootstrap.BootstrapButton
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Ok"
-        android:id="@+id/confirmar"
-        app:bootstrapBrand="primary"
-        app:bootstrapSize="lg"
-        app:buttonMode="regular"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:padding="12dp"
-        app:roundedCorners="true"
-        app:showOutline="false" />
+        android:background="@android:color/transparent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/limpar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:padding="5dp"
+            android:text="Limpar"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:roundedCorners="true"
+            app:showOutline="false" />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/cancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="24dp"
+            android:padding="5dp"
+            android:text="Não"
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:roundedCorners="true"
+            app:showOutline="false" />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/confirmar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:padding="5dp"
+            android:text="Sim"
+            app:bootstrapBrand="success"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:roundedCorners="true"
+            app:showOutline="false" />
+    </LinearLayout>
 </LinearLayout>

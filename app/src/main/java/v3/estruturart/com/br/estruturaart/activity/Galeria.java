@@ -107,8 +107,6 @@ public class Galeria extends AbstractActivity implements View.OnClickListener, N
     public String onPosTask(String result, int id) {
         if (id == ASYNC_IMAGEM) {
             popularFotos();
-        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
-            sincronizeOrcamentoPost();
         }
 
         if (!message.equals("")) {
@@ -116,6 +114,12 @@ public class Galeria extends AbstractActivity implements View.OnClickListener, N
         }
 
         getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+
+
+        if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
+        }
+
         return null;
     }
 

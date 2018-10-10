@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/viewImagem"
-            android:background="@drawable/border_x1"
+            android:background="@drawable/border_shadown"
             android:layout_width="match_parent"
             android:padding="@dimen/bootstrap_alert_paddings"
             android:layout_height="match_parent"

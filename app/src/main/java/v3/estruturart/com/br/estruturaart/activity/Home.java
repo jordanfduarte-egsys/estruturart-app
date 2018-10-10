@@ -58,7 +58,6 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
 
         // Inicia o menu
         initNavigationBar().setNavigationItemSelectedListener(this);
-
         dateBusca.setTime(new Date());
         initListView();
         initBusca();
@@ -153,20 +152,20 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
             // Filtrando algo
             if (!buscaFiltro.equals("")) {
                 try {
-                    // A busca Ã© por pedido
+                    // A busca por pedido
                     Integer.parseInt(buscaFiltro);
                     nome = "";
                     dataFiltro = "";
                     idPedido = buscaFiltro;
                 } catch (NumberFormatException e) {
-                    // A busca Ã© por nome e com data
+                    // A busca por nome e com data
                     idPedido = "";
                     nome = buscaFiltro;
                     dateBusca.set(Calendar.DAY_OF_MONTH, 1);
                     dataFiltro = dateFormat.format(dateBusca.getTime());
                 }
             } else {
-                // NÃ£o tem busca Ã© so busca por data
+                // NÃ£o tem busca so busca por data
                 idPedido = "";
                 nome = buscaFiltro;
                 dateBusca.set(Calendar.DAY_OF_MONTH, 1);
@@ -224,8 +223,6 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
 //                        .setAction("No action", null).show();
                 }
             });
-        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
-            sincronizeOrcamentoPost();
         }
 
         if (!message.equals("")) {
@@ -234,6 +231,10 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
         }
 
         getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+
+        if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
+        }
         return null;
     }
 

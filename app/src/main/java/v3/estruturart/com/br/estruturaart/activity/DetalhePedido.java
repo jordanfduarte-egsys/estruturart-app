@@ -174,18 +174,27 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
             idCameraItem = 0;
             mCurrentPhotoPath = "";
             if (!retornoCamera.getMessage().equals("")) {
-                showMessage(this, retornoCamera.getMessage());
+                if (retornoCamera.getStatus()) {
+                    showMessageSuccess(this, retornoCamera.getMessage());
+                } else {
+                    showMessage(this, retornoCamera.getMessage());
+                }
+
                 retornoCamera = new JsonModel();
             }
-        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
-            sincronizeOrcamentoPost();
         }
 
         if (!message.equals("")) {
             showMessage(this, message);
             message = "";
         }
+
         getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+
+        if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
+        }
+
         return null;
     }
 

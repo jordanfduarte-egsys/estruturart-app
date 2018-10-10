@@ -85,6 +85,7 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
                 // Coloca a imagem no campo
                 ImageView tb = (ImageView)rowModelo.findViewById(R.id.imgListaModelo);
                 tb.setZ(999);
+                tb.setBackground(content.getResources().getDrawable(R.drawable.border_shadown));
                 tb.setImageBitmap(stringToBitmap(modelo.getBase64Image()));
 
                 // Aplica um nome para o modelo

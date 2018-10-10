@@ -571,8 +571,6 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             }
         } else if (id == ASYNC_FIND_CIDADE) {
             onFindCidadeTask();
-        } else if (id == ASYNC_ORCAMENTO_ACCESS) {
-            sincronizeOrcamentoPost();
         }
 
         if (!message.equals("")) {
@@ -580,6 +578,12 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             message = "";
         }
         getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+
+
+        if (id == ASYNC_ORCAMENTO_ACCESS) {
+            sincronizeOrcamentoPost();
+        }
+
         return null;
     }
 }
