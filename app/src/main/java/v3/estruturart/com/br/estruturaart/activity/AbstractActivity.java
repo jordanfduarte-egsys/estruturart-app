@@ -85,8 +85,13 @@ public class AbstractActivity extends AppCompatActivity {
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        TextView tv = (TextView)navigationView.getHeaderView(0).findViewById(R.id.textViewNameLogin);
-        tv.setText(getUsuarioLogado().getNome());
+        AwesomeTextView tv = (AwesomeTextView)navigationView.getHeaderView(0).findViewById(R.id.textViewNameLogin);
+
+        BootstrapText text = new BootstrapText.Builder(this)
+            .addFontAwesomeIcon(FA_USER)
+            .addText(getUsuarioLogado().getNome())
+            .build();
+        tv.setBootstrapText(text);
 
         List<Orcamento> orcamentos = gutSincronizeOrcamento();
         if (orcamentos.size() > 0) {

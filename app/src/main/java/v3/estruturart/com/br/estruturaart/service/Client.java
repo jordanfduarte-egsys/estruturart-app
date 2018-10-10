@@ -39,6 +39,7 @@ public class Client
     private Context ctx;
     private OkHttpClient client;
     private Map<String, String> parameter = new HashMap<>();
+    private static final String AUTHENTICATION_WS = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
     public static final MediaType FORMURLENCODED = MediaType.parse(
             "application/x-www-form-urlencoded; charset=utf-8"
     );
@@ -58,6 +59,7 @@ public class Client
             OkHttpClient client2 = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(this.url + action)
+                    .addHeader("Authorization: Bearer ", AUTHENTICATION_WS)
                     .build();
 
             Response responseO = client2.newCall(request).execute();
@@ -140,6 +142,7 @@ public class Client
             RequestBody body = RequestBody.create(FORMURLENCODED, getParametersToString());
             Request request = new Request.Builder()
                     .url(this.url + action)
+                    .addHeader("Authorization: Bearer ", AUTHENTICATION_WS)
                     .post(body)
                     .build();
 
