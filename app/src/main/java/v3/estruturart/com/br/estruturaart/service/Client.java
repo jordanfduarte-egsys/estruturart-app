@@ -59,7 +59,7 @@ public class Client
             OkHttpClient client2 = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(this.url + action)
-                    .addHeader("Authorization: Bearer ", AUTHENTICATION_WS)
+                    .addHeader("Authorization", AUTHENTICATION_WS)
                     .build();
 
             Response responseO = client2.newCall(request).execute();
@@ -142,7 +142,7 @@ public class Client
             RequestBody body = RequestBody.create(FORMURLENCODED, getParametersToString());
             Request request = new Request.Builder()
                     .url(this.url + action)
-                    .addHeader("Authorization: Bearer ", AUTHENTICATION_WS)
+                    .addHeader("Authorization", AUTHENTICATION_WS)
                     .post(body)
                     .build();
 

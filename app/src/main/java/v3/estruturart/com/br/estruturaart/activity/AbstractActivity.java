@@ -24,7 +24,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapText;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 
 import v3.estruturart.com.br.estruturaart.service.Client;
@@ -32,6 +34,9 @@ import v3.estruturart.com.br.estruturaart.utility.AsyncResponse;
 import v3.estruturart.com.br.estruturaart.utility.AsyncTaskCustom;
 import v3.estruturart.com.br.estruturaart.utility.AwesomeValidationCustom;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
+import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -43,6 +48,7 @@ import java.util.List;
 import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.model.Orcamento;
 import v3.estruturart.com.br.estruturaart.model.TbUsuario;
+import v3.estruturart.com.br.estruturaart.utility.DefaultBootstrapBrandUtility;
 import v3.estruturart.com.br.estruturaart.utility.GsonDeserializeExclusion;
 import v3.estruturart.com.br.estruturaart.utility.JsonModel;
 
@@ -88,10 +94,12 @@ public class AbstractActivity extends AppCompatActivity {
         AwesomeTextView tv = (AwesomeTextView)navigationView.getHeaderView(0).findViewById(R.id.textViewNameLogin);
 
         BootstrapText text = new BootstrapText.Builder(this)
-            .addFontAwesomeIcon(FA_USER)
-            .addText(getUsuarioLogado().getNome())
+            .addFontAwesomeIcon(FontAwesome.FA_USER)
+            .addText(" " + getUsuarioLogado().getNome())
             .build();
+
         tv.setBootstrapText(text);
+        tv.setBootstrapBrand(DefaultBootstrapBrandUtility.PRIMARY);
 
         List<Orcamento> orcamentos = gutSincronizeOrcamento();
         if (orcamentos.size() > 0) {

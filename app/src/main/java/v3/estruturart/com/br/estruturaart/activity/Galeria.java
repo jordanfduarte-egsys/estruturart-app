@@ -120,6 +120,10 @@ public class Galeria extends AbstractActivity implements View.OnClickListener, N
             sincronizeOrcamentoPost();
         }
 
+        if (fotos.size() == 0) {
+            finish();
+        }
+
         return null;
     }
 
@@ -135,7 +139,7 @@ public class Galeria extends AbstractActivity implements View.OnClickListener, N
 
     public void initFotos() {
         ViewPager ga = (ViewPager)findViewById(R.id.gallery);
-        showMessage(this, "TOTAL: " + fotos.size() + " Posicao: " + positionAux);
+        //showMessage(this, "TOTAL: " + fotos.size() + " Posicao: " + positionAux);
         ga.setAdapter(galeriaAdapter);
         ga.removeOnPageChangeListener(onChangeListener);
         ga.setCurrentItem(positionAux);
@@ -151,7 +155,7 @@ public class Galeria extends AbstractActivity implements View.OnClickListener, N
 
         @Override
         public void onPageSelected(int position) {
-            showMessage(Galeria.this, "POSICAO: " + position);
+            //showMessage(Galeria.this, "POSICAO: " + position);
             positionAux = position;
             if (position == fotos.size() - 1) {
                 findImagem();

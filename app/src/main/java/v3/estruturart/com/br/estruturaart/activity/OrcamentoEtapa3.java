@@ -108,6 +108,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
     public String onExecTask(String result, int id) {
         if (id == ASYNC_SAVE) {
             Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+            orcamento.setUsuarioLog(getUsuarioLogado().getId());
             Client client = new Client(this);
             client.getParameter().put("orcamento", orcamento.toJson());
             client.getParameter().put("is_orcamento", orcamento.getIsOrcamento() ? "0" : "1");
@@ -187,11 +188,11 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                     Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
                     putOrcamentoSession(new Orcamento(), Orcamento.class.getName().toString());
                     if (orcamento.getIsOrcamento()) {
-                        showMessageSuccess(this, "Orçamento realizado com sucesso!");
+                        showMessageSuccess(this, "Orçamento realizado!");
 
                         //showMessage(this, "Orçamento realizado com sucesso!");
                     } else {
-                        showMessageSuccess(this, "Pedido realizado com sucesso!");
+                        showMessageSuccess(this, "Pedido realizado!");
                         //showMessage(this, "Pedido realizado com sucesso!");
                     }
                     this.startActivity(new Intent(this, Home.class));

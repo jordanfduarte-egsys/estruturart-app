@@ -27,6 +27,7 @@ public class Orcamento extends AbstractModel
     private boolean isOrcamento = false;
     private boolean hasError = false;
     private String hasCodeValidation = "";
+    private int usuarioLog;
 
     private boolean isValidEtapa1;
     private boolean isValidEtapa2;
@@ -422,5 +423,13 @@ public class Orcamento extends AbstractModel
         }
 
         return false;
+    }
+
+    public int getUsuarioLog() {
+        return usuarioLog;
+    }
+
+    public void setUsuarioLog(int usuarioLog) {
+        this.usuarioLog = usuarioLog;
     }
 }

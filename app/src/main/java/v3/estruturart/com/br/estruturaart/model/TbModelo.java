@@ -17,7 +17,7 @@ public class TbModelo extends AbstractModel implements Cloneable
     private float alturaPadrao = 0;
     private float larguraNova = 0;
     private float alturaNova = 0;
-    private String imagem;
+    private String imagem = "";
     private String imagemSource = "";
     private float precoPintura = 0;
     private float porcentagemAcrescimo = 1;
@@ -344,7 +344,9 @@ public class TbModelo extends AbstractModel implements Cloneable
     {
         float total = 0;
         for (TbMaterial material : materiais) {
-            total += material.getPreco();
+            if (material.getMateriaPrima() == 1) {
+                total += material.getPreco();
+            }
         }
 
         total = ((total * this.porcentagemAcrescimo) / 100) + total;
@@ -362,7 +364,9 @@ public class TbModelo extends AbstractModel implements Cloneable
     {
         float total = 0;
         for (TbMaterial material : materiais) {
-            total += material.getPreco();
+            if (material.getMateriaPrima() == 1) {
+                total += material.getPreco();
+            }
         }
 
         return total;
@@ -372,7 +376,9 @@ public class TbModelo extends AbstractModel implements Cloneable
     {
         float total = 0;
         for (TbMaterial material : materiais) {
-            total += material.getPreco();
+            if (material.getMateriaPrima() == 1) {
+                total += material.getPreco();
+            }
         }
 
         total = ((total * this.porcentagemAcrescimo) / 100) + total;
@@ -384,7 +390,9 @@ public class TbModelo extends AbstractModel implements Cloneable
     {
         float total = 0;
         for (TbMaterial material : materiais) {
-            total += material.getPreco();
+            if (material.getMateriaPrima() == 1) {
+                total += material.getPreco();
+            }
         }
 
         total = ((total * this.porcentagemAcrescimo) / 100) + total;
@@ -398,7 +406,9 @@ public class TbModelo extends AbstractModel implements Cloneable
     {
         float total = 0;
         for (TbMaterial material : materiais) {
-            total += material.getPreco();
+            if (material.getMateriaPrima() == 1) {
+                total += material.getPreco();
+            }
         }
 
         return formatMoney(total);
@@ -408,7 +418,9 @@ public class TbModelo extends AbstractModel implements Cloneable
     {
         float total = 0;
         for (TbMaterial material : materiais) {
-            total += material.getPreco();
+            if (material.getMateriaPrima() == 1) {
+                total += material.getPreco();
+            }
         }
 
         return total;

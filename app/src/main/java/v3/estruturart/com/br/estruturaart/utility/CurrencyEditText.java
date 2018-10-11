@@ -24,7 +24,8 @@ import java.util.Locale;
 public class CurrencyEditText extends android.support.v7.widget.AppCompatEditText {
     private static String prefix = "R$ ";
     private static final int MAX_LENGTH = 20;
-    private static final int MAX_DECIMAL = 3;
+    private static final int MAX_DECIMAL = 2;
+
     private CurrencyTextWatcher currencyTextWatcher = new CurrencyTextWatcher(this, prefix);
 
     public CurrencyEditText(Context context) {

@@ -9,4 +9,5 @@
     <color name="statusAtrasado">#dc3545</color>
     <color name="statusNodia">#ffc107</color>
     <color name="statusCancelado">#CCC</color>
+    <color name="colorWhite">#FFF</color>
 </resources>
