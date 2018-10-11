@@ -103,6 +103,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_span="2"
                                 android:background="@color/bootstrap_brand_secondary_text"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
                                 android:text="Faça um filtro para encontrar os modelos!"
                                 android:textAlignment="center" />
                         </TableRow>
@@ -149,6 +151,8 @@
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:layout_span="2"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
                             android:background="@color/bootstrap_brand_secondary_text"
                             android:text="Nenhum modelo adicionado!"
                             android:textAlignment="center" />

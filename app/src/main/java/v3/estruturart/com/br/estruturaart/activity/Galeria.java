@@ -1,6 +1,7 @@
 package v3.estruturart.com.br.estruturaart.activity;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -107,6 +108,10 @@ public class Galeria extends AbstractActivity implements View.OnClickListener, N
     public String onPosTask(String result, int id) {
         if (id == ASYNC_IMAGEM) {
             popularFotos();
+            if (fotos.size() == 0) {
+                showMessage(this, "Nenhuma imagem cadastrada!");
+                finish();
+            }
         }
 
         if (!message.equals("")) {
@@ -118,10 +123,6 @@ public class Galeria extends AbstractActivity implements View.OnClickListener, N
 
         if (id == ASYNC_ORCAMENTO_ACCESS) {
             sincronizeOrcamentoPost();
-        }
-
-        if (fotos.size() == 0) {
-            finish();
         }
 
         return null;

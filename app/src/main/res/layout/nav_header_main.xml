@@ -30,6 +30,7 @@
     <com.beardedhen.androidbootstrap.AwesomeTextView
         android:id="@+id/textViewNameLogin"
         android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/bootstrap_button_default_corner_radius"
         android:text="Jordan"
         android:textColor="@android:color/white"
         android:layout_height="wrap_content"

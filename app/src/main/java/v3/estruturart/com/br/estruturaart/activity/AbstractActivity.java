@@ -268,9 +268,9 @@ public class AbstractActivity extends AppCompatActivity {
                     putSincronizeOrcamento(orcamentos);
                     typeMessage = "success";
                     if (orcamentoAux.getIsOrcamento()) {
-                        message = "Orçamento salvo com sucesso!";
+                        message = "Orçamento realizado!";
                     } else {
-                        message = "Pedido salvo com sucesso!";
+                        message = "Pedido realizado!";
                     }
                 }
             }
