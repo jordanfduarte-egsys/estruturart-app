@@ -35,11 +35,11 @@ public class Client
     private String url;
     private boolean hasError = false;
     private String message = "";
+	private TbUsuario usuario;
     private String json;
     private Context ctx;
     private OkHttpClient client;
     private Map<String, String> parameter = new HashMap<>();
-    private static final String AUTHENTICATION_WS = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
     public static final MediaType FORMURLENCODED = MediaType.parse(
             "application/x-www-form-urlencoded; charset=utf-8"
     );
@@ -59,7 +59,7 @@ public class Client
             OkHttpClient client2 = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(this.url + action)
-                    .addHeader("Authorization", AUTHENTICATION_WS)
+                    .addHeader("Authorization", getAuth())
                     .build();
 
             Response responseO = client2.newCall(request).execute();
@@ -142,7 +142,7 @@ public class Client
             RequestBody body = RequestBody.create(FORMURLENCODED, getParametersToString());
             Request request = new Request.Builder()
                     .url(this.url + action)
-                    .addHeader("Authorization", AUTHENTICATION_WS)
+                    .addHeader("Authorization", getAuth())
                     .post(body)
                     .build();
 
@@ -278,4 +278,20 @@ public class Client
     public String getMessage() {
         return this.message;
     }
+	
+	public void setAuth(TbUsuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getAuth() {
+		if (usuario != null) {
+			OAuth oAuth = new OAuth();
+			oAuth.setEmail(usuario.getEmail());
+			oAuth.setSenha(usuario.getSenha());
+			Gson gson = new Gson();
+			return gson.toJson(oAuth);
+		} else {
+			return "";
+		}
+	}
 }
