@@ -511,17 +511,6 @@ public class TbModelo extends AbstractModel implements Cloneable
         float precoPintura,
         int quantidade
     ) {
-        System.out.println(
-            "NO HTML ======"
-            + " Altura Antiga: " +alturaAntiga
-            + " Largura Antiga: " +larguraAntiga
-            + " Altura Nova: " +alturaNova
-            + " Largura Nova: " +larguraNova
-            + " preco padrao: " +precoPadrao
-            + " Is Pintura: " +isPintura
-            + " Preco Pintura: " +precoPintura
-            + " QTD: " +quantidade
-        );
         float mediaMedidaAntiga = alturaAntiga * larguraAntiga;
         float mediaMedidaNova = alturaNova * larguraNova;
 

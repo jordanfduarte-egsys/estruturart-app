@@ -21,6 +21,21 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="DialogThemeCalendar" parent="Theme.AppCompat.Light.Dialog" >
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowTitleStyle">@style/PauseDialogTitle</item>
+    </style>
+
+    <style name="PauseDialogTitle" parent="@android:style/TextAppearance.DialogWindowTitle">
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+    <style name="DialogWindowTitle">
+        <item name="android:maxLines">1</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.DialogWindowTitle</item>
+    </style>
+
+
     <style name="DialogThemePopUp" parent="Theme.AppCompat.Dialog" >
         <item name="android:textColor">@color/bootstrap_gray_dark</item>
     </style>

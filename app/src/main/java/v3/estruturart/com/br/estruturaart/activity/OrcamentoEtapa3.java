@@ -46,6 +46,7 @@ import v3.estruturart.com.br.estruturaart.helper.TableListOrcamentoEtapa2;
 import v3.estruturart.com.br.estruturaart.helper.TableListOrcamentoEtapa3;
 import v3.estruturart.com.br.estruturaart.model.Orcamento;
 import v3.estruturart.com.br.estruturaart.model.TbModelo;
+import v3.estruturart.com.br.estruturaart.model.TbPedido;
 import v3.estruturart.com.br.estruturaart.service.Client;
 import v3.estruturart.com.br.estruturaart.utility.AsyncResponse;
 import v3.estruturart.com.br.estruturaart.utility.AsyncTaskCustom;
@@ -89,6 +90,15 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         getBootstrapButton(R.id.btCriarPedido).setOnClickListener(this);
     }
 
+    public void onStart() {
+        super.onStart();
+
+        Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+        if (!orcamento.isValidInstance()) {
+            finish();
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -109,7 +119,8 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         if (id == ASYNC_SAVE) {
             Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
             orcamento.setUsuarioLog(getUsuarioLogado().getId());
-            Client client = new Client(this);
+            Client client = new Client(this ,getIpDefault());
+            client.setAuth(getUsuarioLogado());
             client.getParameter().put("orcamento", orcamento.toJson());
             client.getParameter().put("is_orcamento", orcamento.getIsOrcamento() ? "0" : "1");
             jsonModel = (JsonModel) client.fromPost("/salvar-orcamento", JsonModel.class);
@@ -187,7 +198,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                 } else {
                     Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
                     putOrcamentoSession(new Orcamento(), Orcamento.class.getName().toString());
-                    if (orcamento.getIsOrcamento()) {
+                    if (!orcamento.getIsOrcamento()) {
                         showMessageSuccess(this, "Orçamento realizado!");
 
                         //showMessage(this, "Orçamento realizado com sucesso!");
@@ -195,7 +206,10 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
                         showMessageSuccess(this, "Pedido realizado!");
                         //showMessage(this, "Pedido realizado com sucesso!");
                     }
-                    this.startActivity(new Intent(this, Home.class));
+
+                    Intent intent = new Intent(this, DetalhePedido.class);
+                    intent.putExtra("id", String.valueOf(jsonModel.getId()));
+                    this.startActivity(intent);
                 }
             }
         }
@@ -230,12 +244,12 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
             R.string.orc_desconto
         );
 
-        getValidator(0).addValidation(
-            this,
-            R.id.maoObra,
-            "(^(R\\$ )[+-]?([0-9]*[,])?[0-9]+$)",
-            R.string.orc_mao_obra
-        );
+//        getValidator(0).addValidation(
+//            this,
+//            R.id.maoObra,
+//            "^(R\\$ )([1-9]{1}[\\d]{0,2}(\\.[\\d]{3})*(\\,[\\d]{0,2})?|[1-9]{1}[\\d]{0,}(\\,[\\d]{0,2})?|0(\\,[\\d]{0,2})?)$",
+//            R.string.orc_mao_obra
+//        );
     }
 
     public void initResumo() {
@@ -250,16 +264,13 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
 
     public void loadValues() {
         Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
-        System.out.println("\n\n\nJSON=================\n\n\n");
-        System.out.println(orcamento.toJson());
-        System.out.println("\n\nJSON=================\n\n");
         getEditText(R.id.precoTotalItens).setText("R$ " + orcamento.getPrecoItensGeralString());
         getEditText(R.id.qtdTotalItens).setText(String.valueOf(orcamento.getModelos().size()));
         getEditText(R.id.prevEntrega).setText(orcamento.getPrevEntregaString());
         getEditText(R.id.maxDesconto).setText(orcamento.getPorcentagemMaximaSomaString() + " %");
         getEditText(R.id.desconto).setText(orcamento.getDescontoString());
         getEditText(R.id.subTotal).setText("R$ " + String.valueOf(orcamento.getPrecoSubTotalString()));
-        getEditText(R.id.maoObra).setText(orcamento.getValorMaoObraString());
+        //getEditText(R.id.maoObra).setText(orcamento.getValorMaoObraString());
     }
 
     public void initMask() {
@@ -285,7 +296,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
             @Override
             public void afterTextChanged(Editable editable) {
                 float totalItensSemPintura = orcamento.getTotalItensAcrescimoSemPintura();
-                String maoObraStr = getEditText(R.id.maoObra, v).getText().toString().replace(",", ".").replace(".", "").replace("R$", "").trim();
+                String maoObraStr = getEditText(R.id.maoObra, v).getText().toString().replace(".", "").replace(",", ".").replace("R$", "").trim();
                 float maoObra = Float.valueOf(maoObraStr.equals("") ? "0" : maoObraStr);
                 float porcentagemDesconto = Float.valueOf(getEditText(R.id.desconto, v).getText().toString().replace(".", ",").replace(",", "."));
                 float totalPintura = orcamento.getTotalPintura();
@@ -320,7 +331,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
             @Override
             public void afterTextChanged(Editable editable) {
                 float totalItensSemPintura = orcamento.getTotalItensAcrescimoSemPintura();
-                String maoObraStr = getEditText(R.id.maoObra, v).getText().toString().replace(",", ".").replace(".", "").replace("R$", "").trim();
+                String maoObraStr = getEditText(R.id.maoObra, v).getText().toString().replace(".", "").replace(",", ".").replace("R$", "").trim();
                 float maoObra = Float.valueOf(maoObraStr.equals("") ? "0" : maoObraStr);
                 float porcentagemDesconto = Float.valueOf(getEditText(R.id.desconto, v).getText().toString().replace(".", ",").replace(",", "."));
                 float totalPintura = orcamento.getTotalPintura();
@@ -370,7 +381,7 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
         if (getValidator(0).validate()) {
             float porcentagemDesconto = Float.valueOf(getEditText(R.id.desconto, v.getContext()).getText().toString().replace(".", ",").replace(",", "."));
 
-            String maoObraStr = getEditText(R.id.maoObra, v.getContext()).getText().toString().replace(",", ".").replace(".", "").replace("R$", "").trim();
+            String maoObraStr = getEditText(R.id.maoObra, v.getContext()).getText().toString().replace(".", "").replace(",", ".").replace("R$", "").trim();
             float maoObra = Float.valueOf(maoObraStr.equals("") ? "0" : maoObraStr);
             String obs = getEditText(R.id.observacao).getText().toString();
             orcamento.setDesconto(porcentagemDesconto);
@@ -395,8 +406,6 @@ public class OrcamentoEtapa3 extends AbstractActivity implements View.OnClickLis
             } else {
                 for (Param param : orcamento.getValidation()) {
                     Object ob = findViewById(param.getIndex());
-                    System.out.println("ERRO: " + (String)param.getValue());
-                    System.out.println("CLASS: " + ob.getClass().getName());
 
                     if (ob instanceof Spinner) {
                         getValidator(0).validateElement(getSpinner(param.getIndex()), (String)param.getValue());

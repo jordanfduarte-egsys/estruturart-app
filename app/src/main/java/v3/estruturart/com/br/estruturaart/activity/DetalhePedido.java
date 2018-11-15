@@ -51,6 +51,8 @@ import com.basgeekball.awesomevalidation.utility.custom.CustomErrorReset;
 import com.basgeekball.awesomevalidation.utility.custom.CustomValidation;
 import com.basgeekball.awesomevalidation.utility.custom.CustomValidationCallback;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapText;
+import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.google.gson.reflect.TypeToken;
 
 import org.apache.commons.codec.binary.Base32;
@@ -70,6 +72,7 @@ import v3.estruturart.com.br.estruturaart.model.Orcamento;
 import v3.estruturart.com.br.estruturaart.model.TbCidade;
 import v3.estruturart.com.br.estruturaart.model.TbEndereco;
 import v3.estruturart.com.br.estruturaart.model.TbEstado;
+import v3.estruturart.com.br.estruturaart.model.TbLogPedido;
 import v3.estruturart.com.br.estruturaart.model.TbPedido;
 import v3.estruturart.com.br.estruturaart.model.TbPedidoItem;
 import v3.estruturart.com.br.estruturaart.model.TbPerfil;
@@ -77,6 +80,7 @@ import v3.estruturart.com.br.estruturaart.model.TbUsuario;
 import v3.estruturart.com.br.estruturaart.service.Client;
 import v3.estruturart.com.br.estruturaart.utility.AsyncResponse;
 import v3.estruturart.com.br.estruturaart.utility.AsyncTaskCustom;
+import v3.estruturart.com.br.estruturaart.utility.DefaultBootstrapBrandUtility;
 import v3.estruturart.com.br.estruturaart.utility.JsonModel;
 import v3.estruturart.com.br.estruturaart.utility.MaskEditUtil;
 import v3.estruturart.com.br.estruturaart.utility.Param;
@@ -133,7 +137,8 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
     @Override
     public String onExecTask(String result, int id) {
         if (id == ASYNC_PEDIDO) {
-            Client client = new Client(this);
+            Client client = new Client(this ,getIpDefault());
+            client.setAuth(getUsuarioLogado());
             client.getParameter().put("id", String.valueOf(pedido.getId()));
             pedido = (TbPedido) client.fromPost("/detalhe-pedido", TbPedido.class);
 
@@ -141,12 +146,13 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
                 message = client.getMessage();
             }
         } else if (id == ASYNC_SEND_PHOTO) {
-            Client client = new Client(this);
+            Client client = new Client(this ,getIpDefault());
+            client.setAuth(getUsuarioLogado());
             client.getParameter().put("id", String.valueOf(idCameraItem));
             client.getParameter().put("base64", imagemBase64);
             client.getParameter().put("format", "jpg");
             client.getParameter().put("observacao", observacao);
-            System.out.println("ID: " + idCameraItem);
+
             //System.out.println("\n\nCADE O BASE: " + imagemBase64);
 
             retornoCamera = (JsonModel) client.fromPost("/nova-foto-camera-item", JsonModel.class);
@@ -209,7 +215,17 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
             showMessage(this, "Ocorreu um erro ao consultar o pedido. Tente novamente mais tarde!");
             finish();
         }
-        getTextView(R.id.numPedido).setText("Pedido #" + pedido.getIdString());
+
+        BootstrapText text = new BootstrapText.Builder(this)
+            .addText("Pedido ")
+            .addFontAwesomeIcon(FontAwesome.FA_SLACK)
+            .addText(pedido.getIdString())
+            .build();
+
+        getBootstrapTextView(R.id.numPedido).setBootstrapText(text);
+        //getBootstrapTextView(R.id.numPedido).setBootstrapBrand(DefaultBootstrapBrandUtility.PRIMARY);
+
+        //getTextView(R.id.numPedido).setText("Pedido #" + pedido.getIdString());
         getTextView(R.id.totalItens).setText("Total itens: " + pedido.getItens().size());
         getTextView(R.id.precoItensTotal).setText("Preço total itens: R$ " + pedido.getPrecoGeralString());
         getTextView(R.id.desconto).setText("Desconto: " + pedido.getDescontoGeralString() + "%");
@@ -218,7 +234,7 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
         getTextView(R.id.enderecoCompleto1).setText(String.format("%s %s", pedido.getEndereco().getLogradouro(), pedido.getEndereco().getNumero()));
         getTextView(R.id.enderecoCompleto2).setText(String.format("Cep: %s %s/%s - %s", pedido.getEndereco().getCep(), pedido.getEndereco().getCidade().getNome(), pedido.getEndereco().getCidade().getEstado().getNome(), pedido.getEndereco().getComplemento()));
         getTextView(R.id.nomeClienteCpf).setText(String.format("%s - %s", pedido.getUsuario().getNome(), pedido.getUsuario().getCpfCnpjString()));
-        getTextView(R.id.statusNome).setText(pedido.getStatusPedido().getNome());
+        getTextView(R.id.statusNome).setText("Status: " + pedido.getStatusPedido().getNome());
         getTextView(R.id.previsao).setText("Prev. Inst.: " + pedido.getDataPrevisaoInstalacaoString());
         getTextView(R.id.previsao).setBackgroundColor(getResources().getColor(pedido.getCorPrevisaoInstalacaoInt()));
         if (!pedido.getObservacao().equals("")) {
@@ -252,6 +268,16 @@ public class DetalhePedido extends AbstractActivity implements View.OnClickListe
             } else {
                 btn.setVisibility(View.GONE);
             }
+        }
+
+        TableLayout tlHistorico = (TableLayout)findViewById(R.id.tbListHistorico);
+        for (TbLogPedido log : pedido.getLogPedido()) {
+            View rowModelo = getLayoutInflater().inflate(R.layout.historico_pedido, null);
+
+            ((TextView)rowModelo.findViewById(R.id.statusPedido)).setText(log.getStatusPedido().getNome());
+            ((TextView)rowModelo.findViewById(R.id.dataNome)).setText(log.getDataInclusaoString() + " - " + log.getUsuario().getNome().toLowerCase());
+
+            tlHistorico.addView(rowModelo);
         }
     }
 

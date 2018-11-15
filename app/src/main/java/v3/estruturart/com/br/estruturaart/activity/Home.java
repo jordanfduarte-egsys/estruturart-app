@@ -110,19 +110,24 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                int porId = 0;
                 try {
                     getBootstrapButton(R.id.btNext).setVisibility(View.GONE);
                     getBootstrapButton(R.id.btPrev).setVisibility(View.GONE);
                     getTextView(R.id.nomeFiltro).setText("");
 
-                    Integer.parseInt(getEditText(R.id.edBuscaPedido).getText().toString());
+                    porId = Integer.parseInt(getEditText(R.id.edBuscaPedido).getText().toString());
                 } catch (NumberFormatException e) {
                     getBootstrapButton(R.id.btNext).setVisibility(View.VISIBLE);
                     getBootstrapButton(R.id.btPrev).setVisibility(View.VISIBLE);
                     showDataString();
+                    porId = 0;
                 }
 
                 buscaFiltro = getEditText(R.id.edBuscaPedido).getText().toString();
+                if (porId > 0 && buscaFiltro.length() >= 2) {
+                    initListView();
+                }
 
                 // Busca intercalada
                 if (buscaFiltro.length() > 2 && buscaFiltro.length() % 2 == 0) {
@@ -172,7 +177,8 @@ public class Home extends AbstractActivity implements View.OnClickListener, Navi
                 dataFiltro = dateFormat.format(dateBusca.getTime());
             }
 
-            Client client = new Client(this);
+            Client client = new Client(this ,getIpDefault());
+            client.setAuth(getUsuarioLogado());
             client.getParameter().put("id", idPedido);
             client.getParameter().put("nome", nome);
             client.getParameter().put("data_filtro", dataFiltro);

@@ -63,13 +63,19 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
         trMessage.setVisibility(View.VISIBLE);
 
         // Remove todos os elementos do filtro
+        table.removeViews(1, table.getChildCount() -1);
         for (int i = 0, j = table.getChildCount(); i < j; i++) {
             View view = table.getChildAt(i);
             if (view instanceof TableRow) {
                 TableRow row = (TableRow) view;
-                if (row.getId() != R.id.facaFiltro) {
+                String tag = (String)row.getTag();
+
+                //if (row.getId() != R.id.facaFiltro) {
+                if (row.getTag() instanceof String && tag.matches("(.*)row-add(.*)")) {
                     table.removeView(row);
+                    table.removeViewAt(i);
                 }
+                //}
             }
         }
 
@@ -77,10 +83,12 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
         if (modelos.size() > 0) {
             // Desabilita a mensagem de filtragem
             trMessage.setVisibility(View.GONE);
-
+            int count = 0;
             // Pega os elementos retornados
             for (TbModelo modelo : modelos) {
-                View rowModelo = ac.getLayoutInflater().inflate(R.layout.lista_modelos, null);
+                TableRow rowModelo = (TableRow)ac.getLayoutInflater().inflate(R.layout.lista_modelos, null);
+                rowModelo.setTag("row-add-" + count);
+                count++;
 
                 // Coloca a imagem no campo
                 ImageView tb = (ImageView)rowModelo.findViewById(R.id.imgListaModelo);
@@ -272,7 +280,6 @@ public class TableListOrcamentoEtapa2 extends AbstractHelper {
                         modelo.setQuantidadeCompra(1);
                         return true;
                     } else {
-                        System.out.println("TOTAL QTD: " + qtd.getText().toString());
                         modelo.setQuantidadeCompra(Integer.parseInt(qtd.getText().toString()));
                     }
 

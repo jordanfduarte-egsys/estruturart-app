@@ -6,8 +6,7 @@ import java.text.SimpleDateFormat;
 
 import v3.estruturart.com.br.estruturaart.R;
 import v3.estruturart.com.br.estruturaart.utility.StringUtilsPad;
-import v3.estruturart.com.br.estruturaart.model.TbPedidoItem;
-import v3.estruturart.com.br.estruturaart.model.TbStatusPedido;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +26,7 @@ public class TbPedido extends AbstractModel
     private TbEndereco endereco = new TbEndereco();
     private TbUsuario usuario = new TbUsuario();
     private List<TbPedidoItem> itens;
+    private List<TbLogPedido> logPedido;
     private TbStatusPedido statusPedido;
 
     private String url;
@@ -45,6 +45,7 @@ public class TbPedido extends AbstractModel
     public TbPedido()
     {
         itens = new ArrayList<TbPedidoItem>();
+        setLogPedido(new ArrayList<TbLogPedido>());
         statusPedido = new TbStatusPedido();
     }
 
@@ -372,5 +373,13 @@ public class TbPedido extends AbstractModel
         }
 
         return "Não";
+    }
+
+    public List<TbLogPedido> getLogPedido() {
+        return logPedido;
+    }
+
+    public void setLogPedido(List<TbLogPedido> logPedido) {
+        this.logPedido = logPedido;
     }
 }

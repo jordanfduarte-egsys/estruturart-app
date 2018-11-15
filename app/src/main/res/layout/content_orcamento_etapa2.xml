@@ -24,6 +24,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:id="@+id/parent_scroll"
+        android:focusableInTouchMode="false"
         android:layout_height="match_parent">
 
         <TableLayout
@@ -36,14 +38,15 @@
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal">
 
-                <TextView
+                <com.beardedhen.androidbootstrap.AwesomeTextView
                     android:id="@+id/tvInfoTitle"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_span="2"
-                    android:text="Orçamento - Etapa 2"
+                    app:bootstrapText="{fa_slack} Orçamento - Etapa 2"
                     android:textAlignment="center"
                     android:textSize="30sp" />
+
             </TableRow>
 
             <TableRow
@@ -80,13 +83,17 @@
                 android:background="@drawable/border_x1"
                 android:gravity="center_horizontal">
 
-                <ScrollView
+                <com.bskim.maxheightscrollview.widgets.MaxHeightScrollView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_width="wrap_content"
-                    android:layout_height="200dp">
+                    android:layout_height="match_parent"
+                    android:id="@+id/child_scroll"
+                    android:minHeight="200dp"
+                    app:maxHeight="200dp">
 
                     <TableLayout
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="match_parent"
                         android:layout_span="2"
                         android:paddingBottom="@dimen/bootstrap_button_default_font_size"
                         android:id="@+id/tbListItensFilter"
@@ -109,7 +116,7 @@
                                 android:textAlignment="center" />
                         </TableRow>
                     </TableLayout>
-                </ScrollView>
+                </com.bskim.maxheightscrollview.widgets.MaxHeightScrollView>
             </TableRow>
 
             <TableRow
@@ -172,6 +179,7 @@
                     android:layout_height="match_parent"
                     app:roundedCorners="true"
                     app:bootstrapBrand="primary"
+                    app:bootstrapSize="lg"
                     android:background="@android:color/transparent"
                     android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:layout_span="3">
@@ -183,6 +191,7 @@
                         android:layout_marginRight="2dp"
                         android:paddingRight="0dp"
                         android:layout_weight="1"
+                        app:bootstrapSize="lg"
                         android:text="Icone"
                         app:bootstrapBrand="regular"
                         app:bootstrapText="{fa_cart_plus} Voltar"
@@ -195,6 +204,7 @@
                         android:layout_marginRight="2dp"
                         android:paddingRight="0dp"
                         android:layout_weight="1"
+                        app:bootstrapSize="lg"
                         android:text="Icone"
                         app:bootstrapBrand="primary"
                         app:bootstrapText="{fa_cart_plus} Avançar"

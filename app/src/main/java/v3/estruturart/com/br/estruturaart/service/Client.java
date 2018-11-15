@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
+import org.apache.commons.codec.binary.Base32;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,7 +29,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import v3.estruturart.com.br.estruturaart.R;
+import v3.estruturart.com.br.estruturaart.model.OAuth;
 import v3.estruturart.com.br.estruturaart.model.Orcamento;
+import v3.estruturart.com.br.estruturaart.model.TbUsuario;
 import v3.estruturart.com.br.estruturaart.utility.GsonDeserializeExclusion;
 
 public class Client
@@ -38,20 +42,20 @@ public class Client
 	private TbUsuario usuario;
     private String json;
     private Context ctx;
-    private OkHttpClient client;
     private Map<String, String> parameter = new HashMap<>();
+    private String ip = "";
     public static final MediaType FORMURLENCODED = MediaType.parse(
             "application/x-www-form-urlencoded; charset=utf-8"
     );
 
-    public Client(Context ctx)
+    public Client(Context ctx, String ip)
     {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        this.client = new OkHttpClient();
         this.ctx = ctx;
-        this.url = ctx.getString(R.string.ws_host);
+        this.url = String.format(ctx.getString(R.string.ws_host), ip);
+        this.ip = ip;
     }
 
     public Object fromGet(String action, Type type) {
@@ -59,13 +63,11 @@ public class Client
             OkHttpClient client2 = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(this.url + action)
-                    .addHeader("Authorization", getAuth())
+                    .addHeader("Authentication", getAuth())
                     .build();
 
             Response responseO = client2.newCall(request).execute();
             this.json = responseO.body().string();
-
-            System.out.println("RESPONSTA WS: " + this.json);
 
             switch (responseO.code()) {
                 case 200:
@@ -97,7 +99,6 @@ public class Client
 
         Gson gson = new Gson();
         try {
-            System.out.println("WS JSON: " + this.json);
             if (!this.json.equals("")) {
                 return gson.fromJson(this.json, type);
             }
@@ -142,14 +143,12 @@ public class Client
             RequestBody body = RequestBody.create(FORMURLENCODED, getParametersToString());
             Request request = new Request.Builder()
                     .url(this.url + action)
-                    .addHeader("Authorization", getAuth())
+                    .addHeader("Authentication", getAuth())
                     .post(body)
                     .build();
 
             Response responseO = client2.newCall(request).execute();
             this.json = responseO.body().string();
-
-            System.out.println("RESPONSTA WS: " + this.json);
 
             switch (responseO.code()) {
                 case 200:
@@ -289,7 +288,8 @@ public class Client
 			oAuth.setEmail(usuario.getEmail());
 			oAuth.setSenha(usuario.getSenha());
 			Gson gson = new Gson();
-			return gson.toJson(oAuth);
+            Base32 b2 = new Base32();
+			return b2.encodeToString(gson.toJson(oAuth).getBytes());
 		} else {
 			return "";
 		}

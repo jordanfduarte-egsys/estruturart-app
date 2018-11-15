@@ -73,7 +73,6 @@ public class GalleryAdapter extends PagerAdapter {
         tv.setLayoutParams(lp);
         ll.addView(tv);
 
-        System.out.println("Script Build: Carro: "+(position));
 
         //return iv;
         return(tv);

@@ -49,7 +49,7 @@ public class TbLogPedido extends AbstractModel
 
     public String getDataInclusaoString()
     {
-        return this.getSimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(getDataInclusao());
+        return this.getSimpleDateFormat("dd/MM/yyyy").format(getDataInclusao());
     }
 
     public int getStatusPedidoId()

@@ -79,6 +79,15 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         getBootstrapButton(R.id.btAvancarEtapa1).setOnClickListener(this);
     }
 
+    public void onStart() {
+        super.onStart();
+
+        Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+        if (!orcamento.isValidInstance()) {
+            finish();
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -440,7 +449,7 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
                 usuario.setTipoPessoaNome(tipoPessoaName);
             } else {
                 usuario.setNome(getEditText(R.id.edNomeCompleto).getText().toString());
-                usuario.setCpfCnpj(getEditText(R.id.etCpfCnpj).getText().toString());
+                usuario.setCpfCnpj(MaskEditUtil.unmask(getEditText(R.id.etCpfCnpj).getText().toString()));
                 usuario.setEmail(getEditText(R.id.edEmail).getText().toString());
                 usuario.setRgIncricaoEstadual(getEditText(R.id.edRgInscricaoEstadual).getText().toString());
                 usuario.setTelefone(getEditText(R.id.edCelular).getText().toString());
@@ -467,8 +476,6 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
             } else {
                 for (Param param : orcamento.getValidation()) {
                     Object ob = findViewById(param.getIndex());
-                    System.out.println("ERRO: " + (String)param.getValue());
-                    System.out.println("CLASS: " + ob.getClass().getName());
 
                     if (ob instanceof Spinner) {
                         getValidator(0).validateElement(getSpinner(param.getIndex()), (String)param.getValue());
@@ -510,7 +517,8 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
                 MaskEditUtil.unmask(getEditText(R.id.etCpfCnpj).getText().toString()).length() == 11
                 || MaskEditUtil.unmask(getEditText(R.id.etCpfCnpj).getText().toString()).length() == 14
             ) {
-                Client client = new Client(this);
+                Client client = new Client(this ,getIpDefault());
+                client.setAuth(getUsuarioLogado());
                 client.getParameter().put("cpf_cnpj", MaskEditUtil.unmask(getEditText(R.id.etCpfCnpj).getText().toString()));
                 usuarioCompra = (TbUsuario) client.fromPost("/find-cpf-cnpj", TbUsuario.class);
 
@@ -521,20 +529,29 @@ public class OrcamentoEtapa1 extends AbstractActivity implements View.OnClickLis
         } else if (id == ASYNC_FIND_CEP) {
             cepModelCompra = new CepModel();
             if (MaskEditUtil.unmask(getEditText(R.id.etCep).getText().toString().toString()).length() == 8) {
-                Client client = new Client(this);
+                Client client = new Client(this ,getIpDefault());
+                client.setAuth(getUsuarioLogado());
                 client.getParameter().put("cep", MaskEditUtil.unmask(getTextView(R.id.etCep).getText().toString()));
                 cepModelCompra = (CepModel) client.fromPost("/find-cep-object", CepModel.class);
 
                 if (!client.getMessage().equals("")) {
                     message = client.getMessage();
                 }
+
+                if (cepModelCompra.getId() > 0 && estados.size() == 0) {
+                    AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_FIND_ESTADO);
+                    async.delegate = (AsyncResponse) this;
+                    async.execute();
+                }
             }
         } else if (id == ASYNC_FIND_ESTADO) {
-            Client client = new Client(this);
+            Client client = new Client(this ,getIpDefault());
+            client.setAuth(getUsuarioLogado());
             estados = (List<TbEstado>) client.fromGet("/find-estados", new TypeToken<ArrayList<TbEstado>>(){}.getType());
         } else if (id == ASYNC_FIND_CIDADE) {
             if (cidadeAutocomplete.getEstado().getId() > 0) {
-                Client client = new Client(this);
+                Client client = new Client(this ,getIpDefault());
+                client.setAuth(getUsuarioLogado());
                 client.getParameter().put("estado_id", String.valueOf(cidadeAutocomplete.getEstado().getId()));
                 cidades = ((List<TbCidade>) client.fromPost("/find-cidades", new TypeToken<ArrayList<TbCidade>>() {
                 }.getType()));

@@ -10,8 +10,10 @@ import android.support.design.widget.NavigationView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
@@ -49,6 +51,7 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         initNavigationBar().setNavigationItemSelectedListener(this);
 
         bindBuscarModelo();
+        bindScroll();
         populaFormulario();
 
         getValidator(0).addValidation(
@@ -59,6 +62,15 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         );
         getBootstrapButton(R.id.btAvancarEtapa2).setOnClickListener(this);
         getBootstrapButton(R.id.btVoltar).setOnClickListener(this);
+    }
+
+    public void onStart() {
+        super.onStart();
+
+        Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+        if (!orcamento.isValidInstance()) {
+            finish();
+        }
     }
 
     @Override
@@ -79,7 +91,8 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         switch (id) {
             case ASYNC_FIND_MODELO:
                 if (getEditText(R.id.etBuscaModelo).getText().toString().length() > 2) {
-                    Client client = new Client(this);
+                    Client client = new Client(this, getIpDefault());
+                    client.setAuth(getUsuarioLogado());
                     client.getParameter().put("nome", getEditText(R.id.etBuscaModelo).getText().toString());
                     modelos = (List<TbModelo>) client.fromPost("/buscar-modelo", new TypeToken<ArrayList<TbModelo>>(){}.getType());
 
@@ -134,12 +147,8 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
     public void bindBuscarModelo() {
         final Activity ac = (Activity)this;
         getTextView(R.id.etBuscaModelo).addTextChangedListener(new TextWatcher() {
-            //@TODO back pressed ?
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_FIND_MODELO);
-                async.delegate = (AsyncResponse) ac;
-                async.execute();
             }
 
             @Override
@@ -149,7 +158,9 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                AsyncTaskCustom async = new AsyncTaskCustom(ASYNC_FIND_MODELO);
+                async.delegate = (AsyncResponse) ac;
+                async.execute();
             }
         });
     }
@@ -179,7 +190,7 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         );
 
         tableListOrcamentoEtapa2.create(this);
-        modelos.clear();
+        modelos = new ArrayList<TbModelo>();
         getValidator(0).clearElement(getEditText(R.id.etBuscaModelo));
     }
 
@@ -207,8 +218,8 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         } else {
             for (Param param : orcamento.getValidation()) {
                 Object ob = findViewById(param.getIndex());
-                System.out.println("ERRO 2: " + (String)param.getValue());
-                System.out.println("CLASS 2: " + ob.getClass().getName());
+
+
 
                 if (ob instanceof EditText) {
                     getValidator(0).validateElement(getEditText(param.getIndex()), (String)param.getValue());
@@ -217,5 +228,24 @@ public class OrcamentoEtapa2 extends AbstractActivity implements View.OnClickLis
         }
 
 		getProgressBar(R.id.progressBar1).setVisibility(View.GONE);
+    }
+
+    public void bindScroll() {
+        ScrollView parentScroll = (ScrollView)findViewById(R.id.parent_scroll);
+        ScrollView childScroll = (ScrollView)findViewById(R.id.child_scroll);
+
+        parentScroll.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                findViewById(R.id.child_scroll).getParent().requestDisallowInterceptTouchEvent(false);
+                return false;
+            }
+        });
+
+        childScroll.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
     }
 }

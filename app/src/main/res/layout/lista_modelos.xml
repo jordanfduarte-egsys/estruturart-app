@@ -72,9 +72,9 @@
                         android:paddingRight="0dp"
                         android:layout_marginRight="0dp"
                         android:gravity="center_vertical|center_horizontal"
-                        app:bootstrapText="{fa_plus}"
+                        app:bootstrapText="{fa_cart_arrow_down}"
                         app:bootstrapBrand="primary"
-                        app:fontAwesomeIcon="fa_cart_plus" />
+                        app:fontAwesomeIcon="fa_cart_arrow_down" />
 
                 </TableRow>
 
@@ -83,30 +83,38 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal">
 
-                    <EditText
-                        android:id="@+id/valorLargura"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:inputType="numberDecimal|numberSigned"
-                        android:digits="0123456789,$"
-                        android:gravity="left|center_horizontal"
-                        android:hint="Largura">
+                        android:layout_weight="1">
 
-                    </EditText>
+                        <EditText
+                            android:id="@+id/valorLargura"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:inputType="numberDecimal|numberSigned"
+                            android:digits="0123456789,$"
+                            android:gravity="left|center_horizontal"
+                            android:hint="Largura (mm)"/>
+
+                    </android.support.design.widget.TextInputLayout>
 
 
-                    <EditText
-                        android:id="@+id/valorAltura"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:inputType="numberDecimal|numberSigned"
-                        android:digits="0123456789,$"
-                        android:gravity="left"
-                        android:hint="Altura">
+                        android:layout_weight="1">
 
-                    </EditText>
+                        <EditText
+                            android:id="@+id/valorAltura"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:inputType="numberDecimal|numberSigned"
+                            android:digits="0123456789,$"
+                            android:gravity="left"
+                            android:hint="Altura (mm)"/>
+
+                        </android.support.design.widget.TextInputLayout>
 
                 </TableRow>
             </TableLayout>

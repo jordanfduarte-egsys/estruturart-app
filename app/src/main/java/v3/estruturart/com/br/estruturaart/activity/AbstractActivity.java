@@ -36,6 +36,7 @@ import v3.estruturart.com.br.estruturaart.utility.AwesomeValidationCustom;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapBrand;
+import com.beardedhen.androidbootstrap.api.view.BootstrapTextView;
 import com.beardedhen.androidbootstrap.font.FontAwesome;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -95,7 +96,7 @@ public class AbstractActivity extends AppCompatActivity {
 
         BootstrapText text = new BootstrapText.Builder(this)
             .addFontAwesomeIcon(FontAwesome.FA_USER)
-            .addText(" " + getUsuarioLogado().getNome())
+            .addText(" " + getUsuarioLogado().getCodigo() + " - " + getUsuarioLogado().getNome())
             .build();
 
         tv.setBootstrapText(text);
@@ -134,11 +135,13 @@ public class AbstractActivity extends AppCompatActivity {
 
     protected TextView getTextView(int tvName) {return (TextView)findViewById(tvName);}
 
+    protected BootstrapTextView getBootstrapTextView(int tvName) {return (BootstrapTextView)findViewById(tvName);}
+
     protected AwesomeValidationCustom getValidator(int formIntName) {
         try {
             validators.get(formIntName);
         } catch ( IndexOutOfBoundsException e ) {
-            System.out.println("CATCH FORM");
+
             validators.add(formIntName, new AwesomeValidationCustom(ValidationStyle.BASIC));
         }
 
@@ -164,6 +167,13 @@ public class AbstractActivity extends AppCompatActivity {
         if (id == R.id.nav_pedidos) {
             home(item);
         } else if (id == R.id.nav_orcamentos) {
+            Orcamento orcamento = (Orcamento)getOrcamentoSession(Orcamento.class.getName().toString());
+
+            if (!orcamento.isValidInstance()) {
+                putOrcamentoSession((new Orcamento()).setValidInstance(true), Orcamento.class.getName().toString());
+            }
+
+            item.setCheckable(false);
             orcamento(item);
         } else if (id == R.id.nav_sair) {
             logout(item);
@@ -240,7 +250,8 @@ public class AbstractActivity extends AppCompatActivity {
             Object orc = getNextOrcamentoSincronizacao();
             if (orc instanceof Orcamento) {
                 Orcamento orcamentoAux = (Orcamento)orc;
-                Client client = new Client(this);
+                Client client = new Client(this, getIpDefault());
+                client.setAuth(getUsuarioLogado());
                 client.getParameter().put("orcamento", orcamentoAux.toJson());
                 client.getParameter().put("is_orcamento", orcamentoAux.getIsOrcamento() ? "0" : "1");
                 JsonModel jsonModel = (JsonModel) client.fromPost("/salvar-orcamento", JsonModel.class);
@@ -253,7 +264,6 @@ public class AbstractActivity extends AppCompatActivity {
                     orcamentoAux.setHasError(true);
                     orcamentos.add(orcamentoAux);
 
-                    System.out.println("DEU ERRO: ");
                     putSincronizeOrcamento(orcamentos);
                 } else if (!jsonModel.getStatus()) {
                     message = jsonModel.getMessage();
@@ -267,7 +277,7 @@ public class AbstractActivity extends AppCompatActivity {
                     List<Orcamento> orcamentos = removeOrcamentoSincronizacao(orcamentoAux);
                     putSincronizeOrcamento(orcamentos);
                     typeMessage = "success";
-                    if (orcamentoAux.getIsOrcamento()) {
+                    if (!orcamentoAux.getIsOrcamento()) {
                         message = "Orçamento realizado!";
                     } else {
                         message = "Pedido realizado!";
@@ -281,8 +291,6 @@ public class AbstractActivity extends AppCompatActivity {
 
         List<Orcamento> orcamentosAyx = new ArrayList<Orcamento>();
         for (Orcamento orc1 : orcamentos) {
-            System.out.println("OB1: " + orc1);
-            System.out.println("OB2: " + orc);
             if (!orc1.equals(orc)) {
                 orcamentosAyx.add(orc1);
             }
@@ -369,8 +377,6 @@ public class AbstractActivity extends AppCompatActivity {
 
     protected void getPositionSpinnerByListObject(Spinner sp, Object ob) {
         for (int i = 0; i < sp.getCount(); i++) {
-            System.out.println("ESTADO SP: " + sp.getItemAtPosition(i).toString());
-            System.out.println("ESTADO CP: " + sp.getItemAtPosition(i).toString());
             if (sp.getItemAtPosition(i).toString().equals(ob.toString())) {
                 sp.setSelection(i);
                 break;
@@ -383,9 +389,6 @@ public class AbstractActivity extends AppCompatActivity {
             .addDeserializationExclusionStrategy(new GsonDeserializeExclusion()).create();
 //        Gson gson = new Gson();
         String json = getSession("orcamentoSession").getString(name, "");
-
-        System.out.println("JSON\n\n\n");
-        System.out.println("JSON\n\n\n" + json);
 
         if (json.equals("")) {
             json = gson.toJson(new Orcamento());
@@ -413,9 +416,6 @@ public class AbstractActivity extends AppCompatActivity {
         Gson gson = new GsonBuilder()
             .addDeserializationExclusionStrategy(new GsonDeserializeExclusion()).create();
         String json = getSession("sincronizeOrcamento").getString("orcamentos", "");
-
-        System.out.println("JSON\n\n\n");
-        System.out.println("JSON\n\n\n" + json);
 
         if (json.equals("")) {
             json = gson.toJson(new ArrayList<Orcamento>());
@@ -461,5 +461,16 @@ public class AbstractActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setGravity(Gravity.TOP, 0,0);
         toast.show();
+    }
+
+    public String getIpDefault() {
+        return getSession("ipDefault").getString("ip", "");
+    }
+
+    protected void putIpDefault(String ip) {
+        SharedPreferences.Editor editor = getSession("ipDefault").edit();
+        editor.putString("ip", ip);
+        editor.apply();
+        editor.commit();
     }
 }

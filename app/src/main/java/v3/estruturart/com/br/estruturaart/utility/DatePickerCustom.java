@@ -34,8 +34,12 @@ public class DatePickerCustom extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Calendar c = Calendar.getInstance();
         c.setTime(this.orcamento.getPrevEntrega());
-        Dialog d = new DatePickerDialog(getActivity(), R.style.DialogTheme, dateSetListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-        d.setTitle(R.string.orc_prev_entrega_picker);
+        DatePickerDialog d = new DatePickerDialog(getActivity(), R.style.DialogThemeCalendar, dateSetListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        d.setCustomTitle(((Activity)ctx).getLayoutInflater().inflate(R.layout.datepicket_title, null));
+
+        //d.setTitle(R.string.orc_prev_entrega_picker);
+
+
 
         return d;
     }

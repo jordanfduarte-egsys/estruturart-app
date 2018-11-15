@@ -11,6 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.BootstrapText;
+import com.beardedhen.androidbootstrap.api.view.BootstrapTextView;
+import com.beardedhen.androidbootstrap.font.FontAwesome;
+
 import java.util.ArrayList;
 
 import v3.estruturart.com.br.estruturaart.R;
@@ -23,7 +27,7 @@ public class CustomAdapterListPedidos extends ArrayAdapter<TbPedido> implements 
 
     // View lookup cache
     private static class ViewHolder {
-        TextView txtName;
+        BootstrapTextView txtName;
         TextView txtType;
         TextView txtVersion;
         ImageView info;
@@ -68,7 +72,8 @@ public class CustomAdapterListPedidos extends ArrayAdapter<TbPedido> implements 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_list_pedidos, parent, false);
-            viewHolder.txtName = (TextView) convertView.findViewById(R.id.name);
+
+            viewHolder.txtName = (BootstrapTextView) convertView.findViewById(R.id.name);
             viewHolder.txtType = (TextView) convertView.findViewById(R.id.type);
             viewHolder.txtVersion = (TextView) convertView.findViewById(R.id.version_number);
             viewHolder.info = (ImageView) convertView.findViewById(R.id.item_info);
@@ -86,7 +91,12 @@ public class CustomAdapterListPedidos extends ArrayAdapter<TbPedido> implements 
         result.startAnimation(animation);
         lastPosition = position;
 
-        viewHolder.txtName.setText("#" + dataModel.getIdString());
+        BootstrapText text = new BootstrapText.Builder(mContext)
+            .addFontAwesomeIcon(FontAwesome.FA_SLACK)
+            .addText(" " + dataModel.getIdString())
+            .build();
+
+        viewHolder.txtName.setBootstrapText(text);
         viewHolder.txtType.setText(dataModel.getUsuario().getNome());
         viewHolder.txtVersion.setText(dataModel.getDataPrevisaoInstalacaoString());
         viewHolder.txtVersion.setBackgroundColor(mContext.getResources().getColor(dataModel.getCorPrevisaoInstalacaoInt()));

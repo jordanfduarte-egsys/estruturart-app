@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
 
 /**
@@ -38,7 +40,7 @@ public class CurrencyEditText extends android.support.v7.widget.AppCompatEditTex
 
     public CurrencyEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        this.setInputType(InputType.TYPE_CLASS_NUMBER);
         this.setHint(prefix);
         this.setFilters(new InputFilter[] { new InputFilter.LengthFilter(MAX_LENGTH) });
     }
@@ -102,8 +104,9 @@ public class CurrencyEditText extends android.support.v7.widget.AppCompatEditTex
             if (str.equals(prefix)) {
                 return;
             }
+
             // cleanString this the string which not contain prefix and ,
-            String cleanString = str.replace(prefix, "").replaceAll("[,]", "");
+            String cleanString = str.replace(prefix, "").replaceAll("[.]", "").replaceAll("[,]", "");
             // for prevent afterTextChanged recursive call
             if (cleanString.equals(previousCleanString) || cleanString.isEmpty()) {
                 return;
@@ -111,11 +114,8 @@ public class CurrencyEditText extends android.support.v7.widget.AppCompatEditTex
             previousCleanString = cleanString;
 
             String formattedString;
-            if (cleanString.contains(".")) {
-                formattedString = formatDecimal(cleanString);
-            } else {
-                formattedString = formatInteger(cleanString);
-            }
+            formattedString = formatInteger(cleanString);
+
             editText.removeTextChangedListener(this); // Remove listener
             editText.setText(formattedString);
             handleSelection();
@@ -123,10 +123,46 @@ public class CurrencyEditText extends android.support.v7.widget.AppCompatEditTex
         }
 
         private String formatInteger(String str) {
-            BigDecimal parsed = new BigDecimal(str);
-            DecimalFormat formatter =
-                    new DecimalFormat(prefix + "#,###", new DecimalFormatSymbols(Locale.US));
-            return formatter.format(parsed);
+            // BigDecimal parsed = new BigDecimal(str);
+
+            if (str.length() <= 2) {
+                return prefix + "0,00";
+            }
+            String decimal = str.substring(str.length() - 2);
+            str = str.substring(0, str.length() - 2) + "." + decimal;
+
+            if (str.substring(0, 1).equals(".")) {
+                str = "0" + str;
+            }
+            System.out.println("VALOR: " + str);
+            Locale ptBR = new Locale("pt", "BR");
+            NumberFormat numberFormat = NumberFormat.getNumberInstance(ptBR);
+            numberFormat.setMinimumFractionDigits(2);
+            String output =   prefix + numberFormat.format(Float.parseFloat(str));
+
+            System.out.println("VALOR: " + output);
+
+            return output.split(",")[0] + "," + decimal;
+
+
+//            try {
+//                return prefix + (NumberFormat.getCurrencyInstance(new Locale("pt", "BR"))).parse(parsed.toString()).toString();
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            return prefix + "0,00";
+//            BigDecimal parsed = new BigDecimal(str);
+//
+//            DecimalFormat decimalFormat = new DecimalFormat( "#,##0.00" );
+//            return decimalFormat.format(parsed);
+
+//            DecimalFormat formatter =
+//                    new DecimalFormat(prefix + "#,##", new DecimalFormatSymbols(Locale.US));
+//            if (str.length() > 3) {
+//                formatter =
+//                        new DecimalFormat(prefix + "#,###", new DecimalFormatSymbols(Locale.US));
+//            }
+            // return formatter.format(parsed);
         }
 
         private String formatDecimal(String str) {

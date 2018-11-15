@@ -77,7 +77,8 @@ public class Galeria extends AbstractActivity implements View.OnClickListener, N
                 fotoAux = fotos.get(fotos.size() - 1);
             }
 
-            Client client = new Client(this);
+            Client client = new Client(this ,getIpDefault());
+            client.setAuth(getUsuarioLogado());
             client.getParameter().put("id", String.valueOf(tbPedidoItem.getId()));
             client.getParameter().put("idmaisquatro", String.valueOf(fotoAux.getId()));
 

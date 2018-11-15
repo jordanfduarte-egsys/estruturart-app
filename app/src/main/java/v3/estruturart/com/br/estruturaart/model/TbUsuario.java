@@ -13,7 +13,7 @@ public class TbUsuario extends AbstractModel {
     private Integer id = 0;
     private String tipoPessoa = "1";
     private String nome;
-    private String cpfCnpj;
+    private String cpfCnpj = "";
     private String rgIncricaoEstadual;
     private String email;
     private String telefone;

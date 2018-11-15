@@ -28,6 +28,7 @@ public class Orcamento extends AbstractModel
     private boolean hasError = false;
     private String hasCodeValidation = "";
     private int usuarioLog;
+    private boolean isValidInstance = false;
 
     private boolean isValidEtapa1;
     private boolean isValidEtapa2;
@@ -145,10 +146,10 @@ public class Orcamento extends AbstractModel
                     isValidPrevEntrega = false;
                 }
 
-                if (getValorMaoObra() <= 0) {
-                    this.getValidation().add(new Param(R.id.maoObra, "Informe o valor de mão de obra válido!"));
-                    isValidMaoObra = false;
-                }
+//                if (getValorMaoObra() <= 0) {
+//                    this.getValidation().add(new Param(R.id.maoObra, "Informe o valor de mão de obra válido!"));
+//                    isValidMaoObra = false;
+//                }
 
                 isEtapaValid = isValidPrevEntrega && isValidMaoObra;
                 break;
@@ -296,10 +297,8 @@ public class Orcamento extends AbstractModel
                 }
             }
         } catch (ParseException e) {
-            System.out.println("ERRO CALCULO DATA");
             data = new Date();
         } catch (Exception e) {
-            System.out.println("ERRO CALCULO DATA 2");
             data = new Date();
         }
 
@@ -431,5 +430,14 @@ public class Orcamento extends AbstractModel
 
     public void setUsuarioLog(int usuarioLog) {
         this.usuarioLog = usuarioLog;
+    }
+
+    public boolean isValidInstance() {
+        return isValidInstance;
+    }
+
+    public Orcamento setValidInstance(boolean validInstance) {
+        isValidInstance = validInstance;
+        return this;
     }
 }

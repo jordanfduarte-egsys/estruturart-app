@@ -36,12 +36,12 @@
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal">
 
-                <TextView
+                <com.beardedhen.androidbootstrap.AwesomeTextView
                     android:id="@+id/tvInfoTitle"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_span="2"
-                    android:text="Orçamento - Etapa 1"
+                    app:bootstrapText="{fa_slack} Orçamento - Etapa 1"
                     android:textAlignment="center"
                     android:textSize="30sp" />
             </TableRow>
@@ -296,6 +296,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:roundedCorners="true"
+                        app:bootstrapSize="lg"
                         android:layout_marginTop="@dimen/activity_vertical_margin"
                         android:layout_marginBottom="@dimen/activity_vertical_margin"
                         android:layout_span="2"

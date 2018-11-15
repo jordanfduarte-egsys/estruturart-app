@@ -7,7 +7,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="ws_host">http://192.168.0.101:9090/estrutura-art-web-maven-version/webservice</string>
+    <string name="ws_host">http://%s/estrutura-art-web-maven-version/webservice</string>
 
     <string name="orc_cpf_cnpj_erro">Cpf ou cnpj informado inválido!</string>
     <string name="orc_rg_ins_est_erro">Rg ou inscrição estadual inválido!</string>
@@ -23,7 +23,7 @@
     <string name="orc_dta_prev">Informe a data de previsão de instalação!</string>
     <string name="orc_desconto">Informe o desconto!</string>
     <string name="orc_mao_obra">Informe um valor da mão de obra!</string>
-    <string name="orc_prev_entrega_picker">Previsão de entrega</string>
+    <string name="orc_prev_entrega_picker">  Previsão de instalação</string>
 
 
     <string name="spinner_title_cidade">Selecione!</string>

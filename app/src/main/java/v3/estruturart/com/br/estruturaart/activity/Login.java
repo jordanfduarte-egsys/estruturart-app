@@ -85,7 +85,8 @@ public class Login extends AbstractActivity implements View.OnClickListener, Asy
         if (id == ASYNC_LOGIN){			
             String usuario = getEditText(R.id.input_email).getText().toString();
             String senha = getEditText(R.id.input_password).getText().toString();
-			Client client = new Client(this);
+            String ip = getEditText(R.id.inputIp).getText().toString();
+			Client client = new Client(this, ip);
             client.getParameter().put("email", usuario);
             client.getParameter().put("senha", senha);
             usuarioModel = (TbUsuario) client.fromPost("/find-usuario", TbUsuario.class);
@@ -113,16 +114,27 @@ public class Login extends AbstractActivity implements View.OnClickListener, Asy
 			usuarioModel = new TbUsuario();
 		} else {		
 			if (usuarioModel.getId() > 0) {
-                SharedPreferences.Editor editor = getSession(Login.class.toString()).edit();
-                String usuario = getEditText(R.id.input_email).getText().toString();
-                String senha = getEditText(R.id.input_password).getText().toString();
-				editor.putString("login", usuario);
-				editor.putString("senha", senha);
-				editor.putString("loginJson", usuarioModel.toJson());
-				editor.apply();
-				editor.commit();
+			    if (usuarioModel.getStatusUsuarioId() == 1) {
+                    SharedPreferences.Editor editor = getSession(Login.class.toString()).edit();
+                    String usuario = getEditText(R.id.input_email).getText().toString();
+                    String senha = getEditText(R.id.input_password).getText().toString();
+                    usuarioModel.setEmail(usuario);
+                    usuarioModel.setSenha(senha);
+                    editor.putString("login", usuario);
+                    editor.putString("senha", senha);
+                    editor.putString("loginJson", usuarioModel.toJson());
+                    editor.apply();
+                    editor.commit();
 
-				this.startActivity(new Intent(this, Home.class));
+                    putIpDefault(getEditText(R.id.inputIp).getText().toString());
+                    this.startActivity(new Intent(this, Home.class));
+                } else if (usuarioModel.getStatusUsuarioId() == 2) {
+                    showMessage(this, "Usuário inativo. Informe o administrador do sistema!");
+                } else if (usuarioModel.getStatusUsuarioId() == 3) {
+                    showMessage(this, "Usuário bloqueado. Informe o administrador do sistema!");
+                } else {
+                    showMessage(this, "Usuário ou senha informado inválido. Verifique!");
+                }
 			} else {
 				showMessage(this, "Usuário ou senha informado inválido. Verifique!");
 			}

@@ -39,6 +39,7 @@
             android:layout_marginBottom="8dp">
             <EditText android:id="@+id/input_email"
                 android:layout_width="match_parent"
+                android:drawableLeft="@drawable/ic_login"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:hint="Login" />
@@ -53,13 +54,13 @@
             <EditText android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_pass"
                 android:inputType="textPassword"
                 android:hint="Senha"/>
         </android.support.design.widget.TextInputLayout>
                 <com.beardedhen.androidbootstrap.BootstrapButton
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Entrar"
                     android:id="@+id/btn_login"
                     app:bootstrapBrand="primary"
                     app:bootstrapSize="lg"
@@ -68,7 +69,22 @@
                     android:layout_marginBottom="24dp"
                     android:padding="12dp"
                     app:roundedCorners="true"
+                    app:bootstrapText="{fa_unlock} Entrar"
                     app:showOutline="false" />
 
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/inputIp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="192.168.0.101:9090"
+                android:hint="IP" />
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 </ScrollView>
